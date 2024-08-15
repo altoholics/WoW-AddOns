@@ -1,0 +1,7 @@
+## Interface: 110002
+## Title: Combat Outline
+## Author: Nazuraki
+## Version: 11.0.002-0.1
+## IconTexture: Interface\Icons\inv_shadowflame_debuff.blp
+
+core.lua
