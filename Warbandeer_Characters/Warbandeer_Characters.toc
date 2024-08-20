@@ -4,7 +4,7 @@
 ## Version: 11.0.000-1
 ## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green.blp
 
-# TODO: gather basic character info on login: name, class, race, level, ilvl, ?
+# TODO: gather basic character info on login: name, class, race, level, ilvl, xp, rested!, ?
 # make data available via api:
 # - getCharacters(): Character{name, class, race, ...}
 # - getChracter(name)
