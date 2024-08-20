@@ -10,3 +10,12 @@
 # - getChracter(name)
 # - getCurrentCharacter()
 # - ?
+
+CombatOnOff.lua
+init.lua
+api.lua
+events.lua
+database.lua
+commands.lua
+compartment.lua
+window.lua
