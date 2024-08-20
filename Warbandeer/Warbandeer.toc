@@ -2,9 +2,14 @@
 ## Title: Warbandeer
 ## Author: Nazuraki
 ## Version: 11.0.000-1
-## IconTexture: Interface\Icons\INV_Drink_05.blp
+## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green.blp
 ## SavedVariables: WarbandeerDB
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
 
+init.lua
 api.lua
-core.lua
+events.lua
+database.lua
+commands.lua
+compartment.lua
+window.lua
