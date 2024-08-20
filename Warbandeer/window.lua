@@ -8,6 +8,7 @@ local _G = _G
 local CreateFrame = CreateFrame
 local C_AddOns, UISpecialFrames = C_AddOns, UISpecialFrames
 
+-- class colors: https://wowpedia.fandom.com/wiki/Class_colors
 local CLASSES = {
     "Warrior",
     "Hunter",
@@ -56,6 +57,10 @@ local HORDE_RACES = {
     "Dracthyr",
 }
 
+local CELL_WIDTH = 100
+local CELL_HEIGHT = 24
+local NUM_CELLS = 12
+
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
@@ -64,6 +69,7 @@ local function CreateMainFrame()
     --   a circle portrait in the top left
     --   a close button in the top right
     --   a title bar
+    -- https://github.com/Gethe/wow-ui-source/blob/b5c546c1625c96fe008a771c5c46b4ccb90944f6/Interface/AddOns/Blizzard_SharedXML/PortraitFrame.lua
     local frame = CreateFrame("Frame", addOnName, UIParent, "PortraitFrameTemplate")
 
     -- make it closable with Escape key
@@ -71,12 +77,7 @@ local function CreateMainFrame()
     tinsert(UISpecialFrames, frame:GetName()) -- make it a special frame
 
     -- set the title
-    frame.title = _G["WarbandeerTitleText"] -- retrieve the global component created by the frame template
-    frame.title:SetText(addOnName)
-
-    -- give the background texture
-    local tex = frame:CreateTexture("ARTWORK")
-    tex:SetAllPoints()
+    frame:SetTitle(addOnName)
 
     -- make it draggable
     frame:SetMovable(true)
@@ -91,7 +92,7 @@ local function CreateMainFrame()
     end)
 
     -- portrait
-    WarbandeerPortrait:SetTexture("Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
+    frame:SetPortraitTextureRaw("Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
 
     -- todo, make resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
 
@@ -99,7 +100,7 @@ local function CreateMainFrame()
     frame:SetFrameStrata("DIALOG")
     frame:SetClampedToScreen(true)
     frame:SetPoint("CENTER")
-    frame:SetSize(800, 400)
+    frame:SetSize(CELL_WIDTH * (#ALLIANCE_RACES + 1) + 24, 400)
  
     -- re-skin, if present
     if C_AddOns.IsAddOnLoaded("Warbandeer_FrameColor") then
@@ -112,21 +113,38 @@ local function CreateMainFrame()
     frame.tableFrame:SetPoint("TOPLEFT", 12, -56)
     frame.tableFrame:SetPoint("BOTTOMRIGHT", -58, 8)
     local content = frame.tableFrame
+
+    local ROW_WIDTH = CELL_WIDTH * (#ALLIANCE_RACES + 1)
+
+    content.header = CreateFrame("Frame", nil, content)
+    content.header:SetSize(ROW_WIDTH, CELL_HEIGHT)
+    content.header:SetPoint("TOPLEFT", 0, 0)
+
+    content.header.columns = {}
+    for i=1,#ALLIANCE_RACES do
+        content.header.columns[i] = content.header:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        content.header.columns[i]:SetPoint("LEFT", i * CELL_WIDTH, 0)
+        content.header.columns[i]:SetText(ALLIANCE_RACES[i])
+    end
+    
     content.rows = {}
-    local CELL_WIDTH = 100
-    local CELL_HEIGHT = 24
-    local NUM_CELLS = 12
-    for i,c in pairs(CLASSES) do
+    for i=1,GetNumClasses() do
+        local className, classFile = GetClassInfo(i)
+        local classColor = C_ClassColor.GetClassColor(classFile)
         if not content.rows[i] then
-            local button = CreateFrame("Button", nil, content)
-            button:SetSize(CELL_WIDTH * NUM_CELLS, CELL_HEIGHT)
-            button:SetPoint("TOPLEFT", 0, -i * CELL_HEIGHT)
-            button.columns = {}
-            button.columns[1] = button:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            button.columns[1]:SetPoint("LEFT", 0 * CELL_WIDTH, 0)
-            content.rows[i] = button
+            local row = CreateFrame("Frame", nil, content)
+            row:SetSize(ROW_WIDTH, CELL_HEIGHT)
+            row:SetPoint("TOPLEFT", 0, -i * CELL_HEIGHT)
+            row.tex = row:CreateTexture()
+            row.tex:SetAllPoints()
+            row.tex:SetColorTexture(classColor.r, classColor.g, classColor.b, 0.5)
+            
+            row.columns = {}
+            row.columns[1] = row:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            row.columns[1]:SetPoint("LEFT", 0 * CELL_WIDTH, 0)
+            content.rows[i] = row
         end
-        content.rows[i].columns[1]:SetText(c)
+        content.rows[i].columns[1]:SetText(className)
         content.rows[i].columns[1]:Show()
     end
 
