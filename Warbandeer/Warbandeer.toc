@@ -1,9 +1,10 @@
 ## Interface: 110000, 110002
 ## Title: Warbandeer
 ## Author: Nazuraki
-## Version: 11.0.000-0.1
+## Version: 11.0.000-1
 ## IconTexture: Interface\Icons\INV_Drink_05.blp
 ## SavedVariables: WarbandeerDB
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
 
+api.lua
 core.lua

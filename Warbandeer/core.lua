@@ -1,4 +1,8 @@
 local addOnName, ns = ...
+local _G = _G
+
+-- WoW APIs
+local CreateFrame, SlashCmdList, UISpecialFrames = CreateFrame, SlashCmdList, UISpecialFrames
 
 function ns.Print(...) print("|cFF33FF99".. addOnName.. "|r:", ...) end
 
@@ -14,32 +18,59 @@ f:SetScript("OnEvent", f.OnEvent)
 -- addon compartment, settings scroll templates: https://warcraft.wiki.gg/wiki/Patch_10.1.0/API_changes
 -- settings changes: https://warcraft.wiki.gg/wiki/Patch_11.0.2/API_changes
 
-function ns.Open()
+function ns.CreateMainFrame()
     -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
-    -- https://www.wowinterface.com/forums/showthread.php?t=40444
-    local frame = CreateFrame("Frame", "Warbandeer", UIParent, "BasicFrameTemplateWithInset")
+    -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
+    ns.frame = CreateFrame("Frame", addOnName, UIParent, "PortraitFrameTemplate")
+    local frame = ns.frame
+
+    -- make it closable with Escape key
+    _G[frame:GetName()] = frame
+    tinsert(UISpecialFrames, frame:GetName())
+
+    local r,g,b = PANEL_BACKGROUND_COLOR:GetRGB()
+    frame.Bg:SetColorTexture(r,g,b,0.9)
+
+    -- set the title
+    frame.title = _G["WarbandeerTitleText"]
+    frame.title:SetText(addOnName)
+
+    -- make it draggable
     frame:SetMovable(true)
     frame:EnableMouse(true)
     frame:RegisterForDrag("LeftButton")
-    frame:SetScript("OnDragStart", function(self)
-        self:StartMoving()
+    frame.TitleContainer:SetScript("OnMouseDown", function()
+        frame:StartMoving()
     end)
-    frame:SetScript("OnDragStop", function(self)
-        self:StopMovingOrSizing()
+    frame.TitleContainer:SetScript("OnMouseUp", function()
+        frame:StopMovingOrSizing()
     end)
 
+    -- portrait
+    WarbandeerPortrait:SetTexture("Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
+
+    -- todo, make resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
+
+    -- center it on screen and size it
+    frame:SetFrameStrata("DIALOG")
+    frame:SetClampedToScreen(true)
     frame:SetPoint("CENTER")
-    frame:SetSize(200, 200)
+    frame:SetSize(800, 240)
     local tex = frame:CreateTexture("ARTWORK")
     tex:SetAllPoints()
-    -- tex:SetColorTexture(1.0, 0.5, 0, 0.5)
 
-    frame.TitleBg:SetHeight(30)
-    frame.title = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    frame.title:SetPoint("TOPLEFT", frame.TitleBg, "TOPLEFT", 5, -3)
-    frame.title:SetText("Warbandeer")
+    -- re-skin, if present
+    if C_AddOns.IsAddOnLoaded("Warbandeer_FrameColor") and ns.api then
+        ns.api.SkinFrame(frame)
+    end
+end
 
-    ShowUIPanel(frame)
+function ns.Open()
+    if not ns.frame then
+        ns.CreateMainFrame()
+    end
+
+    ShowUIPanel(ns.frame)
 end
 
 local defaults = {
@@ -68,7 +99,7 @@ end
 SLASH_WARBAND1 = "/warband"
 SLASH_WARBAND2 = "/wb"
 
-SlashCmdList.WARBAND = function(msg, editBox)
+function SlashCmdList.WARBAND(msg)
     ns.Open()
 end
 
