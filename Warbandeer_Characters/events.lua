@@ -10,12 +10,12 @@ local function OnEvent(self, event, ...)
 		print(event, addOnName)
 	elseif event == "PLAYER_ENTERING_WORLD" then
 		local isLogin, isReload = ...
-		print(event, isLogin, isReload)
+		--print(event, isLogin, isReload)
 	elseif event == "CHAT_MSG_CHANNEL" then
 		local text, playerName, _, channelName = ...
-		print(event, text, playerName, channelName)
+		--print(event, text, playerName, channelName)
 	elseif event == "PLAYER_LEVEL_UP" then
-		PlayMusic(642322) -- sound/music/pandaria/mus_50_toast_b_hero_01.mp3
+		--PlayMusic(642322) -- sound/music/pandaria/mus_50_toast_b_hero_01.mp3
 	end
 end
 
