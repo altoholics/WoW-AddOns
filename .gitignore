@@ -43,3 +43,4 @@ WeakAurasArchive
 WeakAurasModelPaths
 WeakAurasOptions
 WeakAurasTemplates
+*.code-workspace
