@@ -2,28 +2,10 @@ local addOnName, ns = ...
 
 -- set up the main addon window
 
-local _G = _G
-
 -- Wow APIs
 local CreateFrame = CreateFrame
-local C_AddOns, UISpecialFrames = C_AddOns, UISpecialFrames
 
 -- class colors: https://wowpedia.fandom.com/wiki/Class_colors
-local CLASSES = {
-    "Warrior",
-    "Hunter",
-    "Mage",
-    "Rogue",
-    "Priest",
-    "Warlock",
-    "Paladin",
-    "Druid",
-    "Shaman",
-    "Monk",
-    "Demon Hunter",
-    "Death Knight",
-    "Evoker",
-}
 
 local ALLIANCE_RACES = {
     "Human",
@@ -65,51 +47,12 @@ local NUM_CELLS = 12
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 local function CreateMainFrame()
-    -- this gives us a full window with:
-    --   a circle portrait in the top left
-    --   a close button in the top right
-    --   a title bar
-    -- https://github.com/Gethe/wow-ui-source/blob/b5c546c1625c96fe008a771c5c46b4ccb90944f6/Interface/AddOns/Blizzard_SharedXML/PortraitFrame.lua
-    local frame = CreateFrame("Frame", addOnName, UIParent, "PortraitFrameTemplate")
-
-    -- make it closable with Escape key
-    _G[frame:GetName()] = frame -- put it in the global namespace
-    tinsert(UISpecialFrames, frame:GetName()) -- make it a special frame
-
-    -- set the title
-    frame:SetTitle(addOnName)
-
-    -- make it draggable
-    frame:SetMovable(true)
-    frame:EnableMouse(true)
-    frame:RegisterForDrag("LeftButton")
-    -- only use the title bar for dragging
-    frame.TitleContainer:SetScript("OnMouseDown", function()
-        frame:StartMoving()
-    end)
-    frame.TitleContainer:SetScript("OnMouseUp", function()
-        frame:StopMovingOrSizing()
-    end)
-
-    -- portrait
-    frame:SetPortraitTextureRaw("Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
-
-    -- todo, make resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
-
-    -- center it on screen and size it
-    frame:SetFrameStrata("DIALOG")
-    frame:SetClampedToScreen(true)
-    frame:SetPoint("CENTER")
-    frame:SetSize(CELL_WIDTH * (#ALLIANCE_RACES + 1) + 24, 400)
- 
-    -- re-skin, if present
-    if C_AddOns.IsAddOnLoaded("Warbandeer_FrameColor") then
-        ns.api.SkinFrame(frame)
-    end
+    local frame = ns.PortraitFrame:create(addOnName, "Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
+    frame:position("CENTER", CELL_WIDTH * (#ALLIANCE_RACES + 1) + 24, 400)
 
     -- add the contents
     -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
-    frame.tableFrame = CreateFrame("Frame", nil, frame)
+    frame.tableFrame = CreateFrame("Frame", nil, frame.frame)
     frame.tableFrame:SetPoint("TOPLEFT", 12, -56)
     frame.tableFrame:SetPoint("BOTTOMRIGHT", -58, 8)
     local content = frame.tableFrame
@@ -156,6 +99,5 @@ function ns.Open()
         ns.MainWindow = CreateMainFrame()
     end
 
-    ---@diagnostic disable-next-line: param-type-mismatch
-    ShowUIPanel(ns.MainWindow)
+    ns.MainWindow:show()
 end

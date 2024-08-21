@@ -8,6 +8,9 @@
 
 init.lua
 api.lua
+
+ui/PortraitFrame.lua
+
 events.lua
 database.lua
 commands.lua
