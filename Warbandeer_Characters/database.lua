@@ -7,7 +7,7 @@ local defaults = {
 
 function ns.frame:ADDON_LOADED(event, name)
     if addOnName == name then
-        self.db = WarbandeerDB or CopyTable(defaults)
+        self.db = WarbandeerCharDB or CopyTable(defaults)
     end
 end
 ns.frame:RegisterEvent("ADDON_LOADED")
