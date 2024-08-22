@@ -1,4 +1,5 @@
 local _, ns = ...
+local ui = ns.ui
 
 -- Creates a Portrait Frame, a default styled frame with textured background, border, close button,
 -- title bar, and a large circular portrait in the top left.
@@ -50,6 +51,7 @@ local function createFrame(ops)
 end
 
 local PortraitFrame = {}
+ui.PortraitFrame = PortraitFrame
 function PortraitFrame:create(name, portraitPath)
     local o = {
         name = name,
@@ -70,5 +72,3 @@ end
 function PortraitFrame:show()
     ShowUIPanel(self.frame)
 end
-
-ns.PortraitFrame = PortraitFrame

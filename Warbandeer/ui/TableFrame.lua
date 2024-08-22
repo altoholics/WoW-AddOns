@@ -1,4 +1,5 @@
 local _, ns = ...
+local ui = ns.ui
 
 -- Creates an empty frame, but lays out its children in a tabular manner.
 -- ops:
@@ -9,7 +10,6 @@ local _, ns = ...
 --   CELL_WIDTH   int          - width of cells in pixels
 --   CELL_HEIGHT  int          - height of cells in pixels
 
-local _G = _G
 local CreateFrame = CreateFrame
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
@@ -77,4 +77,4 @@ function TableFrame:show()
     ShowUIPanel(self.frame)
 end
 
-ns.TableFrame = TableFrame
+ui.TableFrame = TableFrame

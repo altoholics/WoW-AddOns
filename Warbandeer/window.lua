@@ -1,4 +1,6 @@
 local addOnName, ns = ...
+local ui = ns.ui
+local PortraitFrame, TableFrame = ui.PortraitFrame, ui.TableFrame
 
 -- set up the main addon window
 
@@ -49,11 +51,11 @@ local CLASS_NAMES = Map(CLASSES, Select("name"))
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 local function CreateMainFrame()
-    local frame = ns.PortraitFrame:create(addOnName, "Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
+    local frame = PortraitFrame:create(addOnName, "Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
     frame:position("CENTER", 100 * (#ALLIANCE_RACES + 1) + 24, 400)
 
     -- add the contents
-    local t = ns.TableFrame:create(frame.frame, {
+    local t = TableFrame:create(frame.frame, {
         CELL_WIDTH = 100,
         CELL_HEIGHT = 24,
         columnNames = ALLIANCE_RACES,

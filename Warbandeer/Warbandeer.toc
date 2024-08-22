@@ -11,6 +11,7 @@ util.lua
 init.lua
 api.lua
 
+ui/BasicFrame.lua
 ui/PortraitFrame.lua
 ui/TableFrame.lua
 
