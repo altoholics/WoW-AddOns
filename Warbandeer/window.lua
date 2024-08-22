@@ -3,7 +3,10 @@ local addOnName, ns = ...
 -- set up the main addon window
 
 -- Wow APIs
-local CreateFrame = CreateFrame
+local NUM_CLASSES = GetNumClasses()
+local GetClassInfo, GetClassColor = GetClassInfo, C_ClassColor.GetClassColor
+
+local Generate, Map, Select = ns.util.Generate, ns.util.Map, ns.util.Select
 
 -- class colors: https://wowpedia.fandom.com/wiki/Class_colors
 
@@ -39,56 +42,32 @@ local HORDE_RACES = {
     "Dracthyr",
 }
 
-local CELL_WIDTH = 100
-local CELL_HEIGHT = 24
-local NUM_CELLS = 12
+local CLASSES = Generate(function(i) local n, id = GetClassInfo(i); local c = GetClassColor(id); return {name = n, id = id, color = c} end, NUM_CLASSES)
+local CLASS_NAMES = Map(CLASSES, Select("name"))
 
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 local function CreateMainFrame()
     local frame = ns.PortraitFrame:create(addOnName, "Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
-    frame:position("CENTER", CELL_WIDTH * (#ALLIANCE_RACES + 1) + 24, 400)
+    frame:position("CENTER", 100 * (#ALLIANCE_RACES + 1) + 24, 400)
 
     -- add the contents
-    -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
-    frame.tableFrame = CreateFrame("Frame", nil, frame.frame)
-    frame.tableFrame:SetPoint("TOPLEFT", 12, -56)
-    frame.tableFrame:SetPoint("BOTTOMRIGHT", -58, 8)
-    local content = frame.tableFrame
+    local t = ns.TableFrame:create(frame.frame, {
+        CELL_WIDTH = 100,
+        CELL_HEIGHT = 24,
+        columnNames = ALLIANCE_RACES,
+        rowNames = CLASS_NAMES,
+    })
+    t:position("TOPLEFT", nil, nil, 12, -56)
+    t:position("BOTTOMRIGHT", nil, nil, -58, 8)
 
-    local ROW_WIDTH = CELL_WIDTH * (#ALLIANCE_RACES + 1)
-
-    content.header = CreateFrame("Frame", nil, content)
-    content.header:SetSize(ROW_WIDTH, CELL_HEIGHT)
-    content.header:SetPoint("TOPLEFT", 0, 0)
-
-    content.header.columns = {}
-    for i=1,#ALLIANCE_RACES do
-        content.header.columns[i] = content.header:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        content.header.columns[i]:SetPoint("LEFT", i * CELL_WIDTH, 0)
-        content.header.columns[i]:SetText(ALLIANCE_RACES[i])
-    end
-    
-    content.rows = {}
-    for i=1,GetNumClasses() do
-        local className, classFile = GetClassInfo(i)
-        local classColor = C_ClassColor.GetClassColor(classFile)
-        if not content.rows[i] then
-            local row = CreateFrame("Frame", nil, content)
-            row:SetSize(ROW_WIDTH, CELL_HEIGHT)
-            row:SetPoint("TOPLEFT", 0, -i * CELL_HEIGHT)
-            row.tex = row:CreateTexture()
-            row.tex:SetAllPoints()
-            row.tex:SetColorTexture(classColor.r, classColor.g, classColor.b, 0.5)
-            
-            row.columns = {}
-            row.columns[1] = row:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            row.columns[1]:SetPoint("LEFT", 0 * CELL_WIDTH, 0)
-            content.rows[i] = row
-        end
-        content.rows[i].columns[1]:SetText(className)
-        content.rows[i].columns[1]:Show()
+    -- color the backgrounds of the rows by class color
+    for i=1,NUM_CLASSES do
+        local r = t.frame.rows[i]
+        r.bg = r:CreateTexture()
+        r.bg:SetAllPoints()
+        r.bg:SetColorTexture(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
     end
 
     return frame

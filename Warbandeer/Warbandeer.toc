@@ -6,10 +6,13 @@
 ## SavedVariables: WarbandeerDB
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
 
+util.lua
+
 init.lua
 api.lua
 
 ui/PortraitFrame.lua
+ui/TableFrame.lua
 
 events.lua
 database.lua
