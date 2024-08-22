@@ -12,6 +12,7 @@ local function OnEvent(self, event, ...)
 		local isLogin, isReload = ...
 		local playerName = UnitName("player");
 		ChatFrame1:AddMessage('Hi my name is: ' .. playerName);
+		ChatFrame1:AddMessage('The cVar arachnophobiaMode is: ' .. arachnophobiaMode);
 		--print(event, isLogin, isReload)
 	elseif event == "CHAT_MSG_CHANNEL" then
 		local text, playerName, _, channelName = ...
