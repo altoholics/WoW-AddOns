@@ -20,6 +20,11 @@ local PortraitFrame = Class(Dialog, function(self, o)
     -- portrait
     local frame = o.frame
     frame:SetPortraitTextureRaw(o.portraitPath)
+
+    -- re-skin, if present
+    if C_AddOns.IsAddOnLoaded("FrameColor") then
+        ns.SkinFrame(frame)
+    end
 end, {
     parent = UIParent,
     template = "PortraitFrameTemplate"

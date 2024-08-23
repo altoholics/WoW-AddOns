@@ -5,6 +5,7 @@
 ## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green.blp
 ## SavedVariables: WarbandeerDB
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
+## Dependencies: LibNUI
 
 util.lua
 

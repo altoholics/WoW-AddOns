@@ -1,8 +1,0 @@
-## Interface: 110000, 110002
-## Title: Warbandeer_FrameColor
-## Author: Nazuraki
-## Version: 11.0.000-1
-## Dependencies: FrameColor, Warbandeer
-
-api.lua
-main.lua

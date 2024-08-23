@@ -1,10 +1,8 @@
-local addOnName, ns = ...
-local ADDON_NAME = "Warbandeer"
+local _, ns = ...
 
 local CreateSkinModule = FrameColor_CreateSkinModule
 
-function ns.Print(...) print("|cFF33FF99".. addOnName.. "|r:", ...) end
-
+-- because it isn't exposed by FrameColor
 function ns:SkinNineSliced(frame, color, desaturation)   
     for _, texture in pairs({
         frame.NineSlice.TopEdge,
@@ -21,9 +19,9 @@ function ns:SkinNineSliced(frame, color, desaturation)
     end
 end
 
-function ns.api.SkinFrame(frame)
+function ns.SkinFrame(frame)
     local module = CreateSkinModule({
-        moduleName = ADDON_NAME,
+        moduleName = frame:GetName(),
         moduleDesc = "",
     })
 

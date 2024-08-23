@@ -3,7 +3,10 @@
 ## Author: Nazuraki
 ## Version: 11.0.000-1
 ## IconTexture: Interface\Icons\achievement_guildperk_bountifulbags.blp
+## OptionalDeps: FrameColor
 
 BasicFrame.lua
 PortraitFrame.lua
 TableFrame.lua
+
+FrameColor.lua
