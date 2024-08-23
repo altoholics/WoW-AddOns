@@ -51,11 +51,16 @@ local CLASS_NAMES = Map(CLASSES, Select("name"))
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 local function CreateMainFrame()
-    local frame = PortraitFrame:create(addOnName, "Interface\\Icons\\inv_10_tailoring2_banner_green.blp")
-    frame:position("CENTER", 100 * (#ALLIANCE_RACES + 1) + 24, 400)
-
+    local pf = PortraitFrame:new{
+        name = addOnName,
+        portraitPath = "Interface\\Icons\\inv_10_tailoring2_banner_green.blp",
+    }
+    pf:center()
+    pf:size(100 * (#ALLIANCE_RACES + 1) + 24, 400)
+    
     -- add the contents
-    local t = TableFrame:create(frame.frame, {
+    local frame = pf.frame
+    local t = TableFrame:create(frame, {
         CELL_WIDTH = 100,
         CELL_HEIGHT = 24,
         columnNames = ALLIANCE_RACES,
@@ -72,7 +77,7 @@ local function CreateMainFrame()
         r.bg:SetColorTexture(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
     end
 
-    return frame
+    return pf
 end
 
 function ns.Open()

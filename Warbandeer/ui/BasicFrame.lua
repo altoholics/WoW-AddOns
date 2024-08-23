@@ -5,12 +5,13 @@ ns.ui = ui
 
 -- Basic frame classes.
 
+local _G = _G
 local CreateFrame, ShowUIPanel, Mixin = CreateFrame, ShowUIPanel, Mixin
+local UISpecialFrames = UISpecialFrames
 
 -- empty frame
 local Frame = {}
 ui.Frame = Frame
-
 function Frame:new(o)
     o = o or {}
     setmetatable(o, self)
@@ -38,7 +39,6 @@ end
 -- frame with a background
 local BgFrame = {}
 ui.BgFrame = BgFrame
-
 function BgFrame:new(o)
     o = Frame:new(o)
     Mixin(o, Frame, BgFrame)
@@ -56,11 +56,10 @@ end
 -- dialog with title bar and close button, closable with escape
 local Dialog = {}
 ui.Dialog = Dialog
-
 function Dialog:new(o)
     o = Frame:new(o)
     Mixin(o, Frame, Dialog)
-    setmetatable(o.__index, self)
+    setmetatable(o, self)
     self.__index = self
 
     local frame = o.frame
