@@ -3,11 +3,9 @@ local _, ns = ...
 local ui = {}
 ns.ui = ui
 
--- WARNING! Everything below is broken and still in flux.
-
 -- Basic frame classes.
 
-local CreateFrame, ShowUIPanel = CreateFrame, ShowUIPanel
+local CreateFrame, ShowUIPanel, Mixin = CreateFrame, ShowUIPanel, Mixin
 
 -- empty frame
 local Frame = {}
@@ -43,7 +41,8 @@ ui.BgFrame = BgFrame
 
 function BgFrame:new(o)
     o = Frame:new(o)
-    setmetatable(o.__index, self)
+    Mixin(o, Frame, BgFrame)
+    setmetatable(o, self)
     self.__index = self
 
     o.bg = o.frame:CreateTexture()
@@ -60,6 +59,7 @@ ui.Dialog = Dialog
 
 function Dialog:new(o)
     o = Frame:new(o)
+    Mixin(o, Frame, Dialog)
     setmetatable(o.__index, self)
     self.__index = self
 

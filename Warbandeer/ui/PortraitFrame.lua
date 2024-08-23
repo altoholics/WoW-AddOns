@@ -1,11 +1,12 @@
 local _, ns = ...
 local ui = ns.ui
+local Dialog = ui.Dialog
 
 -- Creates a Portrait Frame, a default styled frame with textured background, border, close button,
 -- title bar, and a large circular portrait in the top left.
 
 local _G = _G
-local CreateFrame, ShowUIPanel = CreateFrame, ShowUIPanel
+local ShowUIPanel = ShowUIPanel
 local C_AddOns, UIParent, UISpecialFrames = C_AddOns, UIParent, UISpecialFrames
 
 local function createFrame(ops)
@@ -14,7 +15,12 @@ local function createFrame(ops)
     --   a close button in the top right
     --   a title bar
     -- https://github.com/Gethe/wow-ui-source/blob/b5c546c1625c96fe008a771c5c46b4ccb90944f6/Interface/AddOns/Blizzard_SharedXML/PortraitFrame.lua
-    local frame = CreateFrame("Frame", ops.name, UIParent, "PortraitFrameTemplate")
+    local dialog = Dialog:new{
+        name = ops.name,
+        parent = UIParent,
+        template = "PortraitFrameTemplate",
+    }
+    local frame = dialog.frame
     frame:SetFrameStrata("DIALOG")
     frame:SetClampedToScreen(true)
     
