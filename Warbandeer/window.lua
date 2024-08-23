@@ -1,8 +1,9 @@
 local addOnName, ns = ...
-local ui = ns.ui
-local PortraitFrame, TableFrame = ui.PortraitFrame, ui.TableFrame
 
 -- set up the main addon window
+
+local ui = LibNUI
+local PortraitFrame, TableFrame = ui.PortraitFrame, ui.TableFrame
 
 -- Wow APIs
 local NUM_CLASSES = GetNumClasses()
@@ -72,6 +73,11 @@ local function CreateMainFrame()
     -- color the backgrounds of the rows by class color
     for i=1,NUM_CLASSES do
         t:row(i).bg:SetColorTexture(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
+    end
+
+    -- re-skin, if present
+    if C_AddOns.IsAddOnLoaded(pf.frame:GetName() .. "_FrameColor") then
+        ns.api.SkinFrame(pf.frame)
     end
 
     return pf

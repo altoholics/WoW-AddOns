@@ -1,0 +1,9 @@
+## Interface: 110002
+## Title: LibNUI
+## Author: Nazuraki
+## Version: 11.0.000-1
+## IconTexture: Interface\Icons\achievement_guildperk_bountifulbags.blp
+
+BasicFrame.lua
+PortraitFrame.lua
+TableFrame.lua

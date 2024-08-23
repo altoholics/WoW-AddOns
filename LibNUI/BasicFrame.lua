@@ -1,7 +1,8 @@
 local _, ns = ...
 
-local ui = {}
-ns.ui = ui
+ns.ui = {}
+local ui = ns.ui
+LibNUI = ns.ui
 
 -- Basic frame classes.
 
