@@ -1,68 +1,61 @@
 local _, ns = ...
 local ui = ns.ui
-local Frame = ui.Frame
+local Class, Frame, BgFrame = ui.Class, ui.Frame, ui.BgFrame
 
 -- Creates an empty frame, but lays out its children in a tabular manner.
 -- ops:
---   numColumns?  int          - defaults to count of column names
+--   numCols?     int          - defaults to count of column names
 --   numRows?     int          - defaults to count of row names
---   columnNames? string array - list of header names at top of columns
+--   colNames?    string array - list of header names at top of columns
 --   rowNames?    string array - list of header names at left of rows
 --   CELL_WIDTH   int          - width of cells in pixels
 --   CELL_HEIGHT  int          - height of cells in pixels
 
-local CreateFrame = CreateFrame
-
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
-local TableFrame = {}
-ui.TableFrame = TableFrame
-function TableFrame:new(o)
-    o = Frame:new(o)
-    Mixin(o, Frame, TableFrame)
-    setmetatable(o, self)
-    self.__index = self
-
-    o.numColumns = o.columns or #o.columnNames
+local TableFrame = Class(Frame, function(self, o)
+    o.numCols = o.columns or #o.colNames
     o.numRows = o.numRows or #o.rowNames
 
     local offsetX = o.rowNames ~= nil and o.CELL_WIDTH or 0
-    local offsetY = o.columnNames ~= nil and o.CELL_HEIGHT or 0
-    
+    local offsetY = o.colNames ~= nil and o.CELL_HEIGHT or 0
+
     local frame = o.frame
+    o.cols = {}
+    o.rows = {}
+    local cols, rows = o.cols, o.rows
 
-    if o.columnNames then
-        local header = CreateFrame("Frame", nil, frame)
-        frame.header = header
-        header:SetSize(o.CELL_WIDTH * o.numColumns, o.CELL_HEIGHT)
-        header:SetPoint("TOPLEFT", offsetX, 0)
-        header.columns = {}
+    if o.colNames then
+        local colHeight = o.CELL_HEIGHT * (o.numRows + 1)
+        local col, h
+        for i=1,#o.colNames do
+            col = BgFrame:new{parent = frame, bgAlpha = 0}
+            col:size(o.CELL_WIDTH, colHeight)
+            col:topLeft(offsetX + (i-1) * o.CELL_WIDTH, 0)
+            cols[i] = col
 
-        local f
-        for i=1,#o.columnNames do
-            f = header:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            f:SetPoint("LEFT", (i-1) * o.CELL_WIDTH, 0)
-            f:SetText(o.columnNames[i])
-            header.columns[i] = f
+            h = col.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            h:SetPoint("TOPLEFT", (i-1) * o.CELL_WIDTH, 0)
+            h:SetText(o.colNames[i])
         end
     end
 
     if o.rowNames then
-        offsetX = o.CELL_WIDTH
-        frame.rows = {}
-        local rowWidth = o.CELL_WIDTH * (o.numColumns + 1)
+        local rowWidth = o.CELL_WIDTH * (o.numCols + 1)
         local row, h
         for i=1,#o.rowNames do
-            row = CreateFrame("Frame", nil, frame)
-            row:SetSize(rowWidth, o.CELL_HEIGHT)
-            row:SetPoint("TOPLEFT", 0, (i-1) * -o.CELL_HEIGHT - offsetY)
-            frame.rows[i] = row
+            row = BgFrame:new{parent = frame, bgAlpha = 0}
+            row:size(rowWidth, o.CELL_HEIGHT)
+            row:topLeft(0, (i-1) * -o.CELL_HEIGHT - offsetY)
+            rows[i] = row
 
-            h = row:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            h = row.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             -- inset padding 2
             h:SetPoint("LEFT", 2, 0)
             h:SetText(o.rowNames[i])
         end
     end
+end)
+ui.TableFrame = TableFrame
 
-    return o
-end
+function TableFrame:row(n) return self.rows[n] end
+function TableFrame:col(n) return self.cols[n] end

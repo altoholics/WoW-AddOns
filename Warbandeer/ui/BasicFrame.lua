@@ -5,24 +5,46 @@ ns.ui = ui
 
 -- Basic frame classes.
 
-local _G = _G
+local _G, setmetatable, tinsert, MergeTable = _G, setmetatable, tinsert, MergeTable
 local CreateFrame, ShowUIPanel, Mixin = CreateFrame, ShowUIPanel, Mixin
 local UISpecialFrames = UISpecialFrames
 
--- empty frame
-local Frame = {}
-ui.Frame = Frame
-function Frame:new(o)
-    o = o or {}
-    setmetatable(o, self)
-    self.__index = self
+local function Class(parent, fn, defaults)
+    local c = {}
 
+    -- define the constructor
+    if not parent then
+        function c:new(o)
+            o = o or {}
+            setmetatable(o, self)
+            self.__index = self
+            fn(self, o)
+            return o
+        end
+    else
+        function c:new(o)
+            if defaults then MergeTable(o, defaults) end
+            o = parent:new(o)
+            Mixin(o, parent, c)
+            setmetatable(o, self)
+            self.__index = self
+            fn(self, o)
+            return o
+        end
+    end
+
+    return c
+end
+ui.Class = Class
+
+-- empty frame
+local Frame = Class(nil, function(self, o)
     o.frame = CreateFrame("Frame", o.name, o.parent, o.template)
     o.name = nil
     o.parent = nil
     o.template = nil
-    return o
-end
+end)
+ui.Frame = Frame
 
 function Frame:center() self.frame:SetPoint("CENTER") end
 function Frame:topLeft(x, y) self.frame:SetPoint("TOPLEFT", x, y) end
@@ -39,44 +61,28 @@ end
 
 
 -- frame with a background
-local BgFrame = {}
-ui.BgFrame = BgFrame
-function BgFrame:new(o)
-    o = Frame:new(o)
-    Mixin(o, Frame, BgFrame)
-    setmetatable(o, self)
-    self.__index = self
-
+local BgFrame = Class(Frame, function(self, o)
     o.bg = o.frame:CreateTexture()
     o.bg:SetAllPoints()
-    o.bg:SetColorTexture(0, 0, 0, 0.8)
-
-    return o
-end
+    o.bg:SetColorTexture(0, 0, 0, o.bgAlpha or 0.8)
+end)
+ui.BgFrame = BgFrame
 
 
 -- dialog with title bar and close button, closable with escape
-local Dialog = {}
-ui.Dialog = Dialog
-function Dialog:new(o)
-    o = Frame:new(o)
-    Mixin(o, Frame, Dialog)
-    setmetatable(o, self)
-    self.__index = self
-
+local Dialog = Class(Frame, function(self, o)
     local frame = o.frame
     frame:SetFrameStrata("DIALOG")
     frame:SetClampedToScreen(true)
-    
+
     -- make it closable with Escape key
     _G[frame:GetName()] = frame -- put it in the global namespace
     tinsert(UISpecialFrames, frame:GetName()) -- make it a special frame
 
     -- set the title
     frame:SetTitle(self.title or frame:GetName())
-
-    return o
-end
+end)
+ui.Dialog = Dialog
 
 function Dialog:makeTitlebarDraggable()
     self.frame.TitleContainer:SetScript("OnMouseDown", function()

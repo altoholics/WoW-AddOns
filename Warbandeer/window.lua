@@ -63,7 +63,7 @@ local function CreateMainFrame()
         parent = pf.frame,
         CELL_WIDTH = 100,
         CELL_HEIGHT = 24,
-        columnNames = ALLIANCE_RACES,
+        colNames = ALLIANCE_RACES,
         rowNames = CLASS_NAMES,
     }
     t:topLeft(12, -56)
@@ -71,10 +71,7 @@ local function CreateMainFrame()
 
     -- color the backgrounds of the rows by class color
     for i=1,NUM_CLASSES do
-        local r = t.frame.rows[i]
-        r.bg = r:CreateTexture()
-        r.bg:SetAllPoints()
-        r.bg:SetColorTexture(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
+        t:row(i).bg:SetColorTexture(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
     end
 
     return pf
