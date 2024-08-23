@@ -13,24 +13,14 @@ local function Class(parent, fn, defaults)
     local c = {}
 
     -- define the constructor
-    if not parent then
-        function c:new(o)
-            o = o or {}
-            setmetatable(o, self)
-            self.__index = self
-            fn(self, o)
-            return o
-        end
-    else
-        function c:new(o)
-            if defaults then MergeTable(o, defaults) end
-            o = parent:new(o)
-            Mixin(o, parent, c)
-            setmetatable(o, self)
-            self.__index = self
-            fn(self, o)
-            return o
-        end
+    function c:new(o)
+        if defaults then MergeTable(o, defaults) end
+        o = parent and parent:new(o) or (o or {})
+        Mixin(o, parent or {}, c)
+        setmetatable(o, self)
+        self.__index = self
+        fn(self, o)
+        return o
     end
 
     return c
