@@ -59,15 +59,15 @@ local function CreateMainFrame()
     pf:size(100 * (#ALLIANCE_RACES + 1) + 24, 400)
     
     -- add the contents
-    local frame = pf.frame
-    local t = TableFrame:create(frame, {
+    local t = TableFrame:new{
+        parent = pf.frame,
         CELL_WIDTH = 100,
         CELL_HEIGHT = 24,
         columnNames = ALLIANCE_RACES,
         rowNames = CLASS_NAMES,
-    })
-    t:position("TOPLEFT", nil, nil, 12, -56)
-    t:position("BOTTOMRIGHT", nil, nil, -58, 8)
+    }
+    t:topLeft(12, -56)
+    t:bottomRight(-58, 8)
 
     -- color the backgrounds of the rows by class color
     for i=1,NUM_CLASSES do

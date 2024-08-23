@@ -25,6 +25,8 @@ function Frame:new(o)
 end
 
 function Frame:center() self.frame:SetPoint("CENTER") end
+function Frame:topLeft(x, y) self.frame:SetPoint("TOPLEFT", x, y) end
+function Frame:bottomRight(x, y) self.frame:SetPoint("BOTTOMRIGHT", x, y) end
 function Frame:size(x, y) self.frame:SetSize(x, y) end
 function Frame:show() ShowUIPanel(self.frame) end
 function Frame:makeDraggable()

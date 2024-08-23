@@ -1,5 +1,6 @@
 local _, ns = ...
 local ui = ns.ui
+local Frame = ui.Frame
 
 -- Creates an empty frame, but lays out its children in a tabular manner.
 -- ops:
@@ -13,68 +14,55 @@ local ui = ns.ui
 local CreateFrame = CreateFrame
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
-local function createFrame(parent, ops)
-    ops.numColumns = ops.columns or #ops.columnNames
-    ops.numRows = ops.numRows or #ops.rowNames
+local TableFrame = {}
+ui.TableFrame = TableFrame
+function TableFrame:new(o)
+    o = Frame:new(o)
+    Mixin(o, Frame, TableFrame)
+    setmetatable(o, self)
+    self.__index = self
 
-    local frame = CreateFrame("Frame", nil, parent)
-    local offsetX = ops.rowNames ~= nil and ops.CELL_WIDTH or 0
-    local offsetY = ops.columnNames ~= nil and ops.CELL_HEIGHT or 0
+    o.numColumns = o.columns or #o.columnNames
+    o.numRows = o.numRows or #o.rowNames
 
-    if ops.columnNames then
+    local offsetX = o.rowNames ~= nil and o.CELL_WIDTH or 0
+    local offsetY = o.columnNames ~= nil and o.CELL_HEIGHT or 0
+    
+    local frame = o.frame
+
+    if o.columnNames then
         local header = CreateFrame("Frame", nil, frame)
         frame.header = header
-        header:SetSize(ops.CELL_WIDTH * ops.numColumns, ops.CELL_HEIGHT)
+        header:SetSize(o.CELL_WIDTH * o.numColumns, o.CELL_HEIGHT)
         header:SetPoint("TOPLEFT", offsetX, 0)
         header.columns = {}
 
         local f
-        for i=1,#ops.columnNames do
+        for i=1,#o.columnNames do
             f = header:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            f:SetPoint("LEFT", (i-1) * ops.CELL_WIDTH, 0)
-            f:SetText(ops.columnNames[i])
+            f:SetPoint("LEFT", (i-1) * o.CELL_WIDTH, 0)
+            f:SetText(o.columnNames[i])
             header.columns[i] = f
         end
     end
 
-    if ops.rowNames then
-        offsetX = ops.CELL_WIDTH
+    if o.rowNames then
+        offsetX = o.CELL_WIDTH
         frame.rows = {}
-        local rowWidth = ops.CELL_WIDTH * (ops.numColumns + 1)
+        local rowWidth = o.CELL_WIDTH * (o.numColumns + 1)
         local row, h
-        for i=1,#ops.rowNames do
+        for i=1,#o.rowNames do
             row = CreateFrame("Frame", nil, frame)
-            row:SetSize(rowWidth, ops.CELL_HEIGHT)
-            row:SetPoint("TOPLEFT", 0, (i-1) * -ops.CELL_HEIGHT - offsetY)
+            row:SetSize(rowWidth, o.CELL_HEIGHT)
+            row:SetPoint("TOPLEFT", 0, (i-1) * -o.CELL_HEIGHT - offsetY)
             frame.rows[i] = row
 
             h = row:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             -- inset padding 2
             h:SetPoint("LEFT", 2, 0)
-            h:SetText(ops.rowNames[i])
+            h:SetText(o.rowNames[i])
         end
     end
 
-    return frame
-end
-
-local TableFrame = {}
-function TableFrame:create(parent, ops)
-    local o = ops or {}
-    setmetatable(o, self)
-    self.__index = self
-    o.frame = createFrame(parent, o)
     return o
 end
-
--- position it on screen and size it
-function TableFrame:position(point, width, height, offx, offy)
-    self.frame:SetPoint(point, offx, offy)
-    if width ~= nil and height ~= nil then self.frame:SetSize(width, height) end
-end
-
-function TableFrame:show()
-    ShowUIPanel(self.frame)
-end
-
-ui.TableFrame = TableFrame
