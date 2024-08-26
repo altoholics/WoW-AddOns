@@ -72,7 +72,7 @@ local function CreateMainFrame()
 
     -- color the backgrounds of the rows by class color
     for i=1,NUM_CLASSES do
-        t:row(i).bg:SetColorTexture(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
+        t:row(i):backdropColor(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
     end
 
     return pf

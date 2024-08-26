@@ -5,8 +5,18 @@
 ## IconTexture: Interface\Icons\achievement_guildperk_bountifulbags.blp
 ## OptionalDeps: FrameColor
 
-BasicFrame.lua
+init.lua
+
+util.lua
+constants.lua
+
+Frame.lua
+BgFrame.lua
+Dialog.lua
+StatusBar.lua
 PortraitFrame.lua
 TableFrame.lua
+
+Texture.lua
 
 FrameColor.lua

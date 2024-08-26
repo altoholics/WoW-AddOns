@@ -1,6 +1,6 @@
 local _, ns = ...
 local ui = ns.ui
-local Class, Dialog = ui.Class, ui.Dialog
+local Class, Dialog = ns.util.Class, ui.Dialog
 
 -- Creates a Portrait Frame, a default styled frame with textured background, border, close button,
 -- title bar, and a large circular portrait in the top left.

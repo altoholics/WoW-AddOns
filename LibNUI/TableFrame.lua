@@ -1,6 +1,6 @@
 local _, ns = ...
 local ui = ns.ui
-local Class, Frame, BgFrame = ui.Class, ui.Frame, ui.BgFrame
+local Class, Frame, BgFrame = ns.util.Class, ui.Frame, ui.BgFrame
 
 -- Creates an empty frame, but lays out its children in a tabular manner.
 -- ops:
@@ -28,7 +28,7 @@ local TableFrame = Class(Frame, function(self, o)
         local colHeight = o.CELL_HEIGHT * (o.numRows + 1)
         local col, h
         for i=1,#o.colNames do
-            col = BgFrame:new{parent = frame, bgAlpha = 0}
+            col = BgFrame:new{parent = frame, backdrop = {alpha = 0}}
             col:size(o.CELL_WIDTH, colHeight)
             col:topLeft(offsetX + (i-1) * o.CELL_WIDTH, 0)
             cols[i] = col
@@ -43,7 +43,7 @@ local TableFrame = Class(Frame, function(self, o)
         local rowWidth = o.CELL_WIDTH * (o.numCols + 1)
         local row, h
         for i=1,#o.rowNames do
-            row = BgFrame:new{parent = frame, bgAlpha = 0}
+            row = BgFrame:new{parent = frame, backdrop = {alpha = 0}}
             row:size(rowWidth, o.CELL_HEIGHT)
             row:topLeft(0, (i-1) * -o.CELL_HEIGHT - offsetY)
             rows[i] = row
