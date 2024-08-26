@@ -10,13 +10,13 @@ init.lua
 util.lua
 constants.lua
 
+Texture.lua
+
 Frame.lua
 BgFrame.lua
 Dialog.lua
 StatusBar.lua
 PortraitFrame.lua
 TableFrame.lua
-
-Texture.lua
 
 FrameColor.lua

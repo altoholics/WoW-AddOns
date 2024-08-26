@@ -1,9 +1,12 @@
 local _, ns = ...
 
+local CopyTable = CopyTable
 local CreateFrame, ShowUIPanel = CreateFrame, ShowUIPanel
 
 local ui = ns.ui
-local Class = ns.util.Class
+local Class, CopyTables = ns.util.Class, ns.util.CopyTables
+local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.layer.Overlay
+local Texture = ui.Texture
 
 -- empty frame
 local Frame = Class(nil, function(self, o)
@@ -15,8 +18,7 @@ local Frame = Class(nil, function(self, o)
         if o.position.width then o:width(o.position.width); o.position.width = nil end
         if o.position.height then o:height(o.position.height); o.position.height = nil end
         for p,args in pairs(o.position) do
-            print(p, unpack(args))
-    --         if o[p] then o[p](unpack(args)) end
+            if o[p] then o[p](o, unpack(args)) end
         end
         o.position = nil
     end
@@ -52,13 +54,19 @@ end
 -- todo, resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
 
 function Frame:withTexture(name, o)
-    self[name] = self.frame:CreateTexture(o.textureName or nil, o.textureLayer or nil, o.textureTemplate or nil)
+  o.parent = self.frame
+  self[name] = Texture:new(o)
+  return self
 end
+function Frame:withTextureBackground(name, o) o.textureLayer = Background; return self:withTexture(name, o) end
+function Frame:withTextureArtwork(name, o) o.textureLayer = Artwork; return self:withTexture(name, o) end
+function Frame:withTextureOverlay(name, o) o.textureLayer = Overlay; return self:withTexture(name, o) end
 
+local BACKDROP_DEFAULTS = {
+    positionAll = true,
+    color = {0, 0, 0, 0.8}
+}
 function Frame:addBackdrop(o)
-    self.backdrop = self.frame:CreateTexture(o.textureName or nil, o.textureLayer or nil, o.textureTemplate or nil)
-    self.backdrop:SetAllPoints()
-    self.backdrop:SetColorTexture(o.r or 0, o.g or 0, o.b or 0, o.alpha or 0.8)
-    return self
+    return self:withTextureBackground("backdrop", CopyTables(BACKDROP_DEFAULTS, o))
 end
 
