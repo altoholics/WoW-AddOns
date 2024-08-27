@@ -5,8 +5,6 @@ local Class = ns.util.Class
 local Frame = ui.Frame
 local BottomLeft, TopLeft, TopRight = ui.edge.BottomLeft, ui.edge.TopLeft, ui.edge.TopRight
 
-local CreateColor = CreateColor
-
 -- https://wowpedia.fandom.com/wiki/Widget_API#StatusBar
 
 local StatusBar = Class(Frame, function(self, o)

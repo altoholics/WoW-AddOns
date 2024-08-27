@@ -4,7 +4,7 @@ local ui = LibNUI
 local StatusBar = ui.StatusBar
 local TopLeft, TopRight, BottomLeft, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.BottomRight
 
-local CreateColor, ReloadUI = CreateColor, ReloadUI
+local CreateColor = CreateColor
 local UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
 local StatusTrackingBarManager = StatusTrackingBarManager
 
@@ -19,42 +19,54 @@ local function GetPlayerLevelXP()
   return level, currentXP, maxXP
 end
 
+-- CreateColor(88/255, 0, 145/255, 0)
+local UnrestedGradientStart = CreateColor(88/255, 0, 145/255, 0.7)
+local UnrestedGradientEnd = CreateColor(154/255, 8/255, 252/255, 0.7)
+local RestedGradientStart = CreateColor(0, 32/255, 128/255, 0.7)
+local RestedGradientEnd = CreateColor(0, 64/255, 1, 0.7)
+
 local function onLoad(self)
-  self.rested = false
+  -- darken top edge of bar
+  self:withTextureOverlay("edge", {
+    color = {1, 1, 1},
+    blendMode = "BLEND",
+    gradient = {"VERTICAL", CreateColor(0, 0, 0, 0), CreateColor(0, 0, 0, 0.7)},
+    clamp = {
+      {TopLeft},
+      {BottomRight, self.frame, TopRight, 0, -3}
+    },
+  })
 
-  self:withTextureOverlay("edge", {color = {1, 1, 1}})
-  self.edge.texture:SetPoint(TopLeft)
-  self.edge.texture:SetPoint(BottomRight, self.frame, TopRight, 0, -4)
-  self.edge.texture:SetGradient("VERTICAL", CreateColor(0, 0, 0, 0), CreateColor(0, 0, 0, 1))
-  self.edge.texture:SetBlendMode("BLEND")
+  -- fade into ui above
+  self:withTextureBackground("fade", {
+    color = {1, 1, 1},
+    blendMode = "BLEND",
+    gradient = {"VERTICAL", CreateColor(0, 0, 0, 0.5), CreateColor(0, 0, 0, 0)},
+    clamp = {
+      {TopLeft, 0, 3},
+      {BottomRight, self.frame, TopRight},
+    },
+  })
 
-  self:withTextureBackground("fade", {color = {1, 1, 1}})
-  self.fade.texture:SetPoint(TopLeft, 0, 4)
-  self.fade.texture:SetPoint(BottomRight, self.frame, TopRight)
-  self.fade.texture:SetGradient("VERTICAL", CreateColor(0, 0, 0, 0.5), CreateColor(0, 0, 0, 0))
-  self.fade.texture:SetBlendMode("BLEND")
-
-  self:withTextureOverlay("notch1", {color = {1, 1, 1}})
-  self.notch1.texture:SetPoint(TopLeft, self.frame:GetWidth() / 10, 0)
-  self.notch1.texture:SetPoint(BottomRight, self.frame, BottomLeft, (self.frame:GetWidth() / 10) + 5, 0)
-  self.notch1.texture:SetGradient("HORIZONTAL", CreateColor(0, 0, 0, 0.5), CreateColor(0, 0, 0, 0))
-  self.notch1.texture:SetBlendMode("BLEND")
+  -- secondary bar to show rested amount
+  self:withTextureArtwork("secondary", {
+    color = {RestedGradientEnd.r, RestedGradientEnd.g, RestedGradientEnd.b, 0.5},
+    clamp = {
+      {TopLeft, self.fill.texture, TopRight},
+      {BottomRight, self.fill.texture, BottomRight}
+    },
+  })
 end
 
--- CreateColor(88/255, 0, 145/255, 0)
-local UnrestedGradientStart = CreateColor(88/255, 0, 145/255, 0.8)
-local UnrestedGradientEnd = CreateColor(154/255, 8/255, 252/255, 0.8)
-local RestedGradientStart = CreateColor(0, 32/255, 128/255, 0.8)
-local RestedGradientEnd = CreateColor(0, 64/255, 1, 0.8)
 local ExpBar = StatusBar:new{
   parent = UIParent,
   position = {
-    height = 11,
+    height = 7,
     bottomLeft = {},
     bottomRight = {}
   },
   events = {"PLAYER_ENTERING_WORLD", "PLAYER_XP_UPDATE", "PLAYER_LEVEL_UP", "UPDATE_EXHAUSTION", "PLAYER_UPDATE_RESTING"},
-  backdrop = {0, 0, 0, 0.8},
+  backdrop = {0, 0, 0, 0.7},
   fill = {
     color = {1, 1, 1},
     blend = "ADD",
@@ -65,8 +77,8 @@ local ExpBar = StatusBar:new{
 function ExpBar:update()
   local _, xp, max = GetPlayerLevelXP()
   local w = self.frame:GetWidth()
-  local pcnt = (xp / max) * 100
-  local s = w / pcnt
+  local pcnt = (xp / max)
+  local s = w * pcnt
   self.fill.texture:SetWidth(s)
   -- self.fill.texture:SetWidth(self.frame:GetWidth())
   
@@ -81,9 +93,38 @@ function ExpBar:update()
     end
     self.rested = rested
   end
+  if rested and exhaustionThreshold > xp and exhaustionThreshold < max then
+    pcnt = (exhaustionThreshold - xp) / max
+    s = w * pcnt
+    self.secondary.texture:SetWidth(s)
+  end
+  if (not rested) and self.secondary.texture:GetWidth() > 0 then
+    self.secondary.texture:SetWidth(0)
+  end
 end
 
-function ExpBar:PLAYER_ENTERING_WORLD() self:update() end
+function ExpBar:initNotches()
+  -- add the little notches every 10%
+  local spacing = self.frame:GetWidth() / 10
+  for i=1,9 do
+    self:withTextureOverlay("notch"..i, {
+      color = {1, 1, 1},
+      blendMode = "BLEND",
+      gradient = {"HORIZONTAL", CreateColor(0, 0, 0, 0.3), CreateColor(0, 0, 0, 0.2)},
+      clamp = {
+        {TopLeft, spacing * i, 0},
+        {BottomRight, self.frame, BottomLeft, spacing * i + 3, 0},
+      },
+    })
+  end
+end
+
+function ExpBar:PLAYER_ENTERING_WORLD(login, reload)
+  if login or reload then
+    self:initNotches()
+    self:update()
+  end
+end
 function ExpBar:PLAYER_XP_UPDATE() self:update() end
 function ExpBar:PLAYER_LEVEL_UP() self:update() end
 function ExpBar:UPDATE_EXHAUSTION() self:update() end

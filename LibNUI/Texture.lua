@@ -9,11 +9,14 @@ local Texture = Class(nil, function(self, o)
     o.textureLayer = nil
     o.textureTemplate = nil
 
-    if o.positionAll then
-        o.texture:SetAllPoints()
-    end
-    if o.color then
-        o.texture:SetColorTexture(unpack(o.color))
+    if o.positionAll then o.texture:SetAllPoints() end
+    if o.color then o.texture:SetColorTexture(unpack(o.color)); o.color = nil end
+    if o.blendMode then o.texture:SetBlendMode(o.blendMode); o.blendMode = nil end
+    if o.gradient then o.texture:SetGradient(unpack(o.gradient)); o.gradient = nil end
+    if o.clamp then
+      for i=1,#o.clamp do
+        o.texture:SetPoint(unpack(o.clamp[i]))
+      end
     end
 end)
 ui.Texture = Texture
