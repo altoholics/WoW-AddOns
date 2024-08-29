@@ -1,0 +1,8 @@
+## Interface: 110002
+## Title: LootDrop
+## Author: Nazuraki
+## Version: 11.0.000-1
+## IconTexture: Interface\Icons\inv_misc_coin_01
+## Dependencies: LibNUI
+
+main.lua

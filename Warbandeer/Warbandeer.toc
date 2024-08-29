@@ -2,7 +2,7 @@
 ## Title: Warbandeer
 ## Author: Nazuraki
 ## Version: 11.0.000-1
-## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green.blp
+## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green
 ## SavedVariables: WarbandeerDB
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
 ## Dependencies: LibNUI

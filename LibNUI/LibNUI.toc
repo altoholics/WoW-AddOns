@@ -2,8 +2,10 @@
 ## Title: LibNUI
 ## Author: Nazuraki
 ## Version: 11.0.000-1
-## IconTexture: Interface\Icons\achievement_guildperk_bountifulbags.blp
+## IconTexture: Interface\Icons\achievement_guildperk_bountifulbags
 ## OptionalDeps: FrameColor
+
+# https://wowpedia.fandom.com/wiki/How_the_user_interface_is_rendered
 
 init.lua
 

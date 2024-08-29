@@ -2,7 +2,7 @@
 ## Title: ShadowsOfUI
 ## Author: Nazuraki
 ## Version: 11.0.000-1
-## IconTexture: Interface\Icons\inv_icon_shadowcouncilorb_green.blp
+## IconTexture: Interface\Icons\inv_icon_shadowcouncilorb_green
 ## Dependencies: LibNUI
 
 main.lua

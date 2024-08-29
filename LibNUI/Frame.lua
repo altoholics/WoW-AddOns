@@ -45,12 +45,33 @@ function Frame:size(x, y) self.frame:SetSize(x, y); return self end
 function Frame:width(w) self.frame:SetWidth(w); return self end
 function Frame:height(h) self.frame:SetHeight(h); return self end
 function Frame:show() ShowUIPanel(self.frame); return self end
+function Frame:hide() HideUIPanel(self.frame); return self end
+-- https://wowpedia.fandom.com/wiki/Making_draggable_frames
 function Frame:makeDraggable()
     self.frame:SetMovable(true)
     self.frame:EnableMouse(true)
     self.frame:RegisterForDrag("LeftButton")
     return self
 end
+function Frame:makeContainerDraggable()
+  self.frame:SetScript("OnDragStart", function()
+    self.frame:StartMoving()
+  end)
+  self.frame:SetScript("OnDragStop", function()
+      self.frame:StopMovingOrSizing()
+  end)
+  return self
+end
+function Frame:startUpdates()
+  if self.onUpdate then
+    local s = self
+    self.frame:SetScript("OnUpdate", function(_, elapsed) s:onUpdate(elapsed) end)
+  end
+end
+function Frame:stopUpdates()
+  self.frame:SetScript("OnUpdate", nil)
+end
+
 -- todo, resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
 
 function Frame:withTexture(name, o)
