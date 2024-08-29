@@ -8,7 +8,7 @@ local _G, tinsert = _G, tinsert
 local UISpecialFrames = UISpecialFrames
 
 -- dialog with title bar and close button, closable with escape
-local Dialog = Class(Frame, function(self, o)
+local Dialog = Class(Frame, function(o)
     local frame = o.frame
     frame:SetFrameStrata("DIALOG")
     frame:SetClampedToScreen(true)

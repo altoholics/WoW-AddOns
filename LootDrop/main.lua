@@ -41,9 +41,8 @@ local Bucket = ui.Frame:new{
 }
 
 function Bucket:onUpdate(elapsed)
-  local ms = elapsed * 1000
   if self.fadeTimer > 0 then
-    self.fadeTimer = self.fadeTimer - ms
+    self.fadeTimer = self.fadeTimer - elapsed
     if self.fadeTimer < 0 then self.fadeTimer = 0 end
     self.frame:SetAlpha(self.fadeTimer / self.fadeDelay)
   end

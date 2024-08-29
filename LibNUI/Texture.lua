@@ -3,7 +3,7 @@ local _, ns = ...
 local ui = ns.ui
 local Class = ns.util.Class
 
-local Texture = Class(nil, function(self, o)
+local Texture = Class(nil, function(o)
     o.texture = o.parent:CreateTexture(o.textureName or nil, o.textureLayer or nil, o.textureTemplate or nil)
     o.textureName = nil
     o.textureLayer = nil

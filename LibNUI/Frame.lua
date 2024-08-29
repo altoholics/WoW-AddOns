@@ -9,7 +9,7 @@ local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.l
 local Texture = ui.Texture
 
 -- empty frame
-local Frame = Class(nil, function(self, o)
+local Frame = Class(nil, function(o)
     o.frame = CreateFrame(o.type or "Frame", o.name, o.parent, o.template)
     o.name = nil
     o.parent = nil
@@ -65,7 +65,7 @@ end
 function Frame:startUpdates()
   if self.onUpdate then
     local s = self
-    self.frame:SetScript("OnUpdate", function(_, elapsed) s:onUpdate(elapsed) end)
+    self.frame:SetScript("OnUpdate", function(_, elapsed) s:onUpdate(elapsed * 1000) end)
   end
 end
 function Frame:stopUpdates()

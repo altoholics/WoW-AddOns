@@ -12,7 +12,7 @@ local Class, Frame, BgFrame = ns.util.Class, ui.Frame, ui.BgFrame
 --   CELL_HEIGHT  int          - height of cells in pixels
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
-local TableFrame = Class(Frame, function(self, o)
+local TableFrame = Class(Frame, function(o)
     o.numCols = o.columns or #o.colNames
     o.numRows = o.numRows or #o.rowNames
 

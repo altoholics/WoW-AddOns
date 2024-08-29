@@ -7,7 +7,7 @@ local BottomLeft, TopLeft, TopRight = ui.edge.BottomLeft, ui.edge.TopLeft, ui.ed
 
 -- https://wowpedia.fandom.com/wiki/Widget_API#StatusBar
 
-local StatusBar = Class(Frame, function(self, o)
+local StatusBar = Class(Frame, function(o)
     o:addBackdrop(o.backdrop or {})
     local fill = o.fill
     o:withTextureArtwork("fill", {color = fill.color})

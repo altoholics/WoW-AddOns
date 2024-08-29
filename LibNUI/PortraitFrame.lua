@@ -13,7 +13,7 @@ local C_AddOns, UIParent = C_AddOns, UIParent
 --   a title bar
 -- https://github.com/Gethe/wow-ui-source/blob/b5c546c1625c96fe008a771c5c46b4ccb90944f6/Interface/AddOns/Blizzard_SharedXML/PortraitFrame.lua
 
-local PortraitFrame = Class(Dialog, function(self, o)
+local PortraitFrame = Class(Dialog, function(o)
     o:makeDraggable()
     o:makeTitlebarDraggable()
 

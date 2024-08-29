@@ -5,7 +5,7 @@ local Class = ns.util.Class
 local Frame = ui.Frame
 
 -- frame with a background
-local BgFrame = Class(Frame, function(self, o)
+local BgFrame = Class(Frame, function(o)
     o:addBackdrop(o.backdrop or {})
 end)
 ui.BgFrame = BgFrame

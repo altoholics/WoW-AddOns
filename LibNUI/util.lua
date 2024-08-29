@@ -38,7 +38,7 @@ function u.Class(parent, fn, defaults)
     Mixin(o, parent or {}, c)
     setmetatable(o, self)
     self.__index = self
-    fn(self, o)
+    fn(o)
     if parent and parent.onLoad then parent.onLoad(o) end
     if c.onLoad then c.onLoad(o) end
     if onLoad then onLoad(o) end
