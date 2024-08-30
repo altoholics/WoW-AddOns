@@ -5,4 +5,7 @@
 ## IconTexture: Interface\Icons\inv_icon_shadowcouncilorb_green
 ## Dependencies: LibNUI
 
-main.lua
+globals.lua
+
+ExpBar.lua
+ActionBars.lua
