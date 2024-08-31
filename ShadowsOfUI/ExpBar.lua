@@ -119,6 +119,9 @@ function ExpBar:update()
     pcnt = (exhaustionThreshold - xp) / max
     s = w * pcnt
     self.secondary.texture:SetWidth(s)
+  else
+    pcnt = 0
+    s = 0
   end
   if (not rested) and self.secondary.texture:GetWidth() > 0 then
     self.secondary.texture:SetWidth(0)
