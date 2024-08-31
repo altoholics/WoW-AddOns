@@ -17,6 +17,10 @@ ns.g = {
   GetXPExhaustion = GetXPExhaustion,
   GetRestState = GetRestState,
   maxLevel = GetMaxLevelForPlayerExpansion(),
+  ShowUIPanel = ShowUIPanel,
+  HideUIPanel = HideUIPanel,
+  UnitExists = UnitExists,
+  UnitAffectingCombat = UnitAffectingCombat,
 
   -- WoW objects
   UIParent = UIParent,
@@ -31,8 +35,6 @@ ns.g = {
   MultiBar5 = MultiBar5,
   MultiBar6 = MultiBar6,
   MultiBar7 = MultiBar7,
-  ShowUIPanel = ShowUIPanel,
-  HideUIPanel = HideUIPanel,
 
   -- libs
   ui = LibNUI,
@@ -44,3 +46,8 @@ function ns.GetPlayerLevelXP()
   local maxXP = UnitXPMax("player")
   return currentXP, maxXP, level, ns.g.maxLevel
 end
+
+-- Disable the reagent bag tutorial 
+C_CVar.SetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
+C_CVar.SetCVar("professionToolSlotsExampleShown", 1)
+C_CVar.SetCVar("professionAccessorySlotsExampleShown", 1)
