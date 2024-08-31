@@ -43,11 +43,23 @@ local function onLoad(self)
   -- secondary bar to show rested amount
   self:withTextureArtwork("secondary", {
     color = {RestedGradientEnd.r, RestedGradientEnd.g, RestedGradientEnd.b, 0.5},
-    clamp = {
-      {TopLeft, self.fill.texture, TopRight},
-      {BottomRight, self.fill.texture, BottomRight}
-    },
   })
+  self.secondary.texture:SetHeight(self.frame:GetHeight())
+
+  -- percent text
+  self.textPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
+  self.textPercent:SetHeight(self.frame:GetHeight() - 2)
+  self.textPercent:SetTextColor(1, 1, 1, 0)
+  
+  self.restPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
+  self.restPercent:SetHeight(self.frame:GetHeight() - 2)
+  self.restPercent:SetTextColor(1, 1, 1, 0)
+
+  -- make sure we can get mouse hover events in order to show the text
+  self.fadeDelay = 500
+  self.frame:SetMouseMotionEnabled(true)
+  self.frame:SetScript("OnEnter", function() self:onEnter() end)
+  self.frame:SetScript("OnLeave", function() self:onLeave() end)
 end
 
 local ExpBar = StatusBar:new{
@@ -67,12 +79,38 @@ local ExpBar = StatusBar:new{
   onLoad = onLoad,
 }
 
+function ExpBar:onUpdate(elapsed)
+  if self.fadeTimer > 0 then
+    self.fadeTimer = self.fadeTimer - elapsed
+    if self.fadeTimer < 0 then self.fadeTimer = 0 end
+    self.textPercent:SetTextColor(1, 1, 1, self.fadeTimer / self.fadeDelay)
+    self.restPercent:SetTextColor(1, 1, 1, self.fadeTimer / self.fadeDelay)
+  end
+  if self.fadeTimer == 0 then
+    self:stopUpdates()
+  end
+end
+
+-- mouse enters bar region
+function ExpBar:onEnter()
+  self.textPercent:SetTextColor(1, 1, 1, 1)
+  self.restPercent:SetTextColor(1, 1, 1, 1)
+end
+
+-- mouse leaves bar region
+function ExpBar:onLeave()
+  self.fadeTimer = self.fadeDelay
+  self:startUpdates()
+end
+
 function ExpBar:update()
   local xp, max = ns.GetPlayerLevelXP()
   local w = self.frame:GetWidth()
   local pcnt = (xp / max)
   local s = w * pcnt
   self.fill.texture:SetWidth(s)
+  self.textPercent:SetPoint(TopRight, self.frame, TopLeft, s - 3, -1)
+  self.textPercent:SetText(floor(pcnt * 100).."%")
 
   local exhaustionThreshold = GetXPExhaustion()
 	local exhaustionStateID = GetRestState()
@@ -85,6 +123,9 @@ function ExpBar:update()
   if (not rested) and self.secondary.texture:GetWidth() > 0 then
     self.secondary.texture:SetWidth(0)
   end
+  self.secondary.texture:SetPoint(TopLeft, self.fill.texture:GetWidth(), 0)
+  self.restPercent:SetPoint(TopLeft, self.frame, TopLeft, self.fill.texture:GetWidth() + 3, -1)
+  self.restPercent:SetText(floor(pcnt * 100).."%")
 end
 
 function ExpBar:initNotches()
