@@ -2,7 +2,7 @@ local _, ns = ...
 
 local ui = LibNUI
 
-local GetMoney, GetCoinTextureString = GetMoney, C_CurrencyInfo.GetCoinTextureString
+local GetMoney, GetCoinTextureString, GetItemInfo = GetMoney, C_CurrencyInfo.GetCoinTextureString, C_Item.GetItemInfo
 
 local Bucket = ui.Frame:new{
   parent = UIParent,
@@ -37,6 +37,7 @@ local Bucket = ui.Frame:new{
     self.anim1:SetPoint("TOPRIGHT", 20, -2)
 
     self.fadeDelay = 5000
+    self.tracking = {n=0}
   end
 }
 
@@ -64,28 +65,45 @@ function Bucket:PLAYER_MONEY()
   self:updateMoney()
 end
 
--- PLAYER_XP_UPDATE
-
--- https://wowpedia.fandom.com/wiki/World_of_Warcraft_API#Container
-
--- @param bagSlot     number - the bag that has received the new item
--- @param iconFileId  number - the FileID of the item's icon
-function Bucket:ITEM_PUSH(bagSlot, iconFileId)
+-- https://wowpedia.fandom.com/wiki/CHAT_MSG_LOOT
+function Bucket:CHAT_MSG_LOOT(_, text, playerName, langName, chanName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, langID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, suppressRaidIcons)
+  if playerName == playerName2 or playerName2 == "" then
+    -- extract item link: https://wowpedia.fandom.com/wiki/ItemLink
+    -- |cffxxxxxx|Hitem:payload|h[text]|h|r
+    local x = string.find(text, "|cff")
+    local e = string.find(text, "|r", x)
+    if x and e then
+      local itemLink = string.sub(text, x, e+1)
+      if self.tracking[itemLink] then
+        -- todo
+      end
+    end
+  end
 end
 
--- https://wowpedia.fandom.com/wiki/QUEST_TURNED_IN
--- @param questID     number
--- @param xpReward    number - amount of xp rewarded, if any, 0 if character is max level
--- @param moneyReward number - amount of Money awarded, if any, in copper
-
--- https://wowpedia.fandom.com/wiki/World_of_Warcraft_API#Currency
--- https://wowpedia.fandom.com/wiki/PLAYER_MONEY
--- https://wowpedia.fandom.com/wiki/API_GetMoney
-
-
-
-
+function Bucket:startTracking(itemName)
+  local name, link, _, _, _, _, _, _, _, textureID = GetItemInfo(itemName)
+  if name then
+    
+    -- if we weren't watching loot, start
+    if self.tracking.n == 0 then
+      self.frame:RegisterEvent("CHAT_MSG_LOOT")
+    end
+    self.tracking[link] = {name=name, textureID = textureID}
+    print("Now tracking ", link)
+  end
+end
 
 function Bucket:PLAYER_ENTERING_WORLD(login, reload)
   self:updateMoney()
+end
+
+SLASH_LOOTDROP1 = "/lootdrop"
+SLASH_LOOTDROP2 = "/ld"
+
+function SlashCmdList.LOOTDROP(msg)
+  local _, _, cmd, args = string.find(msg, "(%w+) ?(.*)")
+  if "add" == cmd then
+    Bucket:startTracking(args)
+  end
 end
