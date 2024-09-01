@@ -1,30 +1,46 @@
-local _, ns = ...
+local addonName, ns = ...
 
 local ui = ns.g.ui
 local Frame = ui.Frame
 
 local HideUIPanel, ShowUIPanel, UnitExists, UnitAffectingCombat = ns.g.HideUIPanel, ns.g.ShowUIPanel, ns.g.UnitExists, ns.g.UnitAffectingCombat
-local MainMenuBar, Bar2 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft
+local MainMenuBar, Bar2, Bar3 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft, ns.g.MultiBarBottomRight
 
 local BarControl = Frame:new{
-  events = {"PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
+  events = {"ADDON_LOADED", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
 }
 BarControl:hide()
 
+function BarControl:ADDON_LOADED(name)
+  if addonName ~= name then return end
+  -- override visibility control on action bars
+  MainMenuBar:HideOverride()
+  Bar2:HideOverride()
+end
+
 function BarControl:update()
-  if self.hasTarget or self.inCombat then
-    for _,btn in pairs(MainMenuBar.actionButtons) do
-      btn:Show()
-    end
-    for _,btn in pairs(Bar2.actionButtons) do
-      btn:Show()
-    end
-  else
-    for _,btn in pairs(MainMenuBar.actionButtons) do
-      btn:Hide()
-    end
-    for _,btn in pairs(Bar2.actionButtons) do
-      btn:Hide()
+  local vis = self.hasTarget or self.inCombat
+  if vis ~= self.vis then
+    self.vis = vis
+    if vis then
+      MainMenuBar:ShowBase()
+      Bar2:ShowBase()
+      -- TODO: don't hide buttons that have an active cooldown
+      -- for _,btn in pairs(MainMenuBar.actionButtons) do
+      --   btn:Show()
+      -- end
+      -- for _,btn in pairs(Bar2.actionButtons) do
+      --   btn:Show()
+      -- end
+    else
+      MainMenuBar:HideBase()
+      Bar2:HideBase()
+      -- for _,btn in pairs(MainMenuBar.actionButtons) do
+      --   btn:Hide()
+      -- end
+      -- for _,btn in pairs(Bar2.actionButtons) do
+      --   btn:Hide()
+      -- end
     end
   end
 end
