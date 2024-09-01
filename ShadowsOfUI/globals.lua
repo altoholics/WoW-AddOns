@@ -47,6 +47,10 @@ function ns.GetPlayerLevelXP()
   return currentXP, maxXP, level, ns.g.maxLevel
 end
 
+function ns.min(a, b)
+  return a < b and a or b
+end
+
 -- Disable the reagent bag tutorial 
 C_CVar.SetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 C_CVar.SetCVar("professionToolSlotsExampleShown", 1)

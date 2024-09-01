@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local ui = ns.g.ui
+local min = ns.min
 local StatusBar = ui.StatusBar
 local TopLeft, TopRight, BottomLeft, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.BottomRight
 
@@ -115,8 +116,9 @@ function ExpBar:update()
   local exhaustionThreshold = GetXPExhaustion()
 	local exhaustionStateID = GetRestState()
   local rested = 1 == exhaustionStateID
-  if rested and exhaustionThreshold > xp and exhaustionThreshold < max then
-    pcnt = (exhaustionThreshold - xp) / max
+  local bonus = exhaustionThreshold > max and "+" or ""
+  if rested and exhaustionThreshold > xp then
+    pcnt = (min(exhaustionThreshold, max) - xp) / max
     s = w * pcnt
     self.secondary.texture:SetWidth(s)
   else
@@ -128,7 +130,7 @@ function ExpBar:update()
   end
   self.secondary.texture:SetPoint(TopLeft, self.fill.texture:GetWidth(), 0)
   self.restPercent:SetPoint(TopLeft, self.frame, TopLeft, self.fill.texture:GetWidth() + 3, -1)
-  self.restPercent:SetText(floor(pcnt * 100).."%")
+  self.restPercent:SetText(floor(pcnt * 100)..bonus.."%")
 end
 
 function ExpBar:initNotches()
