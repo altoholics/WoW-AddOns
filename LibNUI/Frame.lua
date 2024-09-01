@@ -63,13 +63,15 @@ function Frame:makeContainerDraggable()
   return self
 end
 function Frame:startUpdates()
-  if self.onUpdate then
+  if self.onUpdate and not self.animating then
+    self.animating = true
     local s = self
     self.frame:SetScript("OnUpdate", function(_, elapsed) s:onUpdate(elapsed * 1000) end)
   end
 end
 function Frame:stopUpdates()
   self.frame:SetScript("OnUpdate", nil)
+  self.animating = false
 end
 
 -- todo, resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames

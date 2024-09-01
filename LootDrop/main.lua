@@ -4,7 +4,7 @@ local ui = LibNUI
 
 local GetMoney, GetCoinTextureString, GetItemInfo = GetMoney, C_CurrencyInfo.GetCoinTextureString, C_Item.GetItemInfo
 
-function max(a, b)
+local function max(a, b)
   return a > b and a or b
 end
 
@@ -74,7 +74,7 @@ function Bucket:updateMoney()
   self.fadeWait = self.fadeDelay
   self.frame:SetAlpha(1)
   self:checkSize()
-  self:startUpdates()
+  -- self:startUpdates()
 end
 
 function Bucket:PLAYER_MONEY()
