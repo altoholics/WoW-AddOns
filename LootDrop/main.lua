@@ -4,6 +4,10 @@ local ui = LibNUI
 
 local GetMoney, GetCoinTextureString, GetItemInfo = GetMoney, C_CurrencyInfo.GetCoinTextureString, C_Item.GetItemInfo
 
+function max(a, b)
+  return a > b and a or b
+end
+
 local Bucket = ui.Frame:new{
   parent = UIParent,
   position = {
@@ -22,12 +26,6 @@ local Bucket = ui.Frame:new{
         {ui.edge.TopRight},
       },
     })
-    -- self:withTextureBackground("bg", {
-    --   color = {1, 1, 1},
-    --   positionAll = true,
-    --   gradient = {"VERTICAL", CreateColor(0, 0, 0, 0), CreateColor(0, 0, 0, 0.5)},
-    --   blendMode = "BLEND",
-    -- })
     self.money = self.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     self.money:SetPoint("TOPRIGHT", -2, -2)
     self.money:SetText("")
@@ -36,19 +34,34 @@ local Bucket = ui.Frame:new{
     self.anim1 = self.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     self.anim1:SetPoint("TOPRIGHT", 20, -2)
 
-    self.fadeDelay = 5000
+    self.fadeDelay = 10000
+    self.fadeDuration = 5000
     self.tracking = {n=0}
   end
 }
 
+function Bucket:checkSize()
+  local w = max(100, self.money:GetUnboundedStringWidth())
+  self.frame:SetWidth(w + 4)
+end
+
 function Bucket:onUpdate(elapsed)
+  if self.fadeWait > 0 then
+    self.fadeWait = self.fadeWait - elapsed
+    if self.fadeWait <= 0 then
+      self.fadeWait = -1
+      self.fadeTimer = self.fadeDuration
+    end
+  end
   if self.fadeTimer > 0 then
     self.fadeTimer = self.fadeTimer - elapsed
-    if self.fadeTimer < 0 then self.fadeTimer = 0 end
-    self.frame:SetAlpha(self.fadeTimer / self.fadeDelay)
-  end
-  if self.fadeTimer == 0 then
-    self:stopUpdates()
+    if self.fadeTimer <= 0 then
+      self:stopUpdates()
+      self.fadeTimer = -1
+      self.frame:SetAlpha(0)
+    else
+      self.frame:SetAlpha(self.fadeTimer / self.fadeDuration)
+    end
   end
 end
 
@@ -56,8 +69,11 @@ function Bucket:updateMoney()
   local money = GetMoney()
   local s = GetCoinTextureString(money)
   self.money:SetText(s)
-  self.fadeTimer = self.fadeDelay
+  -- reset timers
+  self.fadeTimer = -1
+  self.fadeWait = self.fadeDelay
   self.frame:SetAlpha(1)
+  self:checkSize()
   self:startUpdates()
 end
 
