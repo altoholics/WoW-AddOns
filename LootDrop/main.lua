@@ -1,4 +1,4 @@
-local _, ns = ...
+local ADDON_NAME, ns = ...
 
 local ui = LibNUI
 
@@ -15,7 +15,7 @@ local Bucket = ui.Frame:new{
     height = 20,
     bottomRight = {-300, 30},
   },
-  events = {"PLAYER_ENTERING_WORLD", "PLAYER_MONEY"},
+  events = {"PLAYER_ENTERING_WORLD", "PLAYER_MONEY", "ADDON_LOADED"},
   onLoad = function(self)
     self:makeDraggable()
     self:makeContainerDraggable()
@@ -74,7 +74,7 @@ function Bucket:updateMoney()
   self.fadeWait = self.fadeDelay
   self.frame:SetAlpha(1)
   self:checkSize()
-  -- self:startUpdates()
+  self:startUpdates()
 end
 
 function Bucket:PLAYER_MONEY()
@@ -83,30 +83,46 @@ end
 
 -- https://wowpedia.fandom.com/wiki/CHAT_MSG_LOOT
 function Bucket:CHAT_MSG_LOOT(_, text, playerName, langName, chanName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, langID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, suppressRaidIcons)
-  if playerName == playerName2 or playerName2 == "" then
+  if playerName == playerName2 or playerName2 == "" then -- our loot
     -- extract item link: https://wowpedia.fandom.com/wiki/ItemLink
     -- |cffxxxxxx|Hitem:payload|h[text]|h|r
     local x = string.find(text, "|cff")
     local e = string.find(text, "|r", x)
     if x and e then
       local itemLink = string.sub(text, x, e+1)
-      if self.tracking[itemLink] then
+      if self.db.trackedItems[itemLink] then
         -- todo
       end
     end
   end
 end
 
+local defaults = {trackedItems = {n=0}}
+function Bucket:ADDON_LOADED(name)
+  if ADDON_NAME == name then
+    self.db = LootDropDB or CopyTable(defaults)
+  end
+end
+
 function Bucket:startTracking(itemName)
   local name, link, _, _, _, _, _, _, _, textureID = GetItemInfo(itemName)
-  if name then
-    
+  if name and not self.db.trackedItems[link] then
     -- if we weren't watching loot, start
-    if self.tracking.n == 0 then
+    if self.db.trackedItems.n == 0 then
       self.frame:RegisterEvent("CHAT_MSG_LOOT")
     end
-    self.tracking[link] = {name=name, textureID = textureID}
+    self.db.trackedItems.n = self.db.trackedItems.n + 1
+    self.db.trackedItems[link] = {name=name, textureID = textureID}
     print("Now tracking ", link)
+  end
+end
+
+function Bucket:stopTracking(itemName)
+  local name, link, _, _, _, _, _, _, _, textureID = GetItemInfo(itemName)
+  if name and self.db.trackedItems[link] then
+    self.db.trackedItems.n = self.db.trackedItems.n - 1
+    self.db.trackedItems[link] = nil
+    print("No longer tracking ", link)
   end
 end
 
@@ -121,5 +137,7 @@ function SlashCmdList.LOOTDROP(msg)
   local _, _, cmd, args = string.find(msg, "(%w+) ?(.*)")
   if "add" == cmd then
     Bucket:startTracking(args)
+  elseif "remove" == cmd then
+    Bucket:stopTracking(args)
   end
 end
