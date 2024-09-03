@@ -82,7 +82,7 @@ function Bucket:PLAYER_MONEY()
 end
 
 -- https://wowpedia.fandom.com/wiki/CHAT_MSG_LOOT
-function Bucket:CHAT_MSG_LOOT(_, text, playerName, langName, chanName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, langID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, suppressRaidIcons)
+function Bucket:CHAT_MSG_LOOT(text, playerName, langName, chanName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, langID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, suppressRaidIcons)
   if playerName == playerName2 or playerName2 == "" then -- our loot
     -- extract item link: https://wowpedia.fandom.com/wiki/ItemLink
     -- |cffxxxxxx|Hitem:payload|h[text]|h|r

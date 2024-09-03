@@ -116,8 +116,9 @@ function ExpBar:update()
   local exhaustionThreshold = GetXPExhaustion()
 	local exhaustionStateID = GetRestState()
   local rested = 1 == exhaustionStateID
-  local bonus = exhaustionThreshold > max and "+" or ""
+  local bonus = ""
   if rested and exhaustionThreshold > xp then
+    bonus = exhaustionThreshold > max and "+" or ""
     pcnt = (min(exhaustionThreshold, max) - xp) / max
     s = w * pcnt
     self.secondary.texture:SetWidth(s)

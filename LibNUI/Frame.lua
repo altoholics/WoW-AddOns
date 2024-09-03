@@ -1,6 +1,5 @@
 local _, ns = ...
 
-local CopyTable = CopyTable
 local CreateFrame, ShowUIPanel = CreateFrame, ShowUIPanel
 
 local ui = ns.ui
@@ -33,7 +32,7 @@ ui.Frame = Frame
 
 function Frame:OnEvent(event, ...)
     if self[event] then
-        self[event](self, event, ...)
+        self[event](self, ...)
     end
 end
 

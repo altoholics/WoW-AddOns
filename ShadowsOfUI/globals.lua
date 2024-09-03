@@ -21,6 +21,9 @@ ns.g = {
   HideUIPanel = HideUIPanel,
   UnitExists = UnitExists,
   UnitAffectingCombat = UnitAffectingCombat,
+  GetScreenWidth = GetScreenWidth,
+  GetFactionInfoByID = GetFactionInfoByID,
+  GetMajorFactionRenownInfo = C_MajorFactions.GetMajorFactionRenownInfo,
 
   -- WoW objects
   UIParent = UIParent,
@@ -39,6 +42,10 @@ ns.g = {
   -- libs
   ui = LibNUI,
 }
+
+function ns.CreateColor(r, g, b, a)
+  return ns.g.CreateColor(r/255, g/255, b/255, a)
+end
 
 function ns.GetPlayerLevelXP()
   local level = UnitLevel("player")

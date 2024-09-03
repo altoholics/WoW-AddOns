@@ -7,5 +7,6 @@
 
 globals.lua
 
-ExpBar.lua
 ActionBars.lua
+ExpBar.lua
+RepBars.lua
