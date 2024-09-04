@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local CreateFrame, ShowUIPanel = CreateFrame, ShowUIPanel
+local CreateFrame, ShowUIPanel, HideUIPanel = CreateFrame, ShowUIPanel, HideUIPanel
 
 local ui = ns.ui
 local Class, CopyTables = ns.util.Class, ns.util.CopyTables
@@ -25,7 +25,7 @@ local Frame = Class(nil, function(o)
         end
         o.position = nil
     end
-    o.frame:SetScript("OnEvent", function(f, e, ...) o:OnEvent(e, ...) end)
+    o.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
     if o.events then
         for _,e in pairs(o.events) do
             o.frame:RegisterEvent(e)

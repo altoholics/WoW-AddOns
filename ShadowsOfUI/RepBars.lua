@@ -1,8 +1,9 @@
-local ADDON_NAME, ns = ...
+local _, ns = ...
 
 local ui = ns.g.ui
 local Frame, StatusBar = ui.Frame, ui.StatusBar
-local TopLeft, TopRight, BottomLeft, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.BottomRight
+local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
+local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 
 local rgb = ns.CreateColor
 
@@ -12,10 +13,10 @@ local DornogalID = 2590
 local RingingDeepsID = 2594
 local SeveredThreadsID = 2600
 
-local WeaverID = 2601
-local GeneralID = 2605
-local VizierID = 2607
-local BrannID = 2640
+-- local WeaverID = 2601
+-- local GeneralID = 2605
+-- local VizierID = 2607
+-- local BrannID = 2640
 
 local DornogalStart = rgb(55, 138, 191)
 local DornogalEnd = rgb(124, 135, 190)
@@ -84,18 +85,18 @@ local Container = Frame:new{
     self:withTextureOverlay("edge", {
       color = {1, 1, 1},
       blendMode = "BLEND",
-      gradient = {"VERTICAL", CreateColor(0, 0, 0, 0), CreateColor(0, 0, 0, 0.5)},
+      gradient = {"VERTICAL", rgb(0, 0, 0, 0), rgb(0, 0, 0, 0.5)},
       clamp = {
         {TopLeft},
         {BottomRight, self.frame, TopRight, 0, -3}
       },
     })
-  
+
     -- fade into ui above
     self:withTextureBackground("fade", {
       color = {1, 1, 1},
       blendMode = "BLEND",
-      gradient = {"VERTICAL", CreateColor(0, 0, 0, 0.3), CreateColor(0, 0, 0, 0)},
+      gradient = {"VERTICAL", rgb(0, 0, 0, 0.3), rgb(0, 0, 0, 0)},
       clamp = {
         {TopLeft, 0, 3},
         {BottomRight, self.frame, TopRight},
@@ -121,7 +122,8 @@ local function factionFill(factionID)
   return info.renownReputationEarned / info.renownLevelThreshold
 end
 
--- name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(2)
+-- name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep,
+-- isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(2)
 function Container:PLAYER_ENTERING_WORLD(login, reload)
   if (login or reload) and ns.g.UnitLevel("player") == ns.g.maxLevel then
     self:show()

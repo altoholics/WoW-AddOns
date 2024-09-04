@@ -1,5 +1,4 @@
 local addOnName, ns = ...
-local addon = ns
 -- any initial setup for the addon will go here
 -- including some basic shared functions
 
@@ -17,7 +16,7 @@ function ns.Print(...) print("|cFF33FF99".. addOnName.. "|r:", ...) end
 -- f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 -- https://wowpedia.fandom.com/wiki/Create_a_WoW_AddOn_in_15_Minutes#Options_Panel
-addon.Colors = {
+ns.Colors = {
 	white	= "|cFFFFFFFF",
 	red = "|cFFFF0000",
 	darkred = "|cFFF00000",
@@ -30,16 +29,16 @@ addon.Colors = {
 	lightBlue = "|cFFB0B0FF",
 	battleNetBlue = "|cff82c5ff",
 	grey = "|cFF909090",
-	
+
 	-- classes
 	classMage = "|cFF69CCF0",
 	classHunter = "|cFFABD473",
-	
+
 	-- recipes
 	recipeGrey = "|cFF808080",
 	recipeGreen = "|cFF40C040",
 	recipeOrange = "|cFFFF8040",
-	
+
 	-- rarity : http://wow.gamepedia.com/Quality
 	common = "|cFFFFFFFF",
 	uncommon = "|cFF1EFF00",
@@ -51,5 +50,3 @@ addon.Colors = {
 	Alliance = "|cFF2459FF",
 	Horde = "|cFFFF0000"
 }
-
-local colors = addon.Colors
