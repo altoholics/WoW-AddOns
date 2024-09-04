@@ -13,6 +13,10 @@ local Frame = Class(nil, function(o)
     o.name = nil
     o.parent = nil
     o.template = nil
+    if o.level then
+      o.frame:SetFrameLevel(o.level)
+      o.level = nil
+    end
     if o.position then
         if o.position.width then o:width(o.position.width); o.position.width = nil end
         if o.position.height then o:height(o.position.height); o.position.height = nil end

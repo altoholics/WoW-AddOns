@@ -20,7 +20,7 @@ local BrannID = 2640
 local DornogalStart = rgb(55, 138, 191)
 local DornogalEnd = rgb(124, 135, 190)
 local RingingDeepsStart = rgb(239, 111, 53)
-local RingingDeepsEnd = rgb(250, 111, 66)
+local RingingDeepsEnd = rgb(247, 217, 122)
 local HallowfallStart = rgb(247, 190, 143)
 local HallowfallEnd = rgb(253, 199, 134)
 local SeveredThreadsStart = rgb(169, 71, 59)
@@ -28,6 +28,7 @@ local SeveredThreadsEnd = rgb(244, 124, 102)
 
 local Container = Frame:new{
   parent = ns.g.UIParent,
+  level = 2,
   position = {
     height = 7,
     bottomLeft = {},
@@ -37,8 +38,10 @@ local Container = Frame:new{
   backdrop = {0, 0, 0, 0.3},
   onLoad = function(self)
     self:hide()
+    self.frame:SetFrameStrata("BACKGROUND")
     self.dornogal = StatusBar:new{
       parent = self.frame,
+      level = 1,
       position = {topLeft = {}, bottomRight = {}},
       fill = {
         color = {1, 1, 1},
@@ -48,6 +51,7 @@ local Container = Frame:new{
     }
     self.ringingDeeps = StatusBar:new{
       parent = self.frame,
+      level = 1,
       position = {topLeft = {}, bottomRight = {}},
       fill = {
         color = {1, 1, 1},
@@ -57,6 +61,7 @@ local Container = Frame:new{
     }
     self.hallowFall = StatusBar:new{
       parent = self.frame,
+      level = 1,
       position = {topLeft = {}, bottomRight = {}},
       fill = {
         color = {1, 1, 1},
@@ -66,6 +71,7 @@ local Container = Frame:new{
     }
     self.severedThreads = StatusBar:new{
       parent = self.frame,
+      level = 1,
       position = {topLeft = {}, bottomRight = {}},
       fill = {
         color = {1, 1, 1},
@@ -73,18 +79,40 @@ local Container = Frame:new{
         gradient = {"HORIZONTAL", SeveredThreadsStart, SeveredThreadsEnd},
       },
     }
+
+    -- darken top edge of bar
+    self:withTextureOverlay("edge", {
+      color = {1, 1, 1},
+      blendMode = "BLEND",
+      gradient = {"VERTICAL", CreateColor(0, 0, 0, 0), CreateColor(0, 0, 0, 0.5)},
+      clamp = {
+        {TopLeft},
+        {BottomRight, self.frame, TopRight, 0, -3}
+      },
+    })
+  
+    -- fade into ui above
+    self:withTextureBackground("fade", {
+      color = {1, 1, 1},
+      blendMode = "BLEND",
+      gradient = {"VERTICAL", CreateColor(0, 0, 0, 0.3), CreateColor(0, 0, 0, 0)},
+      clamp = {
+        {TopLeft, 0, 3},
+        {BottomRight, self.frame, TopRight},
+      },
+    })
   end
 }
 
 function Container:reposition()
   local quarterWide = self.frame:GetWidth() / 4
   self.dornogal:topLeft()
-  self.dornogal:bottomRight(self.frame, BottomLeft, quarterWide - 1, 0)
-  self.ringingDeeps:topLeft(quarterWide + 1, 0)
-  self.ringingDeeps:bottomRight(self.frame, BottomLeft, quarterWide * 2 - 1, 0)
-  self.hallowFall:topLeft(quarterWide * 2 + 1, 0)
-  self.hallowFall:bottomRight(self.frame, BottomLeft, quarterWide * 3 - 1, 0)
-  self.severedThreads:topLeft(quarterWide * 3 + 1, 0)
+  self.dornogal:bottomRight(self.frame, BottomLeft, quarterWide, 0)
+  self.ringingDeeps:topLeft(quarterWide, 0)
+  self.ringingDeeps:bottomRight(self.frame, BottomLeft, quarterWide * 2, 0)
+  self.hallowFall:topLeft(quarterWide * 2, 0)
+  self.hallowFall:bottomRight(self.frame, BottomLeft, quarterWide * 3, 0)
+  self.severedThreads:topLeft(quarterWide * 3, 0)
   self.severedThreads:bottomRight()
 end
 

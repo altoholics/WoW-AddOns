@@ -24,6 +24,7 @@ ns.g = {
   GetScreenWidth = GetScreenWidth,
   GetFactionInfoByID = GetFactionInfoByID,
   GetMajorFactionRenownInfo = C_MajorFactions.GetMajorFactionRenownInfo,
+  IsAddonLoaded = C_AddOns.IsAddOnLoaded,
 
   -- WoW objects
   UIParent = UIParent,
@@ -38,6 +39,7 @@ ns.g = {
   MultiBar5 = MultiBar5,
   MultiBar6 = MultiBar6,
   MultiBar7 = MultiBar7,
+  Tutorials = Tutorials,
 
   -- libs
   ui = LibNUI,

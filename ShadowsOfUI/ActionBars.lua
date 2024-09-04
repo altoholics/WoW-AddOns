@@ -1,21 +1,23 @@
 local addonName, ns = ...
 
 local ui = ns.g.ui
-local Frame = ui.Frame
+local Frame, UIParent = ui.Frame, ns.g.UIParent
 
 local HideUIPanel, ShowUIPanel, UnitExists, UnitAffectingCombat = ns.g.HideUIPanel, ns.g.ShowUIPanel, ns.g.UnitExists, ns.g.UnitAffectingCombat
-local MainMenuBar, Bar2, Bar3 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft, ns.g.MultiBarBottomRight
+local MainMenuBar, Bar2 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft
 
 local BarControl = Frame:new{
   events = {"ADDON_LOADED", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
 }
 BarControl:hide()
 
+-- if EditModeManagerFrame then
+--   EventRegistry:RegisterCallback("EditMode.Enter", function() self:Unlock(true) end)
+--   EventRegistry:RegisterCallback("EditMode.Exit", function() self:Lock() end)
+
 function BarControl:ADDON_LOADED(name)
   if addonName ~= name then return end
-  -- override visibility control on action bars
-  MainMenuBar:HideOverride()
-  Bar2:HideOverride()
+  ns:HideBlizzard()
 end
 
 function BarControl:update()
@@ -66,6 +68,9 @@ function BarControl:PLAYER_ENTERING_WORLD(login, reload)
   if login or reload then
     HideUIPanel(ns.g.BagsBar)
     HideUIPanel(ns.g.MicroMenuContainer)
+    -- MainMenuBar:SetParent(UIParent)
+    -- Bar2:SetParent(UIParent)
+    self.vis = nil
     self.hasTarget = UnitExists("target")
     self.inCombat = UnitAffectingCombat("player")
     self:update()

@@ -7,6 +7,7 @@
 
 globals.lua
 
+HideBlizzard.lua
 ActionBars.lua
 ExpBar.lua
 RepBars.lua
