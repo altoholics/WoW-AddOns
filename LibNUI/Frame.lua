@@ -9,28 +9,28 @@ local Texture = ui.Texture
 
 -- empty frame
 local Frame = Class(nil, function(o)
-    o.frame = CreateFrame(o.type or "Frame", o.name, o.parent, o.template)
-    o.name = nil
-    o.parent = nil
-    o.template = nil
-    if o.level then
-      o.frame:SetFrameLevel(o.level)
-      o.level = nil
+  o.frame = CreateFrame(o.type or "Frame", o.name, o.parent, o.template)
+  o.name = nil
+  o.parent = nil
+  o.template = nil
+  if o.level then
+    o.frame:SetFrameLevel(o.level)
+    o.level = nil
+  end
+  if o.position then
+    if o.position.width then o:width(o.position.width); o.position.width = nil end
+    if o.position.height then o:height(o.position.height); o.position.height = nil end
+    for p,args in pairs(o.position) do
+      if o[p] then o[p](o, unpack(args)) end
     end
-    if o.position then
-        if o.position.width then o:width(o.position.width); o.position.width = nil end
-        if o.position.height then o:height(o.position.height); o.position.height = nil end
-        for p,args in pairs(o.position) do
-            if o[p] then o[p](o, unpack(args)) end
-        end
-        o.position = nil
+    o.position = nil
+  end
+  o.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
+  if o.events then
+    for _,e in pairs(o.events) do
+      o.frame:RegisterEvent(e)
     end
-    o.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
-    if o.events then
-        for _,e in pairs(o.events) do
-            o.frame:RegisterEvent(e)
-        end
-    end
+  end
 end)
 ui.Frame = Frame
 

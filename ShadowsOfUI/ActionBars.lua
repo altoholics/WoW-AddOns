@@ -3,7 +3,7 @@ local addonName, ns = ...
 local ui = ns.g.ui
 local Frame, UIParent = ui.Frame, ns.g.UIParent
 
-local HideUIPanel, ShowUIPanel, UnitExists, UnitAffectingCombat = ns.g.HideUIPanel, ns.g.ShowUIPanel, ns.g.UnitExists, ns.g.UnitAffectingCombat
+local HideUIPanel, UnitExists, UnitAffectingCombat = ns.g.HideUIPanel, ns.g.UnitExists, ns.g.UnitAffectingCombat
 local MainMenuBar, Bar2 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft
 
 local BarControl = Frame:new{

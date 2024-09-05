@@ -33,8 +33,12 @@ function u.Class(parent, fn, defaults)
   function c:new(o)
     local onLoad = o.onLoad
     o.onLoad = nil
-    if defaults then u.CopyTables(defaults, o) end
-    o = parent and parent:new(o) or (o or {})
+    if defaults then
+      for k,v in pairs(defaults) do
+        if not o[k] then o[k] = v end
+      end
+    end
+    o = parent and parent:new(o) or o
     Mixin(o, parent or {}, c)
     setmetatable(o, self)
     self.__index = self

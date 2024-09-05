@@ -1,34 +1,22 @@
-local _, ns = ...
+local ADDON_NAME, ns = ...
 
 -- set up event handling
 -- eventually this should keep the frame local and expose register/unregister functions
 -- so we can chain callbacks
 
-local function OnEvent(self, event, ...)
-	if event == "ADDON_LOADED" then
-		local addOnName = ...
-		--print(event, addOnName)
-	elseif event == "PLAYER_ENTERING_WORLD" then
-		local isLogin, isReload = ...
-		local playerName = UnitName("player");
-		ChatFrame1:AddMessage('Hi my name is: ' .. playerName);
-		--local arachnophobia = C_CVar.GetCVarInfo("arachnophobiaMode");
-		--ChatFrame1:AddMessage('The cVar arachnophobiaMode is: ' .. arachnophobia);
-		--print(event, isLogin, isReload)
-	elseif event == "CHAT_MSG_CHANNEL" then
-		local text, playerName, _, channelName = ...
-		--print(event, text, playerName, channelName)
-	elseif event == "PLAYER_LEVEL_UP" then
-		--PlayMusic(642322) -- sound/music/pandaria/mus_50_toast_b_hero_01.mp3
-	end
+local EventController = ns.ui.Frame:new{
+  events = {"ADDON_LOADED", "PLAYER_ENTERING_WORLD", "PLAYER_LEVEL_UP"},
+  onLoad = function(self)
+    self.onLoadCallbacks = {}
+  end,
+}
+ns.EventController = EventController
+
+function EventController:ADDON_LOADED(name)
+  if ADDON_NAME ~= name then return end
+  for _,c in ipairs(self.onLoadCallbacks) do
+    c(ns)
+  end
 end
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("ADDON_LOADED")
-f:RegisterEvent("PLAYER_ENTERING_WORLD")
-f:RegisterEvent("CHAT_MSG_CHANNEL")
-f:RegisterEvent("PLAYER_LEVEL_UP")
-f:SetScript("OnEvent", OnEvent)
-
-
-ns.frame = f
+function ns.onLoad(fn) table.insert(EventController.onLoadCallbacks, fn) end

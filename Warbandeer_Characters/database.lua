@@ -1,13 +1,13 @@
-local addOnName, ns = ...
+local _, ns = ...
+-- luacheck: globals WarbandeerCharDB
 
 -- define the addon database and its defaults
 
 local defaults = {
+  characters = {}
 }
 
-function ns.frame:ADDON_LOADED(event, name)
-    if addOnName == name then
-        self.db = WarbandeerCharDB or CopyTable(defaults)
-    end
-end
-ns.frame:RegisterEvent("ADDON_LOADED")
+ns.onLoad(function()
+  WarbandeerCharDB = WarbandeerCharDB or ns.g.CopyTable(defaults)
+  ns.db = WarbandeerCharDB
+end)

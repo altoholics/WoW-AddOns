@@ -3,6 +3,8 @@
 ## Author: Nazuraki
 ## Version: 11.0.000-1
 ## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green.blp
+## SavedVariables: WarbandeerCharDB
+## Dependencies: LibNUI
 
 # TODO: gather basic character info on login: name, class, race, level, ilvl, xp, rested!, ?
 # make data available via api:
@@ -11,10 +13,18 @@
 # - getCurrentCharacter()
 # - ?
 
+# define the interface between addon and rest of the ecosystem
+globals.lua
+
+# basic shared functions and definitions
 init.lua
-api.lua
+
+# set up event handlers
 events.lua
+
+# initialize data
 database.lua
+
 commands.lua
-compartment.lua
-window.lua
+
+main.lua

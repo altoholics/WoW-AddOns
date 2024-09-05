@@ -30,11 +30,13 @@ local TableFrame = Class(Frame, function(o)
         for i=1,#o.colNames do
             col = BgFrame:new{parent = frame, backdrop = {alpha = 0}}
             col:size(o.CELL_WIDTH, colHeight)
-            col:topLeft(offsetX + (i-1) * o.CELL_WIDTH, 0)
+            col:topLeft((i-1) * o.CELL_WIDTH + offsetX, 0)
+            col.frame:SetFrameLevel(1)
             cols[i] = col
 
             h = col.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            h:SetPoint("TOPLEFT", (i-1) * o.CELL_WIDTH, 0)
+            -- inset padding 2
+            h:SetPoint("TOPLEFT", 3, -6)
             h:SetText(o.colNames[i])
         end
     end
@@ -46,6 +48,7 @@ local TableFrame = Class(Frame, function(o)
             row = BgFrame:new{parent = frame, backdrop = {alpha = 0}}
             row:size(rowWidth, o.CELL_HEIGHT)
             row:topLeft(0, (i-1) * -o.CELL_HEIGHT - offsetY)
+            row.frame:SetFrameLevel(2)
             rows[i] = row
 
             h = row.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

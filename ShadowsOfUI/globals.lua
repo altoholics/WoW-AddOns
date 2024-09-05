@@ -21,7 +21,6 @@ ns.g = {
   HideUIPanel = HideUIPanel,
   UnitExists = UnitExists,
   UnitAffectingCombat = UnitAffectingCombat,
-  GetScreenWidth = GetScreenWidth,
   GetFactionInfoByID = GetFactionInfoByID,
   GetMajorFactionRenownInfo = C_MajorFactions.GetMajorFactionRenownInfo,
   IsAddonLoaded = C_AddOns.IsAddOnLoaded,
@@ -60,7 +59,7 @@ function ns.min(a, b)
   return a < b and a or b
 end
 
--- Disable the reagent bag tutorial 
+-- Disable the reagent bag tutorial
 C_CVar.SetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 C_CVar.SetCVar("professionToolSlotsExampleShown", 1)
 C_CVar.SetCVar("professionAccessorySlotsExampleShown", 1)

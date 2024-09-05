@@ -1,19 +1,19 @@
-## Interface: 110000, 110002
+## Interface: 110002
 ## Title: Warbandeer
 ## Author: Nazuraki
 ## Version: 11.0.000-1
 ## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green
 ## SavedVariables: WarbandeerDB
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
-## Dependencies: LibNUI
+## Dependencies: LibNUI, Warbandeer_Characters
+
+globals.lua
 
 util.lua
 
 init.lua
-api.lua
 
 events.lua
 database.lua
-commands.lua
 compartment.lua
 window.lua

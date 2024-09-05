@@ -2,54 +2,12 @@ local addOnName, ns = ...
 
 -- set up the main addon window
 
-local ui = LibNUI
-local PortraitFrame, TableFrame = ui.PortraitFrame, ui.TableFrame
-
--- Wow APIs
-local NUM_CLASSES = GetNumClasses()
-local GetClassInfo, GetClassColor = GetClassInfo, C_ClassColor.GetClassColor
-
-local Generate, Map, Select = ns.util.Generate, ns.util.Map, ns.util.Select
-
--- class colors: https://wowpedia.fandom.com/wiki/Class_colors
-
-local ALLIANCE_RACES = {
-    "Human",
-    "Dwarf",
-    "Night Elf",
-    "Gnome",
-    "Draenei",
-    "Worgen",
-    "Pandaren",
-    "Void Elf",
-    "Lightforged Draenei",
-    "Dark Iron Dwarf",
-    "Kul Tiran",
-    "Mechagnome",
-    "Dracthyr",
-}
-
-local HORDE_RACES = {
-    "Orc",
-    "Undead",
-    "Tauren",
-    "Troll",
-    "Blood Elf",
-    "Goblin",
-    "Pandaren",
-    "Nightborne",
-    "Highmountain Tauren",
-    "Mag'har Orc",
-    "Zandalari Troll",
-    "Vulpera",
-    "Dracthyr",
-}
-
-local CLASSES = Generate(function(i) local n, id = GetClassInfo(i); local c = GetClassColor(id); return {name = n, id = id, color = c} end, NUM_CLASSES)
-local CLASS_NAMES = Map(CLASSES, Select("name"))
+local Frame, PortraitFrame, TableFrame = ns.ui.Frame, ns.ui.PortraitFrame, ns.ui.TableFrame
 
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
+
+local ALLIANCE_RACES, CLASS_NAMES, CLASSES = ns.ALLIANCE_RACES, ns.CLASS_NAMES, ns.CLASSES
 
 local function CreateMainFrame()
     local pf = PortraitFrame:new{
@@ -57,8 +15,8 @@ local function CreateMainFrame()
         portraitPath = "Interface\\Icons\\inv_10_tailoring2_banner_green.blp",
     }
     pf:center()
-    pf:size(100 * (#ALLIANCE_RACES + 1) + 24, 400)
-    
+    pf:size(100 * (#ALLIANCE_RACES + 1) + 20, 400)
+
     -- add the contents
     local t = TableFrame:new{
         parent = pf.frame,
@@ -71,8 +29,26 @@ local function CreateMainFrame()
     t:bottomRight(-58, 8)
 
     -- color the backgrounds of the rows by class color
-    for i=1,NUM_CLASSES do
+    for i=1,ns.g.NUM_CLASSES do
         t:row(i):backdropColor(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
+    end
+
+    for name,data in pairs(ns.api.GetAllCharacters()) do
+      local col = ns.NormalizeRaceId(data.raceId)
+      local row = data.classId
+      local w = t.cols[1].frame:GetWidth()
+      local cell = Frame:new{
+        parent = t.frame,
+        level = 3,
+        position = {
+          topLeft = {col * w + 3, row * -24 - 5},
+          width = w - 6,
+          height = 24 - 10,
+        },
+      }
+      local label = cell.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+      label:SetText(name)
+      label:SetPoint("TOPLEFT")
     end
 
     return pf
@@ -84,4 +60,8 @@ function ns.Open()
     end
 
     ns.MainWindow:show()
+end
+
+function ns:SlashCmd() -- cmd, msg
+  self:Open()
 end

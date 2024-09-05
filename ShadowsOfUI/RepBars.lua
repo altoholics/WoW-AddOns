@@ -23,7 +23,7 @@ local DornogalEnd = rgb(124, 135, 190)
 local RingingDeepsStart = rgb(239, 111, 53)
 local RingingDeepsEnd = rgb(247, 217, 122)
 local HallowfallStart = rgb(247, 190, 143)
-local HallowfallEnd = rgb(253, 199, 134)
+local HallowfallEnd = rgb(251, 216, 178)
 local SeveredThreadsStart = rgb(169, 71, 59)
 local SeveredThreadsEnd = rgb(244, 124, 102)
 
