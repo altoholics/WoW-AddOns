@@ -14,6 +14,7 @@ ns.g = {
   UnitClassBase = UnitClassBase,
   GetClassInfo = GetClassInfo, -- https://wowpedia.fandom.com/wiki/API_UnitClass
   UnitRace = UnitRace,
+  GetAverageItemLevel = GetAverageItemLevel,
 }
 
 ns.ui = LibNUI

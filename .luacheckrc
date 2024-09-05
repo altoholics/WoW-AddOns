@@ -16,6 +16,7 @@ stds.wowapi = {
     "CopyTable",
     "CreateColor",
     "CreateFrame",
+    "GetAverageItemLevel",
     "GetClassInfo",
     "GetFactionInfoByID",
     "GetMaxLevelForPlayerExpansion",
