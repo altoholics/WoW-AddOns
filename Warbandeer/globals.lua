@@ -1,5 +1,5 @@
-local _, ns = ...
--- luacheck: globals WarbandeerApi LibNUI
+local ADDON_NAME, ns = ...
+-- luacheck: globals WarbandeerApi LibNUI Warbandeer_OnAddonCompartmentClick
 
 -- API between addon and the rest of ecosystem
 -- This is the only file in the addon that should reference globals. This helps ensure that other files don't
@@ -32,4 +32,11 @@ SLASH_WARBAND2 = "/wb" -- luacheck: no global
 
 function SlashCmdList.WARBAND(msg) -- luacheck: no global
   ns:SlashCmd("WARBAND", msg)
+end
+
+
+function Warbandeer_OnAddonCompartmentClick(addonName, buttonName)
+  if ADDON_NAME ~= addonName then return end
+  -- buttonName = LeftButton | RightButton | MiddleButton
+  ns:CompartmentClick(buttonName)
 end

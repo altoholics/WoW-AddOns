@@ -15,7 +15,7 @@ local function CreateMainFrame()
         portraitPath = "Interface\\Icons\\inv_10_tailoring2_banner_green.blp",
     }
     pf:center()
-    pf:size(100 * (#ALLIANCE_RACES + 1) + 20, 400)
+    pf:size(100 * (#ALLIANCE_RACES + 1) + 20, 382)
 
     -- add the contents
     local t = TableFrame:new{
@@ -25,7 +25,7 @@ local function CreateMainFrame()
         colNames = ALLIANCE_RACES,
         rowNames = CLASS_NAMES,
     }
-    t:topLeft(12, -56)
+    t:topLeft(12, -35)
     t:bottomRight(-58, 8)
 
     -- color the backgrounds of the rows by class color
@@ -63,5 +63,9 @@ function ns.Open()
 end
 
 function ns:SlashCmd() -- cmd, msg
+  self:Open()
+end
+
+function ns:CompartmentClick() -- buttonName = (LeftButton | RightButton | MiddleButton)
   self:Open()
 end

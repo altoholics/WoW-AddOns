@@ -1,0 +1,6 @@
+
+
+
+# - ctrl+click an item at a vendor to add it to the shopping list
+# - show shopping list items requiring that currency when hovering the currency (in currency view, at vendor, ...)
+# - show a window with shopping list items and allow re-ordering
