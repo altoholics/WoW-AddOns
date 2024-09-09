@@ -13,50 +13,61 @@ local Class, Frame, BgFrame = ns.util.Class, ui.Frame, ui.BgFrame
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
 local TableFrame = Class(Frame, function(o)
-    o.numCols = o.columns or #o.colNames
-    o.numRows = o.numRows or #o.rowNames
+  o.numCols = o.columns or #o.colNames
+  o.numRows = o.numRows or #o.rowNames
 
-    local offsetX = o.rowNames ~= nil and o.CELL_WIDTH or 0
-    local offsetY = o.colNames ~= nil and o.CELL_HEIGHT or 0
+  local offsetX = o.rowNames ~= nil and o.CELL_WIDTH or 0
+  local offsetY = o.colNames ~= nil and o.CELL_HEIGHT or 0
 
-    local frame = o.frame
-    o.cols = {}
-    o.rows = {}
-    local cols, rows = o.cols, o.rows
+  local frame = o.frame
+  o.cols = {}
+  o.rows = {}
+  local cols, rows = o.cols, o.rows
 
-    if o.colNames then
-        local colHeight = o.CELL_HEIGHT * (o.numRows + 1)
-        local col, h
-        for i=1,#o.colNames do
-            col = BgFrame:new{parent = frame, backdrop = {alpha = 0}}
-            col:size(o.CELL_WIDTH, colHeight)
-            col:topLeft((i-1) * o.CELL_WIDTH + offsetX, 0)
-            col.frame:SetFrameLevel(1)
-            cols[i] = col
-
-            h = col.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            -- inset padding 2
-            h:SetPoint("TOPLEFT", 3, -6)
-            h:SetText(o.colNames[i])
-        end
+  if o.colNames then
+    local colHeight = o.CELL_HEIGHT * (o.numRows + 1)
+    for i=1,#o.colNames do
+      cols[i] = BgFrame:new{
+        parent = frame,
+        level = 1,
+        backdrop = {alpha = 0},
+        position = {
+          width = o.CELL_WIDTH,
+          height = colHeight,
+          topLeft = {(i-1) * o.CELL_WIDTH + offsetX, 0},
+        },
+      }
+      cols[i]:withLabel({
+        text = o.colNames[i],
+        position = {"TOPLEFT", 3, -6},
+      })
     end
+  end
 
-    if o.rowNames then
-        local rowWidth = o.CELL_WIDTH * (o.numCols + 1)
-        local row, h
-        for i=1,#o.rowNames do
-            row = BgFrame:new{parent = frame, backdrop = {alpha = 0}}
-            row:size(rowWidth, o.CELL_HEIGHT)
-            row:topLeft(0, (i-1) * -o.CELL_HEIGHT - offsetY)
-            row.frame:SetFrameLevel(2)
-            rows[i] = row
-
-            h = row.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            -- inset padding 2
-            h:SetPoint("LEFT", 2, 0)
-            h:SetText(o.rowNames[i])
-        end
+  if o.rowNames then
+    local rowWidth = o.CELL_WIDTH * (o.numCols + 1)
+    for i=1,#o.rowNames do
+      rows[i] = BgFrame:new{
+        parent = frame,
+        level = 2,
+        backdrop = {alpha = 0},
+        position = {
+          width = rowWidth,
+          height = o.CELL_HEIGHT,
+          topLeft = {0, (i-1) * -o.CELL_HEIGHT - offsetY},
+        },
+      }
+      rows[i]:withLabel({
+        text = o.rowNames[i],
+        position = {"LEFT", 2, 0},
+      })
     end
+  end
+
+  o.cells = {}
+  for i=1,o.numRows do
+    o.cells[i] = {}
+  end
 end)
 ui.TableFrame = TableFrame
 

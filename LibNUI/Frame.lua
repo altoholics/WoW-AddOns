@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local CreateFrame, ShowUIPanel, HideUIPanel = CreateFrame, ShowUIPanel, HideUIPanel
+local CreateFrame, ShowUIPanel, HideUIPanel = ns.g.CreateFrame, ns.g.ShowUIPanel, ns.g.HideUIPanel
 
 local ui = ns.ui
 local Class, CopyTables = ns.util.Class, ns.util.CopyTables
@@ -96,3 +96,17 @@ function Frame:addBackdrop(o)
     return self:withTextureBackground("backdrop", CopyTables(BACKDROP_DEFAULTS, o))
 end
 
+function Frame:withLabel(name, o)
+  if not o then
+    o = name
+    name = "label"
+  end
+  self[name] = self.frame:CreateFontString(nil, o.layer or "ARTWORK", o.template or "GameFontHighlight")
+  if o.text then
+    self[name]:SetText(o.text)
+  end
+  if o.position then
+    self[name]:SetPoint(unpack(o.position))
+  end
+  return self
+end

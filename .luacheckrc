@@ -1,4 +1,6 @@
-std = "min"
+-- ignore unused arguments
+ignore = {"212"}
+std = "max"
 stds.myapi = {
   globals = {
     "LibNUI",
@@ -6,8 +8,6 @@ stds.myapi = {
 }
 stds.wowapi = {
   read_globals = {
-    "pairs",
-    "unpack",
     "BagsBar",
     "C_AddOns",
     "C_ClassColor",
@@ -40,6 +40,7 @@ stds.wowapi = {
     "StatusTrackingBarManager",
     "Tutorials",
     "UIParent",
+    "UISpecialFrames",
     "UnitAffectingCombat",
     "UnitClass",
     "UnitClassBase",

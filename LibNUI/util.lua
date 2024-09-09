@@ -1,10 +1,10 @@
 local _, ns = ...
 local u = ns.util
 
--- https://github.com/Gethe/wow-ui-source/blob/c0f3b4f1794953ba72fa3bc5cd25a6f2cdd696a1/Interface/AddOns/Blizzard_SharedXMLBase/Mixin.lua#L6
-local setmetatable, Mixin = setmetatable, Mixin
+-- Interface/AddOns/Blizzard_SharedXMLBase/Mixin.lua#L6
+local setmetatable, Mixin = setmetatable, ns.g.Mixin
 
--- https://github.com/Gethe/wow-ui-source/blob/c0f3b4f1794953ba72fa3bc5cd25a6f2cdd696a1/Interface/AddOns/Blizzard_SharedXMLBase/TableUtil.lua
+-- Interface/AddOns/Blizzard_SharedXMLBase/TableUtil.lua
 function u.CopyTables(...)
   local copy = {}
   local t

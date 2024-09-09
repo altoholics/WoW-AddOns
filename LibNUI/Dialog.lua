@@ -4,8 +4,8 @@ local ui = ns.ui
 local Class = ns.util.Class
 local Frame = ui.Frame
 
-local _G, tinsert = _G, tinsert
-local UISpecialFrames = UISpecialFrames
+local _G, tinsert = _G, table.insert
+local UISpecialFrames = ns.g.UISpecialFrames
 
 -- dialog with title bar and close button, closable with escape
 local Dialog = Class(Frame, function(o)

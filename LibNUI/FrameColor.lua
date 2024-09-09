@@ -1,9 +1,9 @@
 local _, ns = ...
 
-local CreateSkinModule = FrameColor_CreateSkinModule
+local CreateSkinModule = ns.g.FrameColor_CreateSkinModule
 
 -- because it isn't exposed by FrameColor
-function ns:SkinNineSliced(frame, color, desaturation)   
+function ns:SkinNineSliced(frame, color, desaturation)
     for _, texture in pairs({
         frame.NineSlice.TopEdge,
         frame.NineSlice.BottomEdge,
@@ -12,10 +12,10 @@ function ns:SkinNineSliced(frame, color, desaturation)
         frame.NineSlice.RightEdge,
         frame.NineSlice.LeftEdge,
         frame.NineSlice.BottomRightCorner,
-        frame.NineSlice.BottomLeftCorner,  
+        frame.NineSlice.BottomLeftCorner,
     }) do
         texture:SetDesaturation(desaturation)
-        texture:SetVertexColor(color.r, color.g, color.b, color.a) 
+        texture:SetVertexColor(color.r, color.g, color.b, color.a)
     end
 end
 
