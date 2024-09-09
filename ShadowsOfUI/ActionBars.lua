@@ -7,7 +7,7 @@ local HideUIPanel, UnitExists, UnitAffectingCombat = ns.g.HideUIPanel, ns.g.Unit
 local MainMenuBar, Bar2 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft
 
 local BarControl = Frame:new{
-  events = {"ADDON_LOADED", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
+  events = {}--{"ADDON_LOADED", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
 }
 BarControl:hide()
 

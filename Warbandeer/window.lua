@@ -34,7 +34,8 @@ local function CreateMainFrame()
     end
 
     for name,data in pairs(ns.api.GetAllCharacters()) do
-      local col = ns.NormalizeRaceId(data.raceId)
+      local col, isAlliance = ns.NormalizeRaceId(data.raceId)
+      if not isAlliance then break end
       local row = data.classId
       local w = t.cols[1].frame:GetWidth()
       local cell = Frame:new{
