@@ -60,6 +60,7 @@ function ns.min(a, b)
 end
 
 -- Disable the reagent bag tutorial
+-- /run HelpTip:HideAllSystem("TutorialReagentBag")
 C_CVar.SetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 C_CVar.SetCVar("professionToolSlotsExampleShown", 1)
 C_CVar.SetCVar("professionAccessorySlotsExampleShown", 1)
