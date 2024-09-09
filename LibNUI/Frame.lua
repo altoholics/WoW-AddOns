@@ -49,6 +49,8 @@ function Frame:width(w) self.frame:SetWidth(w); return self end
 function Frame:height(h) self.frame:SetHeight(h); return self end
 function Frame:show() ShowUIPanel(self.frame); return self end
 function Frame:hide() HideUIPanel(self.frame); return self end
+function Frame:registerEvent(event) self.frame:RegisterEvent(event); return self end
+function Frame:unregisterEvent(event) self.frame:UnregisterEvent(event); return self end
 -- https://wowpedia.fandom.com/wiki/Making_draggable_frames
 function Frame:makeDraggable()
     self.frame:SetMovable(true)

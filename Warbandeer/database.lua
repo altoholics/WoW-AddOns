@@ -1,14 +1,15 @@
 local addOnName, ns = ...
+-- luacheck: globals WarbandeerDB
 
 -- define the addon database and its defaults
 
 local defaults = {
 }
 
-function ns.frame:ADDON_LOADED(event, name)
-    if addOnName == name then
-        WarbandeerDB = WarbandeerDB or CopyTable(defaults)
-        self.db = WarbandeerDB
-    end
+function ns.EventController:ADDON_LOADED(name)
+  if addOnName == name then
+    WarbandeerDB = WarbandeerDB or ns.g.CopyTable(defaults)
+    self.db = WarbandeerDB
+  end
 end
-ns.frame:RegisterEvent("ADDON_LOADED")
+ns.EventController:registerEvent("ADDON_LOADED")
