@@ -1,4 +1,4 @@
-## Interface: 110002
+## Interface: 110002, 110005
 ## Title: Warbandeer_Characters
 ## Author: Nazuraki
 ## Version: 11.0.000-1

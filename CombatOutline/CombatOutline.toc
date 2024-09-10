@@ -1,4 +1,4 @@
-## Interface: 110002
+## Interface: 110002, 110005
 ## Title: Combat Outline
 ## Author: Nazuraki
 ## Version: 11.0.002-0.1
