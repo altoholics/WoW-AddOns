@@ -26,9 +26,9 @@ end
 ns.api = WarbandeerApi
 
 
-SLASH_WARBAND1 = "/warbandc" -- luacheck: no global
-SLASH_WARBAND2 = "/wbc" -- luacheck: no global
+SLASH_WARBANDC1 = "/warbandc" -- luacheck: no global
+SLASH_WARBANDC2 = "/wbc" -- luacheck: no global
 
-function SlashCmdList.WARBAND(msg) -- luacheck: no global
-  ns.SlashCmd("WARBAND", msg)
+function SlashCmdList.WARBANDC(msg) -- luacheck: no global
+  ns:SlashCmd("WARBANDC", msg)
 end
