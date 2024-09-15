@@ -10,7 +10,9 @@ local function listCharacters(t)
     table.insert(c, data)
   end
   table.sort(c, function(c1, c2)
-    return c1 ~= nil and c2 ~= nil and c1.level >= c2.level and c1.ilvl >= c2.ilvl and c1.name > c2.name
+    if c1.level ~= c2.level then return c1.level > c2.level end
+    if c1.ilvl ~= c2.ilvl then return c1.ilvl > c2.ilvl end
+    return c1.name > c2.name
   end)
   for _,d in ipairs(c) do
     print(d.name, d.level, d.race, d.className, "ilvl "..d.ilvl)
