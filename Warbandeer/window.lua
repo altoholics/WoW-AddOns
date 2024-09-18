@@ -9,6 +9,9 @@ local Frame, PortraitFrame, TableFrame = ns.ui.Frame, ns.ui.PortraitFrame, ns.ui
 
 local ALLIANCE_RACES, CLASS_NAMES, CLASSES = ns.ALLIANCE_RACES, ns.CLASS_NAMES, ns.CLASSES
 
+local CELL_WIDTH = 100
+local CELL_HEIGHT = 24
+
 local function CreateMainFrame()
   local pf = PortraitFrame:new{
     name = addOnName,
@@ -23,19 +26,26 @@ local function CreateMainFrame()
   -- add the contents
   local t = TableFrame:new{
     parent = pf.frame,
-    CELL_WIDTH = 100,
-    CELL_HEIGHT = 24,
+    CELL_WIDTH = CELL_WIDTH,
+    CELL_HEIGHT = CELL_HEIGHT,
     colNames = ALLIANCE_RACES,
     rowNames = CLASS_NAMES,
     position = {
       topLeft = {12, -35},
       bottomRight = {-58, 8},
     },
+    headerFont = "GameFontHighlightSmall",
   }
 
   -- color the backgrounds of the rows by class color
   for i=1,ns.g.NUM_CLASSES do
     t:row(i):backdropColor(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
+  end
+
+  for i=1,#ALLIANCE_RACES do
+    if math.fmod(i, 2) == 0 then
+      t:col(i):backdropColor(0, 0, 0, 0.6)
+    end
   end
 
   for name,data in pairs(ns.api.GetAllCharacters()) do
@@ -47,14 +57,18 @@ local function CreateMainFrame()
       parent = t.frame,
       level = 3,
       position = {
-        topLeft = {col * w + 3, row * -24 - 5},
+        topLeft = {col * w, row * -24},
         width = w - 6,
         height = 24 - 10,
       },
     }
-    local label = cell.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    local label = cell.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     label:SetText(name)
     label:SetPoint("TOPLEFT")
+    label:SetWidth(CELL_WIDTH)
+    label:SetHeight(CELL_HEIGHT)
+    label:SetJustifyH("CENTER")
+    label:SetJustifyV("MIDDLE")
   end
 
   return pf

@@ -16,6 +16,7 @@ local TableRow = Class(BgFrame, function(o)
   o:withLabel({
     text = o.label,
     position = {ns.ui.edge.Left, 2, 0},
+    template = o.font,
   })
 end, {
   level = 2,
@@ -27,7 +28,13 @@ local TableCol = Class(BgFrame, function(o)
   o:withLabel({
     text = o.label,
     position = {ns.ui.edge.TopLeft, 3, -6},
+    template = o.font,
   })
+  o.label:SetWidth(o.frame:GetWidth() - 6)
+  o.label:SetJustifyH("CENTER")
+  if o.label:GetNumLines() > 1 then
+    o.label:SetPoint(ns.ui.edge.TopLeft, 3, 0)
+  end
 end, {
   level = 1,
   backdrop = {alpha = 0},
@@ -47,14 +54,14 @@ local TableFrame = Class(Frame, function(o)
   if o.colNames then
     local colHeight = o.CELL_HEIGHT * (o.numRows + 1)
     for i=1,#o.colNames do
-      o:addCol(o.colNames[i], o.CELL_WIDTH, colHeight, offsetX)
+      o:addCol(o.colNames[i], o.CELL_WIDTH, colHeight, offsetX, o.colHeaderFont or o.headerFont)
     end
   end
 
   if o.rowNames then
     local rowWidth = o.CELL_WIDTH * (o.numCols + 1)
     for i=1,#o.rowNames do
-      o:addRow(o.rowNames[i], rowWidth, o.CELL_HEIGHT, offsetY)
+      o:addRow(o.rowNames[i], rowWidth, o.CELL_HEIGHT, offsetY, o.rowHeaderFont or o.headerFont)
     end
   end
 
@@ -65,7 +72,7 @@ local TableFrame = Class(Frame, function(o)
 end)
 ui.TableFrame = TableFrame
 
-function TableFrame:addCol(text, width, height, insetLeft)
+function TableFrame:addCol(text, width, height, insetLeft, font)
   table.insert(self.cols, TableCol:new{
     parent = self.frame,
     index = #self.cols,
@@ -75,10 +82,11 @@ function TableFrame:addCol(text, width, height, insetLeft)
       width = width,
       height = height,
     },
+    font = font,
   })
 end
 
-function TableFrame:addRow(text, width, height, insetTop)
+function TableFrame:addRow(text, width, height, insetTop, font)
   table.insert(self.rows, TableRow:new{
     parent = self.frame,
     index = #self.rows,
@@ -88,6 +96,7 @@ function TableFrame:addRow(text, width, height, insetTop)
       width = width,
       height = height,
     },
+    font = font,
   })
 end
 
