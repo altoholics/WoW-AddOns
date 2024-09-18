@@ -3,11 +3,15 @@ local addOnName, ns = ...
 -- set up the main addon window
 
 local Frame, PortraitFrame, TableFrame = ns.ui.Frame, ns.ui.PortraitFrame, ns.ui.TableFrame
+local TopLeft, TopRight = ns.ui.edge.TopLeft, ns.ui.edge.TopRight
+local BottomLeft, BottomRight = ns.ui.edge.BottomLeft, ns.ui.edge.BottomRight
 
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 local ALLIANCE_RACES, CLASS_NAMES, CLASSES = ns.ALLIANCE_RACES, ns.CLASS_NAMES, ns.CLASSES
+
+local rgba = ns.g.CreateColor
 
 local CELL_WIDTH = 85
 local CELL_HEIGHT = 24
@@ -19,7 +23,7 @@ local function CreateMainFrame()
     portraitPath = "Interface\\Icons\\inv_10_tailoring2_banner_green.blp",
     position = {
       width = CELL_WIDTH * (#ALLIANCE_RACES + 1) + 16,
-      height = CELL_HEIGHT * ns.g.NUM_CLASSES + 65,
+      height = CELL_HEIGHT * ns.g.NUM_CLASSES + 65 + 13,
       center = {},
     },
   }
@@ -39,6 +43,14 @@ local function CreateMainFrame()
     headerFont = "GameFontHighlightSmall",
   }
 
+  t:withTextureArtwork("factionIcon", {})
+  -- t.factionIcon.texture:SetTexture("Interface/Icons/ui_hordeicon")
+  t.factionIcon.texture:SetTexture("Interface/Icons/ui_allianceicon")
+  t.factionIcon.texture:SetPoint(TopLeft, 53, -4)
+  t.factionIcon.texture:SetWidth(32)
+  t.factionIcon.texture:SetHeight(32)
+  t.factionIcon.texture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+
   -- color the backgrounds of the rows by class color
   for i=1,ns.g.NUM_CLASSES do
     t:row(i):backdropColor(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
@@ -50,7 +62,8 @@ local function CreateMainFrame()
     end
   end
 
-  for _,data in pairs(ns.api.GetAllCharacters()) do
+  local toons = ns.api.GetAllCharacters()
+  for _,data in pairs(toons) do
     local col, isAlliance = ns.NormalizeRaceId(data.raceId)
     if isAlliance then
       local row = data.classId
@@ -85,6 +98,40 @@ local function CreateMainFrame()
       end)
     end
   end
+
+  local status = Frame:new{
+    parent = pf.frame,
+    position = {
+      topLeft = {pf.frame, BottomLeft, 4, 18},
+      bottomRight = {-4, 5},
+    },
+  }
+  status:addBackdrop({color = {0, 0, 0, 0.2}})
+  status:withTextureBackground("fade", {
+    color = {1, 1, 1},
+    blendMode = "BLEND",
+    gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
+    clamp = {
+      {TopLeft, 0, 3},
+      {BottomRight, status.frame, TopRight},
+    },
+  })
+
+  status:withLabel{
+    name = "count",
+    template = "GameFontHighlightSmall",
+    text = "Characters: "..ns.api.GetNumCharacters(),
+    position = {TopLeft, 4, -2},
+    color = {1, 1, 215/255, 0.8},
+  }
+
+  status:withLabel{
+    name = "maxLevel",
+    template = "GameFontHighlightSmall",
+    text = ns.g.maxLevel.."'s: "..ns.api.GetNumMaxLevel(),
+    position = {TopLeft, 200, -2},
+    color = {1, 1, 215/255, 0.8},
+  }
 
   return pf
 end

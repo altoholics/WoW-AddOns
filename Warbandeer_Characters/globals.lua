@@ -15,6 +15,7 @@ ns.g = {
   GetClassInfo = GetClassInfo, -- https://wowpedia.fandom.com/wiki/API_UnitClass
   UnitRace = UnitRace,
   GetAverageItemLevel = GetAverageItemLevel,
+  maxLevel = GetMaxLevelForPlayerExpansion(),
 }
 
 ns.ui = LibNUI

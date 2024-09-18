@@ -109,7 +109,7 @@ end
 function Frame:withLabel(name, o)
   if not o then
     o = name
-    name = "label"
+    name = o.name or "label"
   end
   self[name] = self.frame:CreateFontString(nil, o.layer or "ARTWORK", o.template or "GameFontHighlight")
   if o.text then
@@ -117,6 +117,9 @@ function Frame:withLabel(name, o)
   end
   if o.position then
     self[name]:SetPoint(unpack(o.position))
+  end
+  if o.color then
+    self[name]:SetTextColor(unpack(o.color))
   end
   return self
 end

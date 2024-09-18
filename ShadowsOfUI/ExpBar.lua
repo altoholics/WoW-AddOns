@@ -51,7 +51,7 @@ local function onLoad(self)
   self.textPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
   self.textPercent:SetHeight(self.frame:GetHeight() - 2)
   self.textPercent:SetTextColor(1, 1, 1, 0)
-  
+
   self.restPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
   self.restPercent:SetHeight(self.frame:GetHeight() - 2)
   self.restPercent:SetTextColor(1, 1, 1, 0)

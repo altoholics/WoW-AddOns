@@ -17,6 +17,7 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
   local data = self.db.characters
   if not data[name] then
     data[name] = ns.Data.newCharacter()
+    self.db.numCharacters = self.db.numCharacters + 1
   end
 
   self.currentPlayer = name
@@ -50,7 +51,16 @@ function ns.api:GetCharacterData(char)
   return ns.db.characters[char or self.currentPlayer]
 end
 
-function ns.api.GetAllCharacters()
+function ns.api:GetNumCharacters() return ns.db.numCharacters end
+function ns.api:GetNumMaxLevel()
+  local n = 0
+  for _,c in pairs(ns.db.characters) do
+    if c.level == ns.g.maxLevel then n = n + 1 end
+  end
+  return n
+end
+
+function ns.api:GetAllCharacters()
   -- todo: return a copy so it is immutable
   return ns.db.characters
 end

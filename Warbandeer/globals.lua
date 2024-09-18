@@ -16,6 +16,8 @@ ns.g = {
   UnitClassBase = UnitClassBase,
   GetClassInfo = GetClassInfo, -- https://wowpedia.fandom.com/wiki/API_UnitClass
   GetClassColor = C_ClassColor.GetClassColor,
+  CreateColor = CreateColor,
+  maxLevel = GetMaxLevelForPlayerExpansion(),
 }
 
 ns.ui = LibNUI
