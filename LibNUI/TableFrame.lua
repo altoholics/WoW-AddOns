@@ -17,6 +17,7 @@ local TableRow = Class(BgFrame, function(o)
     text = o.label,
     position = {ns.ui.edge.Left, 2, 0},
     template = o.font,
+    color = o.color or {1, 1, 1, 1},
   })
 end, {
   level = 2,
@@ -29,6 +30,7 @@ local TableCol = Class(BgFrame, function(o)
     text = o.label,
     position = {ns.ui.edge.TopLeft},
     template = o.font,
+    color = o.color or {1, 215/255, 0, 1},
   })
   o.label:SetWidth(o.frame:GetWidth())
   o.label:SetHeight(o.headerHeight)

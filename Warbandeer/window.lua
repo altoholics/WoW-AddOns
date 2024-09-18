@@ -27,6 +27,7 @@ local function CreateMainFrame()
       center = {},
     },
   }
+  pf.frame.TitleContainer.TitleText:SetTextColor(1, 1, 1, 1)
 
   -- add the contents
   local t = TableFrame:new{
@@ -84,6 +85,9 @@ local function CreateMainFrame()
       label:SetHeight(CELL_HEIGHT)
       label:SetJustifyH("CENTER")
       label:SetJustifyV("MIDDLE")
+      if data.level ~= ns.g.maxLevel then
+        label:SetTextColor(0.7, 0.7, 0.7, 1)
+      end
 
       -- https://wowpedia.fandom.com/wiki/UIOBJECT_GameTooltip
       cell.frame:SetScript("OnEnter", function()
