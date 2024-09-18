@@ -12,7 +12,7 @@ local Class, Frame, BgFrame = ns.util.Class, ui.Frame, ui.BgFrame
 --   CELL_HEIGHT  int          - height of cells in pixels
 
 local TableRow = Class(BgFrame, function(o)
-  o:topLeft(0, #o.rows * -o.position.height - o.position.insetTop)
+  o:topLeft(0, o.index * -o.frame:GetHeight() - o.insetTop)
   o:withLabel({
     text = o.label,
     position = {ns.ui.edge.Left, 2, 0},
@@ -23,7 +23,7 @@ end, {
 })
 
 local TableCol = Class(BgFrame, function(o)
-  o.topLeft(#o.cols * o.CELL_WIDTH + o.insetLeft, 0)
+  o:topLeft(o.index * o.frame:GetWidth() + o.insetLeft, 0)
   o:withLabel({
     text = o.label,
     position = {ns.ui.edge.TopLeft, 3, -6},
@@ -47,14 +47,14 @@ local TableFrame = Class(Frame, function(o)
   if o.colNames then
     local colHeight = o.CELL_HEIGHT * (o.numRows + 1)
     for i=1,#o.colNames do
-      o:addCol(o.colNames[i], o.CELL_WIDTH, colHeight, offsetY)
+      o:addCol(o.colNames[i], o.CELL_WIDTH, colHeight, offsetX)
     end
   end
 
   if o.rowNames then
     local rowWidth = o.CELL_WIDTH * (o.numCols + 1)
     for i=1,#o.rowNames do
-      o:addRow(o.rowNames[i], rowWidth, o.CELL_HEIGHT, offsetX)
+      o:addRow(o.rowNames[i], rowWidth, o.CELL_HEIGHT, offsetY)
     end
   end
 
@@ -67,22 +67,26 @@ ui.TableFrame = TableFrame
 
 function TableFrame:addCol(text, width, height, insetLeft)
   table.insert(self.cols, TableCol:new{
+    parent = self.frame,
+    index = #self.cols,
     label = text,
+    insetLeft = insetLeft,
     position = {
       width = width,
       height = height,
-      insetLeft = insetLeft,
     },
   })
 end
 
 function TableFrame:addRow(text, width, height, insetTop)
   table.insert(self.rows, TableRow:new{
+    parent = self.frame,
+    index = #self.rows,
     label = text,
+    insetTop = insetTop,
     position = {
       width = width,
       height = height,
-      insetTop = insetTop,
     },
   })
 end

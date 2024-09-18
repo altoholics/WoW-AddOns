@@ -13,15 +13,23 @@ local Frame = Class(nil, function(o)
   o.name = nil
   o.parent = nil
   o.template = nil
+  if o.scale then
+    o.frame:SetScale(o.scale)
+    o.scale = nil
+  end
   if o.level then
     o.frame:SetFrameLevel(o.level)
     o.level = nil
   end
   if o.position then
-    if o.position.width then o:width(o.position.width); o.position.width = nil end
-    if o.position.height then o:height(o.position.height); o.position.height = nil end
     for p,args in pairs(o.position) do
-      if o[p] then o[p](o, unpack(args)) end
+      if o[p] then
+        if type(args) == "table" then
+          o[p](o, unpack(args))
+        else
+          o[p](o, args)
+        end
+      end
     end
     o.position = nil
   end
@@ -35,9 +43,9 @@ end)
 ui.Frame = Frame
 
 function Frame:OnEvent(event, ...)
-    if self[event] then
-        self[event](self, ...)
-    end
+  if self[event] then
+    self[event](self, ...)
+  end
 end
 
 function Frame:center() self.frame:SetPoint(ui.edge.Center); return self end
@@ -53,10 +61,10 @@ function Frame:registerEvent(event) self.frame:RegisterEvent(event); return self
 function Frame:unregisterEvent(event) self.frame:UnregisterEvent(event); return self end
 -- https://wowpedia.fandom.com/wiki/Making_draggable_frames
 function Frame:makeDraggable()
-    self.frame:SetMovable(true)
-    self.frame:EnableMouse(true)
-    self.frame:RegisterForDrag("LeftButton")
-    return self
+  self.frame:SetMovable(true)
+  self.frame:EnableMouse(true)
+  self.frame:RegisterForDrag("LeftButton")
+  return self
 end
 function Frame:makeContainerDraggable()
   self.frame:SetScript("OnDragStart", function()
@@ -91,11 +99,11 @@ function Frame:withTextureArtwork(name, o) o.textureLayer = Artwork; return self
 function Frame:withTextureOverlay(name, o) o.textureLayer = Overlay; return self:withTexture(name, o) end
 
 local BACKDROP_DEFAULTS = {
-    positionAll = true,
-    color = {0, 0, 0, 0.8}
+  positionAll = true,
+  color = {0, 0, 0, 0.8}
 }
 function Frame:addBackdrop(o)
-    return self:withTextureBackground("backdrop", CopyTables(BACKDROP_DEFAULTS, o))
+  return self:withTextureBackground("backdrop", CopyTables(BACKDROP_DEFAULTS, o))
 end
 
 function Frame:withLabel(name, o)

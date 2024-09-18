@@ -4,12 +4,6 @@ local UnitName, UnitLevel, UnitClassBase, UnitRace = ns.g.UnitName, ns.g.UnitLev
 local GetClassInfo = ns.g.GetClassInfo
 local GetAverageItemLevel = ns.g.GetAverageItemLevel
 
-local characterMT = {
-  __lt = function(c1, c2)
-    return c1.level >= c2.level and c1.ilvl >= c2.ilvl and c1.name > c2.name
-  end
-}
-
 function ns:PLAYER_ENTERING_WORLD(login, reload)
   if not (login or reload) then return end
 
@@ -22,8 +16,7 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
 
   local data = self.db.characters
   if not data[name] then
-    data[name] = {}
-    setmetatable(data[name], characterMT)
+    data[name] = ns.Data.newCharacter()
   end
 
   self.currentPlayer = name

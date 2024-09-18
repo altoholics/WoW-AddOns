@@ -12,20 +12,20 @@ local IsAddOnLoaded, UIParent = ns.g.IsAddOnLoaded, ns.g.UIParent
 --   a close button in the top right
 --   a title bar
 local PortraitFrame = Class(Dialog, function(o)
-    o:makeDraggable()
-    o:makeTitlebarDraggable()
+  o:makeDraggable()
+  o:makeTitlebarDraggable()
 
-    -- portrait
-    local frame = o.frame
-    frame:SetPortraitTextureRaw(o.portraitPath)
+  -- portrait
+  local frame = o.frame
+  frame:SetPortraitTextureRaw(o.portraitPath)
 
-    -- re-skin, if present
-    if IsAddOnLoaded("FrameColor") then
-        ns.SkinFrame(frame)
-    end
+  -- re-skin, if present
+  if IsAddOnLoaded("FrameColor") then
+    ns.SkinFrame(frame)
+  end
 end, {
-    parent = UIParent,
-    -- Interface/AddOns/Blizzard_SharedXML/PortraitFrame.lua
-    template = "PortraitFrameTemplate"
+  parent = UIParent,
+  -- Interface/AddOns/Blizzard_SharedXML/PortraitFrame.lua
+  template = "PortraitFrameTemplate"
 })
 ui.PortraitFrame = PortraitFrame

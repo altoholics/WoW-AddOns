@@ -23,4 +23,5 @@ ns.g = {
   ShowUIPanel = ShowUIPanel,
   HideUIPanel = HideUIPanel,
   UISpecialFrames = UISpecialFrames,
+  UIParent = UIParent,
 }
