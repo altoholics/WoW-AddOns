@@ -39,6 +39,7 @@ ns.ALLIANCE_RACES = {
   "Kul Tiran",
   "Mechagnome",
   "Dracthyr",
+  "Earthen",
 }
 
 ns.HORDE_RACES = {
@@ -55,6 +56,7 @@ ns.HORDE_RACES = {
   "Zandalari Troll",
   "Vulpera",
   "Dracthyr",
+  "Earthen",
 }
 
 ns.CLASSES = Generate(
@@ -96,6 +98,7 @@ raceIdToFactionIndex[36] = {10, false}
 raceIdToFactionIndex[37] = {12, true}
 raceIdToFactionIndex[52] = {13, true}
 raceIdToFactionIndex[70] = {13, false}
+raceIdToFactionIndex[85] = {14, true}
 
 function ns.NormalizeRaceId(raceId)
   return ns.g.unpack(raceIdToFactionIndex[raceId])
