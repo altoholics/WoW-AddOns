@@ -91,6 +91,22 @@ local function CreateMainFrame()
         GameTooltip:SetText(data.name, 1, 1, 1)
         GameTooltip:AddDoubleLine("Level", data.level, nil, nil, nil, 1, 1, 1)
         GameTooltip:AddDoubleLine("iLvl", data.ilvl, nil, nil, nil, 1, 1, 1)
+        if data.prof1 then
+          GameTooltip:AddDoubleLine(
+            ns.api.professionInfo["sl"..data.prof1.skillID].name,
+            data.prof1.skillLevel.."/"..data.prof1.maxSkill,
+            nil, nil, nil,
+            1, 1, 1
+          )
+        end
+        if data.prof2 then
+          GameTooltip:AddDoubleLine(
+            ns.api.professionInfo["sl"..data.prof2.skillID].name,
+            data.prof2.skillLevel.."/"..data.prof2.maxSkill,
+            nil, nil, nil,
+            1, 1, 1
+          )
+        end
         GameTooltip:Show()
       end)
       cell.frame:SetScript("OnLeave", function()

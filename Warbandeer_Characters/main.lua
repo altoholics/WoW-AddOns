@@ -1,8 +1,25 @@
 local _, ns = ...
 
 local UnitName, UnitLevel, UnitClassBase, UnitRace = ns.g.UnitName, ns.g.UnitLevel, ns.g.UnitClassBase, ns.g.UnitRace
-local GetClassInfo = ns.g.GetClassInfo
+local GetClassInfo, GetProfessions, GetProfessionInfo = ns.g.GetClassInfo, ns.g.GetProfessions, ns.g.GetProfessionInfo
 local GetAverageItemLevel = ns.g.GetAverageItemLevel
+
+local function getProfessionInfo(profID)
+  local name, icon, skillLvl, max, abils, offset, skillID, skillMod, specIdx, specOffset = GetProfessionInfo(profID)
+  return {
+    id = profID,
+    name = name,
+    icon = icon,
+    skillLevel = skillLvl,
+    maxSkill = max,
+    skillID = skillID,
+    skillMod = skillMod,
+    numAbilities = abils,
+    spellOffset = offset,
+    specializationIndex = specIdx,
+    specializationOffset = specOffset,
+  }
+end
 
 function ns:PLAYER_ENTERING_WORLD(login, reload)
   if not (login or reload) then return end
@@ -19,15 +36,21 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
     data[name] = ns.Data.newCharacter()
     self.db.numCharacters = self.db.numCharacters + 1
   end
+  local c = data[name]
 
   self.currentPlayer = name
-  data[name].name = name
-  data[name].classId = classId
-  data[name].className = className
-  data[name].level = level
-  data[name].race = raceFile
-  data[name].raceId = raceId
-  data[name].ilvl = math.floor(ilvl)
+  c.name = name
+  c.classId = classId
+  c.className = className
+  c.level = level
+  c.race = raceFile
+  c.raceId = raceId
+  c.ilvl = math.floor(ilvl)
+  c.ralm = ns.g.RealmName
+
+  local prof1, prof2 = GetProfessions()
+  c.prof1 = prof1 and getProfessionInfo(prof1)
+  c.prof2 = prof2 and getProfessionInfo(prof2)
 end
 ns:registerEvent("PLAYER_ENTERING_WORLD")
 

@@ -35,6 +35,17 @@ function Data.newCharacter()
   return c
 end
 
+local function migrateDB()
+  local db = ns.db
+  local version = db.version
+  if version == 1 then
+    local n = 0
+    for _ in pairs(db.characters) do n = n + 1 end
+    db.numCharacters = n
+    db.version = 2
+  end
+end
+
 function ns:ADDON_LOADED(name)
   if ADDON_NAME ~= name then return end
   WarbandeerCharDB = WarbandeerCharDB or CopyTable(Data.emptyDB)
@@ -42,11 +53,6 @@ function ns:ADDON_LOADED(name)
     WarbandeerCharDB = CopyTable(Data.emptyDB)
   end
   self.db = WarbandeerCharDB
-  if self.db.version == 1 then
-    local n = 0
-    for _ in pairs(self.db.characters) do n = n + 1 end
-    self.db.numCharacters = n
-    self.db.version = 2
-  end
+  if self.db.version ~= Data.dbVersion then migrateDB() end
 end
 ns:registerEvent("ADDON_LOADED")

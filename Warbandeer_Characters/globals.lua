@@ -16,6 +16,13 @@ ns.g = {
   UnitRace = UnitRace,
   GetAverageItemLevel = GetAverageItemLevel,
   maxLevel = GetMaxLevelForPlayerExpansion(),
+  GetServerTime = GetServerTime,
+  GetSecondsUntilWeeklyReset = C_DateAndTime.GetSecondsUntilWeeklyReset,
+  -- GetServerTime() + C_DateAndTime.GetSecondsUntilWeeklyReset() - 604800
+  -- if last recorded time <= GetServerTime(), do weekly reset
+  RealmName = GetRealmName(),
+  GetProfessions = GetProfessions,
+  GetProfessionInfo = GetProfessionInfo,
 }
 
 ns.ui = LibNUI
