@@ -70,6 +70,7 @@ local function CreateMainFrame()
     label:SetJustifyH("CENTER")
     label:SetJustifyV("MIDDLE")
 
+    -- https://wowpedia.fandom.com/wiki/UIOBJECT_GameTooltip
     cell.frame:SetScript("OnEnter", function()
       GameTooltip:SetOwner(cell.frame, "ANCHOR_RIGHT")
       GameTooltip:SetText(name, 1, 1, 1)
