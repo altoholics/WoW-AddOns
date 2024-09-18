@@ -69,6 +69,17 @@ local function CreateMainFrame()
     label:SetHeight(CELL_HEIGHT)
     label:SetJustifyH("CENTER")
     label:SetJustifyV("MIDDLE")
+
+    cell.frame:SetScript("OnEnter", function()
+      GameTooltip:SetOwner(cell.frame, "ANCHOR_RIGHT")
+      GameTooltip:SetText(name, 1, 1, 1)
+      GameTooltip:AddLine(data.level.." "..data.race.." "..data.className)
+      GameTooltip:AddDoubleLine("iLvl", data.ilvl)
+      GameTooltip:Show()
+    end)
+    cell.frame:SetScript("OnLeave", function()
+      GameTooltip:Hide()
+    end)
   end
 
   return pf
