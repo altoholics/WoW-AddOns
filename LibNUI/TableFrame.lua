@@ -27,14 +27,13 @@ local TableCol = Class(BgFrame, function(o)
   o:topLeft(o.index * o.frame:GetWidth() + o.insetLeft, 0)
   o:withLabel({
     text = o.label,
-    position = {ns.ui.edge.TopLeft, 3, -6},
+    position = {ns.ui.edge.TopLeft},
     template = o.font,
   })
-  o.label:SetWidth(o.frame:GetWidth() - 6)
+  o.label:SetWidth(o.frame:GetWidth())
+  o.label:SetHeight(o.headerHeight)
   o.label:SetJustifyH("CENTER")
-  if o.label:GetNumLines() > 1 then
-    o.label:SetPoint(ns.ui.edge.TopLeft, 3, 0)
-  end
+  o.label:SetJustifyV("MIDDLE")
 end, {
   level = 1,
   backdrop = {alpha = 0},
@@ -46,15 +45,15 @@ local TableFrame = Class(Frame, function(o)
   o.numRows = o.numRows or #o.rowNames
 
   local offsetX = o.rowNames ~= nil and o.CELL_WIDTH or 0
-  local offsetY = o.colNames ~= nil and o.CELL_HEIGHT or 0
+  local offsetY = o.colNames ~= nil and o.headerHeight or o.CELL_HEIGHT or 0
 
   o.cols = {}
   o.rows = {}
 
   if o.colNames then
-    local colHeight = o.CELL_HEIGHT * (o.numRows + 1)
+    local colHeight = o.CELL_HEIGHT * (o.numRows) + (o.headerHeight or o.CELL_HEIGHT)
     for i=1,#o.colNames do
-      o:addCol(o.colNames[i], o.CELL_WIDTH, colHeight, offsetX, o.colHeaderFont or o.headerFont)
+      o:addCol(o.colNames[i], o.CELL_WIDTH, colHeight, o.headerHeight or o.CELL_HEIGHT, offsetX, o.colHeaderFont or o.headerFont)
     end
   end
 
@@ -72,12 +71,13 @@ local TableFrame = Class(Frame, function(o)
 end)
 ui.TableFrame = TableFrame
 
-function TableFrame:addCol(text, width, height, insetLeft, font)
+function TableFrame:addCol(text, width, height, headerHeight, insetLeft, font)
   table.insert(self.cols, TableCol:new{
     parent = self.frame,
     index = #self.cols,
     label = text,
     insetLeft = insetLeft,
+    headerHeight = headerHeight,
     position = {
       width = width,
       height = height,
