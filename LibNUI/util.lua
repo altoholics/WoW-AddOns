@@ -35,7 +35,13 @@ function u.Class(parent, fn, defaults)
     o.onLoad = nil
     if defaults then
       for k,v in pairs(defaults) do
-        if not o[k] then o[k] = v end
+        if not o[k] then
+          o[k] = v
+        elseif type(o[k]) == "table" and type(v) == "table" then
+          for j,u in pairs(v) do
+            if not o[k][j] then o[k][j] = u end
+          end
+        end
       end
     end
     o = parent and parent:new(o) or o

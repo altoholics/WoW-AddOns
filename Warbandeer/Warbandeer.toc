@@ -15,4 +15,6 @@ init.lua
 
 events.lua
 database.lua
+
+views\RaceGridView.lua
 window.lua

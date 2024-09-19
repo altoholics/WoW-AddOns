@@ -20,6 +20,9 @@ local Dialog = Class(Frame, function(o)
   -- set the title
   frame:SetTitle(o.title or frame:GetName())
   o.title = nil
+  if o.titleColor then
+    o.frame.TitleContainer.TitleText:SetTextColor(unpack(o.titleColor))
+  end
 end)
 ui.Dialog = Dialog
 

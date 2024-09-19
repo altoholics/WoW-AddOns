@@ -18,5 +18,15 @@ local Texture = Class(nil, function(o)
         o.texture:SetPoint(unpack(o.clamp[i]))
       end
     end
+    if o.texture then
+      o.texture:SetTexture(o.texture)
+    end
+    if o.coords then
+      o.texture:SetTexCoord(unpack(o.coords))
+    end
 end)
 ui.Texture = Texture
+
+function Texture:setTexture(texture)
+  self.texture:SetTexture(texture)
+end
