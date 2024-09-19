@@ -73,10 +73,6 @@ function ns.Open()
   ns.MainWindow:show()
 end
 
-function ns:SlashCmd() -- cmd, msg
-  self:Open()
-end
-
 function ns:CompartmentClick() -- buttonName = (LeftButton | RightButton | MiddleButton)
   self:Open()
 end

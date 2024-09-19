@@ -71,11 +71,11 @@ function ns:PLAYER_EQUIPMENT_CHANGED()
 end
 ns:registerEvent("PLAYER_EQUIPMENT_CHANGED")
 
-function API:GetCurrentCharacter() return self.currentPlayer end
+function API:GetCurrentCharacter() return ns.currentPlayer end
 
 function API:GetCharacterData(char)
   -- todo: return a copy so it is immutable
-  return ns.db.characters[char or self.currentPlayer]
+  return ns.db.characters[char or ns.currentPlayer]
 end
 
 function API:GetNumCharacters() return ns.db.numCharacters end

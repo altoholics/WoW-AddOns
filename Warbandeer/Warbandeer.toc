@@ -21,3 +21,5 @@ views\AllianceView.lua
 views\HordeView.lua
 views\RaceGridView.lua
 window.lua
+
+commands.lua

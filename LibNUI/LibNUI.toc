@@ -21,4 +21,6 @@ StatusBar.lua
 PortraitFrame.lua
 TableFrame.lua
 
+TitleFrame.lua
+
 FrameColor.lua
