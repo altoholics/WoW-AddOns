@@ -38,8 +38,8 @@ function u.Class(parent, fn, defaults)
         if not o[k] then
           o[k] = v
         elseif type(o[k]) == "table" and type(v) == "table" then
-          for j,u in pairs(v) do
-            if not o[k][j] then o[k][j] = u end
+          for j,w in pairs(v) do
+            if not o[k][j] then o[k][j] = w end
           end
         end
       end
@@ -57,6 +57,7 @@ function u.Class(parent, fn, defaults)
 
   return c
 end
+ns.ui.Class = u.Class
 
 -- return a new table by transforming each value by the given function
 function u.ToMap(t, f)

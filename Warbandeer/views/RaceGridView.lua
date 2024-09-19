@@ -1,6 +1,6 @@
 local _, ns = ...
 local ui = ns.ui
-local Class, Frame, TableFrame = ns.util.Class, ui.Frame, ui.TableFrame
+local Class, Frame, TableFrame = ns.ui.Class, ui.Frame, ui.TableFrame
 local TopLeft, TopRight = ns.ui.edge.TopLeft, ns.ui.edge.TopRight
 local BottomLeft, BottomRight = ns.ui.edge.BottomLeft, ns.ui.edge.BottomRight
 
@@ -20,14 +20,9 @@ local FactionIcon = Class(Frame, function(o)
   o:withTextureArtwork("factionIcon", {
     positionAll = true,
     coords = {0.1, 0.9, 0.1, 0.9},
-    texture = o.allianceIcon,
+    texturePath = o.allianceIcon,
   })
-end, {
-  position = {
-    width = 32,
-    height = 32,
-  },
-})
+end)
 
 function FactionIcon:swap()
   self.factionIcon:setTexture(self.isAlliance and self.allianceIcon or self.hordeIcon)
@@ -40,20 +35,14 @@ local AllianceView = Class(TableFrame, function(o)
     o:row(i):backdropColor(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
   end
 
-  for i=1,#ALLIANCE_RACES do
-    if math.fmod(i, 2) == 0 then
-      o:col(i):backdropColor(0, 0, 0, 0.6)
-    end
-  end
-
   local toons = ns.api.GetAllCharacters()
   for _,data in pairs(toons) do
     local col, isAlliance = ns.NormalizeRaceId(data.raceId)
     if isAlliance then
       local row = data.classId
-      local w = t.cols[1].frame:GetWidth()
+      local w = o.cols[1].frame:GetWidth()
       local cell = Frame:new{
-        parent = t.frame,
+        parent = o.frame,
         level = 3,
         position = {
           topLeft = {col * w, (row-1) * -24 - HeaderHeight},
@@ -109,32 +98,34 @@ end, {
   colNames = ALLIANCE_RACES,
   rowNames = CLASS_NAMES,
   position = {
-      topLeft = {8, -20},
-      bottomRight = {-58, 8},
-    },
+    topLeft = {},
+    bottomRight = {},
+  },
   headerFont = "GameFontHighlightSmall",
 })
 
 local RaceGridView = Class(Frame, function(o)
+  o.allianceView = AllianceView:new{
+    parent = o.frame,
+  }
+
   o.factionIcon = FactionIcon:new{
     parent = o.frame,
     position = {
       topLeft = {53, -4},
+      width = 32,
+      height = 32,
     },
-  }
-
-  o.allianceView = AllianceView:new{
-    parent = o.frame,
   }
 
   local status = Frame:new{
     parent = o.frame,
     position = {
-      topLeft = {o.frame, BottomLeft, 4, 18},
-      bottomRight = {-4, 5},
+      topLeft = {o.frame, BottomLeft, 0, 10},
+      bottomRight = {},
     },
   }
-  status:addBackdrop({color = {0, 0, 0, 0.2}})
+  -- status:addBackdrop({color = {0, 0, 0, 0.2}})
   status:withTextureBackground("fade", {
     color = {1, 1, 1},
     blendMode = "BLEND",

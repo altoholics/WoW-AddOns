@@ -21,7 +21,6 @@ local TableRow = Class(BgFrame, function(o)
   })
 end, {
   level = 2,
-  backdrop = {alpha = 0},
 })
 
 local TableCol = Class(BgFrame, function(o)
@@ -38,7 +37,6 @@ local TableCol = Class(BgFrame, function(o)
   o.label:SetJustifyV("MIDDLE")
 end, {
   level = 1,
-  backdrop = {alpha = 0},
 })
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
@@ -85,6 +83,7 @@ function TableFrame:addCol(text, width, height, headerHeight, insetLeft, font)
       height = height,
     },
     font = font,
+    backdrop = {color = {0, 0, 0, math.fmod(#self.cols, 2) == 0 and 0.8 or 0.6}},
   })
 end
 

@@ -28,6 +28,10 @@ local function CreateMainFrame()
   pf.views = {}
   pf.views.raceGrid = ns.RaceGridView:new{
     parent = pf.frame,
+    position = {
+      topLeft = {8, -20},
+      bottomRight = {-58, 8},
+    },
   }
 
   return pf
