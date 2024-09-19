@@ -12,11 +12,11 @@ function u.CopyTables(...)
     t = select(i, ...)
     if t then
       for k, v in pairs(t) do
-        copy[k] = v;
+        copy[k] = v
       end
     end
   end
-	return copy;
+	return copy
 end
 
 function u.MergeTable(destination, source)

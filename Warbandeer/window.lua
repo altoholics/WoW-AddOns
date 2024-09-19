@@ -24,6 +24,33 @@ local function CreateMainFrame()
     },
     titleColor = {1, 1, 1, 1},
   }
+  local cb = pf.frame.CloseButton
+  cb:SetPoint("TOPRIGHT", pf.frame, "TOPRIGHT", -2, -2)
+  cb:SetSize(pf.frame.TitleContainer:GetHeight() - 2, pf.frame.TitleContainer:GetHeight() - 2)
+  cb:ClearDisabledTexture()
+  cb:ClearHighlightTexture()
+  cb:ClearPushedTexture()
+  cb:ClearNormalTexture()
+  pf:withTextureBackground("closeBg", {
+    parent = cb,
+    positionAll = true,
+    color = {1, 1, 1, 0},
+  })
+  pf:withTextureArtwork("closeIcon", {
+    parent = cb,
+    texturePath = "Interface/AddOns/Warbandeer/icons/close.blp",
+    clamp = {{"CENTER", cb, "CENTER"}},
+  })
+  pf.closeIcon.texture:SetSize(10, 10)
+  pf.closeIcon.texture:SetVertexColor(0.7, 0.7, 0.7, 1)
+  cb:SetScript("OnEnter", function()
+    pf.closeIcon.texture:SetVertexColor(1, 1, 1, 1)
+    pf.closeBg.texture:SetColorTexture(1, 0, 0, 0.2)
+  end)
+  cb:SetScript("OnLeave", function()
+    pf.closeIcon.texture:SetVertexColor(0.7, 0.7, 0.7, 1)
+    pf.closeBg.texture:SetColorTexture(1, 1, 1, 0)
+  end)
 
   -- add the contents
   pf.views = {}

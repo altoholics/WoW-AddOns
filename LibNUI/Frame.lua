@@ -90,7 +90,7 @@ end
 -- todo, resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
 
 function Frame:withTexture(name, o)
-  o.parent = self.frame
+  o.parent = o.parent or self.frame
   self[name] = Texture:new(o)
   return self
 end
@@ -103,7 +103,7 @@ local BACKDROP_DEFAULTS = {
   color = {0, 0, 0, 0.8}
 }
 function Frame:addBackdrop(o)
-  return self:withTextureBackground("backdrop", CopyTables(BACKDROP_DEFAULTS, o))
+  return self:withTextureBackground(o.name or "backdrop", CopyTables(BACKDROP_DEFAULTS, o))
 end
 
 function Frame:withLabel(name, o)
