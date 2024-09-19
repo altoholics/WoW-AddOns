@@ -6,6 +6,9 @@ local Frame, UIParent = ui.Frame, ns.g.UIParent
 local HideUIPanel, UnitExists, UnitAffectingCombat = ns.g.HideUIPanel, ns.g.UnitExists, ns.g.UnitAffectingCombat
 local MainMenuBar, Bar2 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft
 
+-- for showing "clock-like" swaap and leading-edge effects
+-- https://wowpedia.fandom.com/wiki/UIOBJECT_Cooldown
+
 local BarControl = Frame:new{
   events = {}--{"ADDON_LOADED", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
 }

@@ -21,6 +21,7 @@ ns.g = {
 }
 
 ns.ui = LibNUI
+ns.views = {}
 
 if not WarbandeerApi then
   -- not local, and thus global (shared)

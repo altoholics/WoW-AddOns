@@ -1,4 +1,5 @@
 local _, ns = ...
+local API = ns.api
 
 local UnitName, UnitLevel, UnitClassBase, UnitRace = ns.g.UnitName, ns.g.UnitLevel, ns.g.UnitClassBase, ns.g.UnitRace
 local GetClassInfo, GetProfessions, GetProfessionInfo = ns.g.GetClassInfo, ns.g.GetProfessions, ns.g.GetProfessionInfo
@@ -30,6 +31,7 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
   local _, raceFile, raceId = UnitRace("player")
   local _, ilvl = GetAverageItemLevel()
   local className = GetClassInfo(classId)
+  local raceIndex, isAlliance = ns.NormalizeRaceId(raceId)
 
   local data = self.db.characters
   if not data[name] then
@@ -45,8 +47,10 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
   c.level = level
   c.race = raceFile
   c.raceId = raceId
+  c.raceIdx = raceIndex
+  c.isAlliance = isAlliance
   c.ilvl = math.floor(ilvl)
-  c.ralm = ns.g.RealmName
+  c.realm = ns.g.RealmName
 
   local prof1, prof2 = GetProfessions()
   c.prof1 = prof1 and getProfessionInfo(prof1)
@@ -67,15 +71,15 @@ function ns:PLAYER_EQUIPMENT_CHANGED()
 end
 ns:registerEvent("PLAYER_EQUIPMENT_CHANGED")
 
-function ns.api:GetCurrentCharacter() return self.currentPlayer end
+function API:GetCurrentCharacter() return self.currentPlayer end
 
-function ns.api:GetCharacterData(char)
+function API:GetCharacterData(char)
   -- todo: return a copy so it is immutable
   return ns.db.characters[char or self.currentPlayer]
 end
 
-function ns.api:GetNumCharacters() return ns.db.numCharacters end
-function ns.api:GetNumMaxLevel()
+function API:GetNumCharacters() return ns.db.numCharacters end
+function API:GetNumMaxLevel()
   local n = 0
   for _,c in pairs(ns.db.characters) do
     if c.level == ns.g.maxLevel then n = n + 1 end
@@ -83,7 +87,23 @@ function ns.api:GetNumMaxLevel()
   return n
 end
 
-function ns.api:GetAllCharacters()
+function API:GetAllCharacters()
   -- todo: return a copy so it is immutable
   return ns.db.characters
+end
+
+function API:GetAllianceCharacters()
+  local c = {}
+  for _,t in pairs(ns.db.characters) do
+    if t.isAlliance then table.insert(c, t) end
+  end
+  return c
+end
+
+function API:GetHordeCharacters()
+  local c = {}
+  for _,t in pairs(ns.db.characters) do
+    if not t.isAlliance then table.insert(c, t) end
+  end
+  return c
 end

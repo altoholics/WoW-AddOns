@@ -3,6 +3,7 @@ local addOnName, ns = ...
 -- set up the main addon window
 
 local PortraitFrame = ns.ui.PortraitFrame
+local RaceGridView = ns.views.RaceGridView
 
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
@@ -26,7 +27,7 @@ local function CreateMainFrame()
 
   -- add the contents
   pf.views = {}
-  pf.views.raceGrid = ns.RaceGridView:new{
+  pf.views.raceGrid = RaceGridView:new{
     parent = pf.frame,
     position = {
       topLeft = {8, -20},

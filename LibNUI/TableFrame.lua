@@ -83,7 +83,7 @@ function TableFrame:addCol(text, width, height, headerHeight, insetLeft, font)
       height = height,
     },
     font = font,
-    backdrop = {color = {0, 0, 0, math.fmod(#self.cols, 2) == 0 and 0.8 or 0.6}},
+    backdrop = {color = {0, 0, 0, math.fmod(#self.cols, 2) == 0 and 0.6 or 0.4}},
   })
 end
 

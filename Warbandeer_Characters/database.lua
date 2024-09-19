@@ -6,7 +6,7 @@ local CopyTable = ns.g.CopyTable
 local Data = {}
 ns.Data = Data
 
-Data.dbVersion = 2
+Data.dbVersion = 3
 Data.emptyDB = {
   version = Data.dbVersion,
   numCharacters = 0,
@@ -43,6 +43,20 @@ local function migrateDB()
     for _ in pairs(db.characters) do n = n + 1 end
     db.numCharacters = n
     db.version = 2
+  end
+  if version == 2 then
+    for _,t in pairs(db.characters) do
+      if t.ralm then
+        t.realm = t.ralm
+        t.ralm = nil
+      end
+      if t.raceId then
+        local raceIndex, isAlliance = ns.NormalizeRaceId(t.raceId)
+        t.raceIdx = raceIndex
+        t.isAlliance = isAlliance
+      end
+    end
+    db.version = 3
   end
 end
 

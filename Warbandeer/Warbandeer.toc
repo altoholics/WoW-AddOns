@@ -16,5 +16,8 @@ init.lua
 events.lua
 database.lua
 
+views\FactionIcon.lua
+views\AllianceView.lua
+views\HordeView.lua
 views\RaceGridView.lua
 window.lua

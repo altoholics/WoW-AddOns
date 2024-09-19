@@ -6,6 +6,7 @@ local _, ns = ...
 -- accidentally create or reference globals in an inefficient manner.
 
 ns.g = {
+  unpack = unpack,
   CopyTable = CopyTable,
   SlashCmdList = SlashCmdList,
   ShowOptionsCategory = InterfaceOptionsFrame_OpenToCategory,
