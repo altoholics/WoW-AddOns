@@ -7,7 +7,6 @@ function ns:SlashCmd(_, msg) -- cmd, msg
   elseif "details" == cmd then
     local data = ns.api:GetCharacterData()
     local f = ns.ui.TitleFrame:new{
-      parent = UIParent,
       name = ADDON_NAME.."Details",
       title = ADDON_NAME.." | Character details: "..data.name,
       position = {

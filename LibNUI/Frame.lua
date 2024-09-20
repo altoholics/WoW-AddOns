@@ -14,7 +14,7 @@ local Texture, Label = ui.Texture, ui.Label
 
 -- empty frame
 local Frame = Class(nil, function(o)
-  o.frame = CreateFrame(o.type or "Frame", o.name, o.parent, o.template)
+  o.frame = CreateFrame(o.type or "Frame", o.name, o.parent and o.parent.frame or o.parent, o.template)
   o.name = nil
   o.parent = nil
   o.template = nil
@@ -62,10 +62,10 @@ local Frame = Class(nil, function(o)
     o:makeDraggable()
     o:makeContainerDraggable()
   end
-  if o.dragTarget then o:setDragTarget(o.dragTarget) end
+  if o.dragTarget then o:setDragTarget(o.dragTarget.frame or o.dragTarget) end
 
-  o.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
   if o.events then
+    o.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
     for _,e in pairs(o.events) do
       o.frame:RegisterEvent(e)
     end
@@ -97,6 +97,10 @@ function Frame:toggle()
   else
     self.frame:Show()
   end
+end
+function Frame:listenForEvents()
+  local o = self
+  self.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
 end
 function Frame:registerEvent(event) self.frame:RegisterEvent(event); return self end
 function Frame:unregisterEvent(event) self.frame:UnregisterEvent(event); return self end

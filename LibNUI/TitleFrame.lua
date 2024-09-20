@@ -7,7 +7,7 @@ local Left, Right, Center = ns.ui.edge.Left, ns.ui.edge.Right, ns.ui.edge.Center
 
 local TitleFrame = Class(Frame, function(o)
   o.border = Frame:new{
-    parent = o.frame,
+    parent = o,
     name = "$parentBorder",
     template = "BackdropTemplate",
     position = {
@@ -15,6 +15,7 @@ local TitleFrame = Class(Frame, function(o)
       bottomRight = {o.frame, BottomRight, 3, -3},
     },
   }
+  -- from BackdropTemplate
   o.border.frame:SetBackdrop({
     edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
     edgeSize = 16,
@@ -24,7 +25,7 @@ local TitleFrame = Class(Frame, function(o)
 
   -- title bar
   o.titlebar = Frame:new{
-    parent = o.frame,
+    parent = o,
     name = "$parentTitle",
     position = {
       topLeft = {o.frame, TopLeft},
@@ -58,7 +59,7 @@ local TitleFrame = Class(Frame, function(o)
   -- close button
   o.closeButton = Frame:new{
     type = "Button",
-    parent = o.titlebar.frame,
+    parent = o.titlebar,
     name = "$parentCloseButton",
     position = {
       width = 30,
@@ -87,6 +88,7 @@ local TitleFrame = Class(Frame, function(o)
   o.closeButton.icon.texture:SetVertexColor(0.7, 0.7, 0.7, 1)
 
 end, {
+  parent = ns.g.UIParent,
   clamped = true,
   strata = "MEDIUM",
   background = {0.11372549019, 0.14117647058, 0.16470588235, 1},
