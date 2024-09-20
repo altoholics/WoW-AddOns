@@ -20,12 +20,12 @@ function ns:SlashCmd(_, msg) -- cmd, msg
 
     f:withLabel("r", {
       text = data.level.." "..data.race.." "..data.className.." on "..data.realm,
-      position = {"TOPLEFT", 5, -35},
+      position = {topLeft = {5, -35}},
     })
     f:withLabel("r2", {
-      template = "GameFontHighlightSmall",
+      font = ns.ui.fonts.GameFontHighlightSmall,
       text = "ilvl "..data.ilvl,
-      position = {"TOPLEFT", 5, -55},
+      position = {topLeft = {5, -55}},
     })
   end
 end

@@ -1,6 +1,7 @@
 local _, ns = ...
+local ui = ns.ui
 
-local Class, Frame, TableFrame = ns.ui.Class, ns.ui.Frame, ns.ui.TableFrame
+local Class, Frame, TableFrame = ui.Class, ui.Frame, ui.TableFrame
 
 local ALLIANCE_RACES, CLASS_NAMES, CLASSES = ns.ALLIANCE_RACES, ns.CLASS_NAMES, ns.CLASSES
 
@@ -27,16 +28,17 @@ local HordeView = Class(TableFrame, function(o)
         height = 24 - 10,
       },
     }
-    local label = cell.frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-    label:SetText(data.name)
-    label:SetPoint("TOPLEFT")
-    label:SetWidth(CELL_WIDTH)
-    label:SetHeight(CELL_HEIGHT)
-    label:SetJustifyH("CENTER")
-    label:SetJustifyV("MIDDLE")
-    if data.level ~= ns.g.maxLevel then
-      label:SetTextColor(0.7, 0.7, 0.7, 1)
-    end
+    cell:withLabel({
+      font = ui.fonts.GameFontHighlightSmall,
+      text = data.name,
+      position = {
+        topLeft = {},
+        size = {CELL_WIDTH, CELL_HEIGHT},
+      },
+      justifyH = "CENTER",
+      justifyV = "MIDDLE",
+      color = data.level ~= ns.g.maxLevel and {0.7, 0.7, 0.7, 1}
+    })
 
     -- https://wowpedia.fandom.com/wiki/UIOBJECT_GameTooltip
     cell.frame:SetScript("OnEnter", function()

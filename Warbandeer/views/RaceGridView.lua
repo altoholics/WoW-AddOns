@@ -1,10 +1,11 @@
 local _, ns = ...
+local ui = ns.ui
 
-local Class, Frame = ns.ui.Class, ns.ui.Frame
+local Class, Frame = ui.Class, ui.Frame
 local AllianceView, HordeView, FactionIcon = ns.views.AllianceView, ns.views.HordeView, ns.views.FactionIcon
 
-local TopLeft, TopRight = ns.ui.edge.TopLeft, ns.ui.edge.TopRight
-local BottomLeft, BottomRight = ns.ui.edge.BottomLeft, ns.ui.edge.BottomRight
+local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
+local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 
 local rgba = ns.g.CreateColor
 
@@ -54,17 +55,17 @@ local RaceGridView = Class(Frame, function(o)
 
   status:withLabel{
     name = "count",
-    template = "GameFontHighlightSmall",
+    font = ui.fonts.GameFontHighlightSmall,
     text = "Characters: "..ns.api.GetNumCharacters(),
-    position = {TopLeft, 4, -2},
+    position = {topLeft = {4, -2}},
     color = {1, 1, 215/255, 0.8},
   }
 
   status:withLabel{
     name = "maxLevel",
-    template = "GameFontHighlightSmall",
+    font = "GameFontHighlightSmall",
     text = ns.g.maxLevel.."'s: "..ns.api.GetNumMaxLevel(),
-    position = {TopLeft, 200, -2},
+    position = {topLeft = {200, -2}},
     color = {1, 1, 215/255, 0.8},
   }
 end)

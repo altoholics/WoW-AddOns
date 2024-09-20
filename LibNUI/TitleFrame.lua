@@ -44,14 +44,16 @@ local TitleFrame = Class(Frame, function(o)
   })
   o.titlebar.icon.texture:SetSize(20, 20)
   o.titlebar:withLabel("title", {
-    stringName = "$parentText",
+    name = "$parentText",
     layer = "OVERLAY",
-    template = "SystemFont_Med2",
-    position = {Left, o.titlebar.frame, 28, 0},
+    font = ui.fonts.SystemFont_Med2,
+    position = {
+      left = {o.titlebar.frame, 28, 0},
+    },
     text = o.title,
+    justifyH = Left,
+    justifyV = "MIDDLE",
   })
-  o.titlebar.title:SetJustifyH(Left)
-  o.titlebar.title:SetJustifyV("MIDDLE")
 
   -- close button
   o.closeButton = Frame:new{

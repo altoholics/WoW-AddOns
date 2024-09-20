@@ -62,6 +62,6 @@ ns.ui.Class = u.Class
 -- return a new table by transforming each value by the given function
 function u.ToMap(t, f)
   local r, x = {}, #t
-  for i=1,x do r[t[i]] = f(t[i]) end
+  for i=1,x do r[t[i]] = f and f(t[i]) or t[i] end
   return r
 end

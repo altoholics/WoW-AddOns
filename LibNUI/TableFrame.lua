@@ -15,7 +15,7 @@ local TableRow = Class(BgFrame, function(o)
   o:topLeft(0, o.index * -o.frame:GetHeight() - o.insetTop)
   o:withLabel({
     text = o.label,
-    position = {ns.ui.edge.Left, 2, 0},
+    position = {left = {2, 0}},
     template = o.font,
     color = o.color or {1, 1, 1, 1},
   })
@@ -27,14 +27,15 @@ local TableCol = Class(BgFrame, function(o)
   o:topLeft(o.index * o.frame:GetWidth() + o.insetLeft, 0)
   o:withLabel({
     text = o.label,
-    position = {ns.ui.edge.TopLeft},
+    position = {
+      topLeft = {},
+      size = {o.frame:GetWidth(), o.headerHeight}
+    },
     template = o.font,
     color = o.color or {1, 215/255, 0, 1},
+    justifyH = "CENTER",
+    justifyV = "MIDDLE",
   })
-  o.label:SetWidth(o.frame:GetWidth())
-  o.label:SetHeight(o.headerHeight)
-  o.label:SetJustifyH("CENTER")
-  o.label:SetJustifyV("MIDDLE")
 end, {
   level = 1,
 })

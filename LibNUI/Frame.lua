@@ -1,13 +1,16 @@
 local _, ns = ...
+local ui = ns.ui
 
 local CreateFrame, ShowUIPanel, HideUIPanel = ns.g.CreateFrame, ns.g.ShowUIPanel, ns.g.HideUIPanel
+local UISpecialFrames = ns.g.UISpecialFrames
+local _G, tinsert = _G, table.insert
 
-local ui = ns.ui
 local Class, CopyTables = ns.util.Class, ns.util.CopyTables
 local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.layer.Overlay
-local Texture = ui.Texture
-local _G, tinsert = _G, table.insert
-local UISpecialFrames = ns.g.UISpecialFrames
+local Texture, Label = ui.Texture, ui.Label
+
+-- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
+-- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 -- empty frame
 local Frame = Class(nil, function(o)
@@ -184,15 +187,6 @@ function Frame:withLabel(name, o)
     o = name
     name = o.name or "label"
   end
-  self[name] = self.frame:CreateFontString(o.stringName or nil, o.layer or "ARTWORK", o.template or "GameFontHighlight")
-  if o.text then
-    self[name]:SetText(o.text)
-  end
-  if o.position then
-    self[name]:SetPoint(unpack(o.position))
-  end
-  if o.color then
-    self[name]:SetTextColor(unpack(o.color))
-  end
+  self[name] = Label:new(o)
   return self
 end

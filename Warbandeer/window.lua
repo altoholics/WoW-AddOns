@@ -1,12 +1,11 @@
 local addOnName, ns = ...
+local ui = ns.ui
+local views = ns.views
 
 -- set up the main addon window
+local PortraitFrame = ui.PortraitFrame
 
-local PortraitFrame = ns.ui.PortraitFrame
-local RaceGridView = ns.views.RaceGridView
-
--- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
--- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
+local RaceGridView = views.RaceGridView
 
 local ALLIANCE_RACES = ns.ALLIANCE_RACES
 
