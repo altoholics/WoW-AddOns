@@ -5,6 +5,7 @@ local _, ns = ...
 -- so we can chain callbacks
 
 local EventController = ns.ui.Frame:new{}
+EventController:listenForEvents()
 
 function EventController:OnEvent(event, ...) -- luacheck: no unused
   if ns[event] then

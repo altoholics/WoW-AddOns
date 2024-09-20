@@ -191,6 +191,7 @@ function Frame:withLabel(name, o)
     o = name
     name = o.name or "label"
   end
+  o.parent = self.frame
   self[name] = Label:new(o)
   return self
 end
