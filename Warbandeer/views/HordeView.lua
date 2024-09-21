@@ -3,7 +3,7 @@ local ui = ns.ui
 
 local Class, Frame, TableFrame = ui.Class, ui.Frame, ui.TableFrame
 
-local ALLIANCE_RACES, CLASS_NAMES, CLASSES = ns.ALLIANCE_RACES, ns.CLASS_NAMES, ns.CLASSES
+local HORDE_RACES, CLASS_NAMES, CLASSES = ns.HORDE_RACES, ns.CLASS_NAMES, ns.CLASSES
 
 local CELL_WIDTH = 85
 local CELL_HEIGHT = 24
@@ -72,7 +72,7 @@ end, {
   CELL_WIDTH = CELL_WIDTH,
   CELL_HEIGHT = CELL_HEIGHT,
   headerHeight = HeaderHeight,
-  colNames = ALLIANCE_RACES,
+  colNames = HORDE_RACES,
   rowNames = CLASS_NAMES,
   position = {
     topLeft = {},
