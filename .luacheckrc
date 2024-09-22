@@ -40,6 +40,7 @@ stds.wowapi = {
     "MultiBar6",
     "MultiBar7",
     "InterfaceOptionsFrame_OpenToCategory",
+    "Settings",
     "ShowUIPanel",
     "SlashCmdList",
     "StatusTrackingBarManager",

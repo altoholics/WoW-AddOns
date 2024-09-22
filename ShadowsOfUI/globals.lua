@@ -8,6 +8,7 @@ local _, ns = ...
 -- the globals used by the mod
 ns.g = {
   -- basic globals
+  CopyTable = CopyTable,
 
   -- WoW functions
   CreateColor = CreateColor,
@@ -26,6 +27,7 @@ ns.g = {
   IsAddonLoaded = C_AddOns.IsAddOnLoaded,
 
   -- WoW objects
+  Settings = Settings,
   UIParent = UIParent,
   StatusTrackingBarManager = StatusTrackingBarManager,
   BagsBar = BagsBar,
