@@ -3,5 +3,7 @@
 ## Author: Nazuraki
 ## Version: 11.0.002-0.1
 ## IconTexture: Interface\Icons\inv_shadowflame_debuff
+## SavedVariables: CombatOutlineDB
+## Dependencies: LibNAddOn
 
 core.lua

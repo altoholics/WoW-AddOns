@@ -5,16 +5,12 @@
 ## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green
 ## SavedVariables: WarbandeerDB
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
-## Dependencies: LibNUI, Warbandeer_Characters
+## Dependencies: LibNAddOn, LibNUI, Warbandeer_Characters
 
 globals.lua
-
 util.lua
-
 init.lua
 
-events.lua
-database.lua
 
 views\FactionIcon.lua
 views\AllianceView.lua

@@ -1,8 +1,75 @@
-local addOnName, ns = ...
--- any initial setup for the addon will go here
--- including some basic shared functions
+local ADDON_NAME, ns = ...
+-- luacheck: globals LibNAddOn Mixin
 
-function ns.Print(...) print("|cFF33FF99".. addOnName.. "|r:", ...) end
+local Data = {}
+ns.Data = Data
+
+Data.dbVersion = 3
+local emptyDB = {
+  version = Data.dbVersion,
+  numCharacters = 0,
+  characters = {},
+}
+
+LibNAddOn{
+  name = ADDON_NAME,
+  addOn = ns,
+  db = {
+    name = "WarbandeerCharDB",
+    defaults = emptyDB,
+  },
+}
+
+Data.emptyCharacter = {
+  name = "",
+  classId = "",
+  className = "",
+  level = 0,
+  race = "",
+  raceId = -1,
+  ilvl = 0,
+}
+
+local characterMT = {
+  __lt = function(c1, c2)
+    return c1.level >= c2.level and c1.ilvl >= c2.ilvl and c1.name > c2.name
+  end
+}
+
+function Data.newCharacter()
+  local c = ns.g.CopyTable(Data.emptyCharacter)
+  setmetatable(c, characterMT)
+  return c
+end
+
+function ns:MigrateDB()
+  local db = ns.db
+  local version = db.version
+  if not version then
+    Mixin(db, emptyDB)
+    return
+  end
+  if version == 1 then
+    local n = 0
+    for _ in pairs(db.characters) do n = n + 1 end
+    db.numCharacters = n
+    db.version = 2
+  end
+  if version == 2 then
+    for _,t in pairs(db.characters) do
+      if t.ralm then
+        t.realm = t.ralm
+        t.ralm = nil
+      end
+      if t.raceId then
+        local raceIndex, isAlliance = ns.NormalizeRaceId(t.raceId)
+        t.raceIdx = raceIndex
+        t.isAlliance = isAlliance
+      end
+    end
+    db.version = 3
+  end
+end
 
 -- https://wowpedia.fandom.com/wiki/Category:HOWTOs
 -- addon compartment, settings scroll templates: https://warcraft.wiki.gg/wiki/Patch_10.1.0/API_changes

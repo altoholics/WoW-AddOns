@@ -1,0 +1,10 @@
+## Interface: 110002, 110005
+## Title: LibNAddOn
+## Author: Nazuraki
+## Version: 11.0.000-1
+## IconTexture: Interface\Icons\achievement_guildperk_bountifulbags
+
+eventListener.lua
+database.lua
+
+api.lua
