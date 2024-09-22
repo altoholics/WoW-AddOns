@@ -62,6 +62,14 @@ local AllianceView = Class(TableFrame, function(o)
           1, 1, 1
         )
       end
+      if data.fishing then
+        GameTooltip:AddDoubleLine(
+          "Fishing",
+          data.fishing.skillLevel.."/"..data.fishing.maxSkill,
+          nil, nil, nil,
+          1, 1, 1
+        )
+      end
       GameTooltip:Show()
     end)
     cell.frame:SetScript("OnLeave", function()
