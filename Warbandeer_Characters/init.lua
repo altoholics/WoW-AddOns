@@ -255,6 +255,7 @@ raceIdToFactionIndex[36] = {10, false}
 raceIdToFactionIndex[37] = {12, true}
 raceIdToFactionIndex[52] = {13, true}
 raceIdToFactionIndex[70] = {13, false}
+raceIdToFactionIndex[84] = {14, false}
 raceIdToFactionIndex[85] = {14, true}
 
 function ns.NormalizeRaceId(raceId)
