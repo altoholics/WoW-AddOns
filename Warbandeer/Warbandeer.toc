@@ -13,6 +13,7 @@ views\FactionIcon.lua
 views\AllianceView.lua
 views\HordeView.lua
 views\RaceGridView.lua
+views\SummaryView.lua
 window.lua
 
 commands.lua

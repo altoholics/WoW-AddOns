@@ -42,8 +42,8 @@ end, {
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
 local TableFrame = Class(Frame, function(o)
-  o.numCols = o.columns or #o.colNames
-  o.numRows = o.numRows or #o.rowNames
+  o.numCols = o.numCols or (o.colNames and #o.colNames) or 0
+  o.numRows = o.numRows or (o.rowNames and #o.rowNames) or 0
 
   local offsetX = o.rowNames ~= nil and o.CELL_WIDTH or 0
   local offsetY = o.colNames ~= nil and o.headerHeight or o.CELL_HEIGHT or 0
