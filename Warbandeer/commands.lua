@@ -6,6 +6,8 @@ function ns:SlashCmd(_, msg) -- cmd, msg
     self:Open()
   elseif "summary" == cmd then
     self:view("summary")
+  elseif "raceGrid" == cmd then
+    self:view("raceGrid")
   elseif "details" == cmd then
     local data = ns.api:GetCharacterData()
     local f = ns.ui.TitleFrame:new{
