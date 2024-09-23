@@ -15,6 +15,7 @@ function ns:SlashCmd(_, msg) -- cmd, msg
         center = {},
       },
       level = 8000,
+      special = true,
     }
 
     f:withLabel("r", {

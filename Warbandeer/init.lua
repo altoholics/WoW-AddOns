@@ -28,10 +28,8 @@ ns.api = WarbandeerApi
 
 -- https://wowpedia.fandom.com/wiki/Create_a_WoW_AddOn_in_15_Minutes#Options_Panel
 
--- Wow APIs
 local GetClassInfo, GetClassColor = ns.g.GetClassInfo, ns.g.GetClassColor
-
-local Generate, Map, Select = ns.util.Generate, ns.util.Map, ns.util.Select
+local Generate, Map, Select = ns.g.Generate, ns.g.Map, ns.g.Select
 
 -- class colors: https://wowpedia.fandom.com/wiki/Class_colors
 
@@ -109,6 +107,7 @@ raceIdToFactionIndex[37] = {12, true}
 raceIdToFactionIndex[52] = {13, true}
 raceIdToFactionIndex[70] = {13, false}
 raceIdToFactionIndex[85] = {14, true}
+-- todo: Earthen horde
 
 function ns.NormalizeRaceId(raceId)
   return ns.g.unpack(raceIdToFactionIndex[raceId])

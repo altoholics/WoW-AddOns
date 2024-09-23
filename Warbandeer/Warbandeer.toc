@@ -7,9 +7,7 @@
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
 ## Dependencies: LibNAddOn, LibNUI, Warbandeer_Characters
 
-util.lua
 init.lua
-
 
 views\FactionIcon.lua
 views\AllianceView.lua
