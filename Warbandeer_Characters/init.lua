@@ -1,5 +1,5 @@
 local ADDON_NAME, ns = ...
--- luacheck: globals LibNAddOn Mixin
+-- luacheck: globals LibNAddOn Mixin LibNUI WarbandeerApi
 
 local Data = {}
 ns.Data = Data
@@ -18,7 +18,18 @@ LibNAddOn{
     name = "WarbandeerCharDB",
     defaults = emptyDB,
   },
+  slashCommands = {
+    warbandc = {"/warbandc", "/wbc"},
+  },
 }
+
+ns.ui = LibNUI
+
+if not WarbandeerApi then
+  -- not local, and thus global (shared)
+  WarbandeerApi = {}
+end
+ns.api = WarbandeerApi
 
 Data.emptyCharacter = {
   name = "",

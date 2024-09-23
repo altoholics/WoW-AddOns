@@ -1,6 +1,8 @@
 local _, ns = ...
 -- luacheck: globals LibNAddOn
 
+local _G = _G
+
 function ns.print(...) print("|cFF33FF99LibNAddOn|r:", ...) end
 
 function LibNAddOn(features)
@@ -17,4 +19,16 @@ function LibNAddOn(features)
     if not features.db.name then ns.print("missing field db.name"); return end
     ns.setupDB(addOnName, addOn, features.db)
   end
+
+  if features.slashCommands then ns.registerSlashCommands(addOn, features.slashCommands) end
+
+  if features.compartmentFn then
+    _G[features.compartmentFn] = function(name, buttonName)
+      if name ~= addOnName then return end
+      -- buttonName = LeftButton | RightButton | MiddleButton
+      addOn:CompartmentClick(buttonName)
+    end
+  end
+
+  ns.linkGlobals(addOn, features.globals or "g")
 end

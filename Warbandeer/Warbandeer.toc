@@ -7,7 +7,6 @@
 ## AddonCompartmentFunc: Warbandeer_OnAddonCompartmentClick
 ## Dependencies: LibNAddOn, LibNUI, Warbandeer_Characters
 
-globals.lua
 util.lua
 init.lua
 

@@ -6,16 +6,6 @@
 ## SavedVariables: WarbandeerCharDB
 ## Dependencies: LibNAddOn, LibNUI
 
-# TODO: gather basic character info on login: name, class, race, level, ilvl, xp, rested!, ?
-# make data available via api:
-# - getCharacters(): Character{name, class, race, ...}
-# - getChracter(name)
-# - getCurrentCharacter()
-# - ?
-
-# define the interface between addon and rest of the ecosystem
-globals.lua
-
 # basic shared functions and definitions
 init.lua
 

@@ -6,5 +6,7 @@
 
 eventListener.lua
 database.lua
+slashCommands.lua
+globals.lua
 
 api.lua

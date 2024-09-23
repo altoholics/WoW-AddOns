@@ -1,5 +1,5 @@
 local ADDON_NAME, ns = ...
--- luacheck: globals LibNAddOn
+-- luacheck: globals LibNAddOn LibNUI WarbandeerApi
 
 LibNAddOn{
   name = ADDON_NAME,
@@ -7,7 +7,20 @@ LibNAddOn{
   db = {
     name = "WarbandeerDB",
   },
+  slashCommands = {
+    warband = {"/warband", "/wb"},
+  },
+  compartmentFn = "Warbandeer_OnAddonCompartmentClick",
 }
+
+ns.ui = LibNUI
+ns.views = {}
+
+if not WarbandeerApi then
+  -- not local, and thus global (shared)
+  WarbandeerApi = {}
+end
+ns.api = WarbandeerApi
 
 -- https://wowpedia.fandom.com/wiki/Category:HOWTOs
 -- addon compartment, settings scroll templates: https://warcraft.wiki.gg/wiki/Patch_10.1.0/API_changes
