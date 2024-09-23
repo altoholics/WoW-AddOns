@@ -4,7 +4,15 @@ local ui = ns.ui
 local Class, Frame, TableFrame = ui.Class, ui.Frame, ui.TableFrame
 
 local SummaryView = Class(TableFrame, function(self)
-  local toons = ns.api.GetAllCharacters()
+  local toons = {}
+  for _,data in pairs(ns.api.GetAllCharacters()) do
+    table.insert(toons, data)
+  end
+  table.sort(toons, function(c1, c2)
+    if c1.level ~= c2.level then return c1.level > c2.level end
+    if c1.ilvl ~= c2.ilvl then return c1.ilvl > c2.ilvl end
+    return c1.name > c2.name
+  end)
   local i = 0
   for _,data in pairs(toons) do
     self:withLabel{
