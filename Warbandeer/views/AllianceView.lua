@@ -84,7 +84,8 @@ end, {
   rowNames = CLASS_NAMES,
   position = {
     topLeft = {},
-    bottomRight = {},
+    width = (#ALLIANCE_RACES + 1) * CELL_WIDTH,
+    height = #CLASS_NAMES * CELL_HEIGHT + HeaderHeight,
   },
   headerFont = ui.fonts.GameFontHighlightSmall,
 })

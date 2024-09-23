@@ -10,10 +10,8 @@ local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 local rgba = ns.g.CreateColor
 
 local RaceGridView = Class(Frame, function(o)
-  o.allianceView = AllianceView:new{
-    parent = o.frame,
-  }
-  o.hordeView = HordeView:new{parent = o.frame}
+  o.allianceView = AllianceView:new{parent = o}
+  o.hordeView = HordeView:new{parent = o}
   o.hordeView:hide()
 
   o.factionIcon = FactionIcon:new{
@@ -38,7 +36,7 @@ local RaceGridView = Class(Frame, function(o)
   local status = Frame:new{
     parent = o.frame,
     position = {
-      topLeft = {o.frame, BottomLeft, 0, 10},
+      topLeft = {o.frame, BottomLeft, 0, 12},
       bottomRight = {},
     },
   }
@@ -68,5 +66,8 @@ local RaceGridView = Class(Frame, function(o)
     position = {topLeft = {200, -2}},
     color = {1, 1, 215/255, 0.8},
   }
+
+  o:width(o.allianceView:width())
+  o:height(o.allianceView:height() + 12)
 end)
 ns.views.RaceGridView = RaceGridView

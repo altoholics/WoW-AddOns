@@ -87,8 +87,14 @@ function Frame:bottomRight(...) self.frame:SetPoint(ui.edge.BottomRight, ...); r
 function Frame:left(...) self.frame:SetPoint(ui.edge.Left, ...); return self end
 function Frame:right(...) self.frame:SetPoint(ui.edge.Right, ...); return self end
 function Frame:size(x, y) self.frame:SetSize(x, y); return self end
-function Frame:width(w) self.frame:SetWidth(w); return self end
-function Frame:height(h) self.frame:SetHeight(h); return self end
+function Frame:width(w)
+  if w ~= nil then self.frame:SetWidth(w); return self end
+  return self.frame:GetWidth()
+end
+function Frame:height(h)
+  if h ~= nil then self.frame:SetHeight(h); return self end
+  return self.frame:GetHeight()
+end
 function Frame:show() ShowUIPanel(self.frame); return self end
 function Frame:hide() HideUIPanel(self.frame); return self end
 function Frame:toggle()
