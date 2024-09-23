@@ -4,7 +4,7 @@ local views = ns.views
 
 -- set up the main addon window
 local Class, TitleFrame = ui.Class, ui.TitleFrame
-local RaceGridView = views.RaceGridView
+local RaceGridView, SummaryView = views.RaceGridView, views.SummaryView
 
 local MainWindow = Class(TitleFrame, function(self)
   -- add the contents
@@ -13,12 +13,19 @@ local MainWindow = Class(TitleFrame, function(self)
     parent = self,
     position = {
       topLeft = {3, -27},
-      bottomRight = {3, 3},
     },
   }
+  self.views.raceGrid:hide()
 
-  self:width(self.views.raceGrid:width() + 6)
-  self:height(self.views.raceGrid:height() + 30)
+  self.views.summary = SummaryView:new{
+    parent = self,
+    position = {
+      topLeft = {3, -27},
+    },
+  }
+  self.views.summary:hide()
+
+  self:view("raceGrid")
 end, {
   name = ADDON_NAME,
   title = ADDON_NAME,
@@ -28,12 +35,26 @@ end, {
   special = true,
 })
 
-function ns.Open()
+function MainWindow:view(name)
+  if self._view then self._view:hide() end
+  self._view = self.views[name]
+  self._view:show()
+
+  self:width(self._view:width()  + 6)
+  self:height(self._view:height() + 30)
+end
+
+function ns:Open()
   if not ns.MainWindow then
     ns.MainWindow = MainWindow:new{}
   end
 
   ns.MainWindow:show()
+end
+
+function ns:view(name)
+  self:Open()
+  ns.MainWindow:view(name)
 end
 
 function ns:CompartmentClick() -- buttonName = (LeftButton | RightButton | MiddleButton)
