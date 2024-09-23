@@ -52,7 +52,7 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
   c.ilvl = math.floor(ilvl)
   c.realm = ns.g.RealmName
 
-  local prof1, prof2, _, fishingIdx, _ = GetProfessions() -- arch, cooking
+  local prof1, prof2, _, fishingIdx, cookingIdx = GetProfessions() -- arch
   c.prof1 = prof1 and getProfessionInfo(prof1)
   c.prof2 = prof2 and getProfessionInfo(prof2)
   local _, _, skill, max, _, _, _, skillMod, _, v = GetProfessionInfo(fishingIdx)
@@ -62,6 +62,14 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
   c.fishing.skillMod = skillMod
   c.fishing.version = v
   c.fishing.isKhazAlgar = "Khaz Algar Fishing" == v
+  local _, _, skill, max, _, _, _, skillMod, _, v = GetProfessionInfo(cookingIdx)
+  c.cooking = c.cooking or {}
+  c.cooking.skillLevel = skill
+  c.cooking.maxSkill = max
+  c.cooking.skillMod = skillMod
+  c.cooking.version = v
+  c.cooking.isKhazAlgar = "Khaz Algar Cooking" == v
+
 end
 ns:registerEvent("PLAYER_ENTERING_WORLD")
 

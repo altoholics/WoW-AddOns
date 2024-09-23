@@ -70,6 +70,14 @@ local AllianceView = Class(TableFrame, function(o)
           1, 1, 1
         )
       end
+      if data.cooking then
+        GameTooltip:AddDoubleLine(
+          "Cooking",
+          data.cooking.skillLevel.."/"..data.cooking.maxSkill,
+          nil, nil, nil,
+          1, 1, 1
+        )
+      end
       GameTooltip:Show()
     end)
     cell.frame:SetScript("OnLeave", function()
