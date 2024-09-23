@@ -69,7 +69,6 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
   c.cooking.skillMod = skillMod
   c.cooking.version = v
   c.cooking.isKhazAlgar = "Khaz Algar Cooking" == v
-
 end
 ns:registerEvent("PLAYER_ENTERING_WORLD")
 
