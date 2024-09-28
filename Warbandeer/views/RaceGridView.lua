@@ -7,7 +7,7 @@ local AllianceView, HordeView, FactionIcon = ns.views.AllianceView, ns.views.Hor
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 
-local rgba = ns.wow.CreateColor
+local rgba = ns.wowui.rgba
 
 local RaceGridView = Class(Frame, function(o)
   o.allianceView = AllianceView:new{parent = o}

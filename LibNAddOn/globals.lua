@@ -10,20 +10,21 @@ local lua = {
   -- Interface/AddOns/Blizzard_SharedXMLBase/TableUtil.lua
 
   -- lua extensions
+  min = ns.min,
+
   CopyTables = ns.CopyTables,
   Generate = ns.Generate,
   MergeTable = ns.MergeTable,
   Select = ns.Select,
   Map = ns.Map,
   ToMap = ns.ToMap,
+
   Class = ns.Class,
 }
 
 local wow = {
   SlashCmdList = SlashCmdList,
   ShowOptionsCategory = InterfaceOptionsFrame_OpenToCategory,
-
-  CreateColor = CreateColor,
 
   -- WoW API
   -- Bags / Inventory
@@ -68,6 +69,8 @@ local wow = {
 }
 
 local wowui = {
+  CreateColor = CreateColor,
+
   -- WoW FrameXML API
   CreateFrame = CreateFrame,
   ShowUIPanel = ShowUIPanel,
@@ -89,6 +92,10 @@ local wowui = {
   MultiBar7 = MultiBar7,
   Tutorials = Tutorials,
 }
+
+function wowui.rgba(r, g, b, a)
+  return ns.wowui.CreateColor(r/255, g/255, b/255, a)
+end
 
 function ns.linkGlobals(addOn, features)
   addOn[features.lua or "lua"] = lua

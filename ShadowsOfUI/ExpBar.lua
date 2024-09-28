@@ -1,11 +1,11 @@
 local _, ns = ...
 
 local ui = ns.ui
-local min = ns.min
+local min = ns.lua.min
 local StatusBar = ui.StatusBar
 local TopLeft, TopRight, BottomLeft, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.BottomRight
 
-local CreateColor = ns.wow.CreateColor
+local rgba = ns.wowui.rgba
 local GetXPExhaustion, GetRestState = ns.wow.GetXPExhaustion, ns.wow.GetRestState
 
 -- default xp bar: https://github.com/Gethe/wow-ui-source/blob/c0f3b4f1794953ba72fa3bc5cd25a6f2cdd696a1/Interface/AddOns/Blizzard_ActionBar/Mainline/ExpBar.lua
@@ -13,17 +13,17 @@ local GetXPExhaustion, GetRestState = ns.wow.GetXPExhaustion, ns.wow.GetRestStat
 -- https://github.com/teelolws/EditModeExpanded
 
 -- CreateColor(88/255, 0, 145/255, 0)
-local UnrestedGradientStart = CreateColor(88/255, 0, 145/255, 0.5)
-local UnrestedGradientEnd = CreateColor(154/255, 8/255, 252/255, 0.5)
-local RestedGradientStart = CreateColor(0, 32/255, 128/255, 0.5)
-local RestedGradientEnd = CreateColor(0, 64/255, 1, 0.5)
+local UnrestedGradientStart = rgba(88, 0, 145, 0.5)
+local UnrestedGradientEnd = rgba(154, 8, 252, 0.5)
+local RestedGradientStart = rgba(0, 32, 128, 0.5)
+local RestedGradientEnd = rgba(0, 64, 1, 0.5)
 
 local function onLoad(self)
   -- darken top edge of bar
   self:withTextureOverlay("edge", {
     color = {1, 1, 1},
     blendMode = "BLEND",
-    gradient = {"VERTICAL", CreateColor(0, 0, 0, 0), CreateColor(0, 0, 0, 0.5)},
+    gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
     clamp = {
       {TopLeft},
       {BottomRight, self.frame, TopRight, 0, -3}
@@ -34,7 +34,7 @@ local function onLoad(self)
   self:withTextureBackground("fade", {
     color = {1, 1, 1},
     blendMode = "BLEND",
-    gradient = {"VERTICAL", CreateColor(0, 0, 0, 0.3), CreateColor(0, 0, 0, 0)},
+    gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
     clamp = {
       {TopLeft, 0, 3},
       {BottomRight, self.frame, TopRight},
@@ -141,7 +141,7 @@ function ExpBar:initNotches()
     self:withTextureOverlay("notch"..i, {
       color = {1, 1, 1},
       blendMode = "BLEND",
-      gradient = {"HORIZONTAL", CreateColor(0, 0, 0, 0.3), CreateColor(0, 0, 0, 0.2)},
+      gradient = {"HORIZONTAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)},
       clamp = {
         {TopLeft, spacing * i, 0},
         {BottomRight, self.frame, BottomLeft, spacing * i + 3, 0},

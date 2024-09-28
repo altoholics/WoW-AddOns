@@ -1,5 +1,5 @@
 local ADDON_NAME, ns = ...
--- luacheck: globals LibNAddOn
+-- luacheck: globals LibNAddOn LibNUI
 
 local defaults = {
   settings = {
@@ -20,3 +20,5 @@ LibNAddOn{
     defaults = defaults,
   },
 }
+
+ns.ui = LibNUI

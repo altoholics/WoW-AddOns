@@ -50,6 +50,10 @@ function ns.Generate(f, n, start)
   return r
 end
 
+function ns.min(a, b)
+  return a < b and a or b
+end
+
 function ns.Class(parent, fn, defaults)
   local c = {}
 

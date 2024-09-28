@@ -5,21 +5,11 @@ local _, ns = ...
 -- This helps prevent accidental leakage, and performance issues
 -- It also helps isolate the addon code from changes to global functions
 
-ns.ui = LibNUI
-
-function ns.CreateColor(r, g, b, a)
-  return ns.wow.CreateColor(r/255, g/255, b/255, a)
-end
-
 function ns.GetPlayerLevelXP()
   local level = UnitLevel("player")
   local currentXP = UnitXP("player")
   local maxXP = UnitXPMax("player")
   return currentXP, maxXP, level, ns.wow.maxLevel
-end
-
-function ns.min(a, b)
-  return a < b and a or b
 end
 
 -- Disable the reagent bag tutorial
