@@ -4,6 +4,7 @@ std = "max"
 stds.myapi = {
   globals = {
     "LibNUI",
+    "LibNAddOn",
   }
 }
 stds.wowapi = {

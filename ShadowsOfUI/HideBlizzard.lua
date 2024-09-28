@@ -1,6 +1,6 @@
-local ADDON_NAME, ns = ...
+local _, ns = ...
 
-local MainMenuBar, MultiBarBottomLeft, Tutorials, IsAddonLoaded = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft, ns.g.Tutorials, ns.g.IsAddonLoaded
+local MainMenuBar, MultiBarBottomLeft, Tutorials, IsAddonLoaded = ns.wowui.MainMenuBar, ns.wowui.MultiBarBottomLeft, ns.wowui.Tutorials, ns.wow.IsAddonLoaded
 
 function PurgeKey(t, k)
 	t[k] = nil

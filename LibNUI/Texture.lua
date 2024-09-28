@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local ui = ns.ui
-local Class = ns.util.Class
+local Class = ns.lua.Class
 
 local Texture = Class(nil, function(o)
     o.texture = o.parent:CreateTexture(o.textureName or nil, o.textureLayer or nil, o.textureTemplate or nil)

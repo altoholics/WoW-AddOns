@@ -1,13 +1,13 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame = ui.Class, ui.Frame
+local Class, Frame = ns.lua.Class, ui.Frame
 local AllianceView, HordeView, FactionIcon = ns.views.AllianceView, ns.views.HordeView, ns.views.FactionIcon
 
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 
-local rgba = ns.g.CreateColor
+local rgba = ns.wow.CreateColor
 
 local RaceGridView = Class(Frame, function(o)
   o.allianceView = AllianceView:new{parent = o}
@@ -62,7 +62,7 @@ local RaceGridView = Class(Frame, function(o)
   status:withLabel{
     name = "maxLevel",
     font = "GameFontHighlightSmall",
-    text = ns.g.maxLevel.."'s: "..ns.api.GetNumMaxLevel(),
+    text = ns.wow.maxLevel.."'s: "..ns.api.GetNumMaxLevel(),
     position = {topLeft = {200, -2}},
     color = {1, 1, 215/255, 0.8},
   }

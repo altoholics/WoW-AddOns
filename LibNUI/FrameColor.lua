@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local CreateSkinModule = ns.g.FrameColor_CreateSkinModule
+local CreateSkinModule = FrameColor_CreateSkinModule
 
 -- because it isn't exposed by FrameColor
 function ns:SkinNineSliced(frame, color, desaturation)

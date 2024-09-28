@@ -1,10 +1,10 @@
 local addonName, ns = ...
 
-local ui = ns.g.ui
-local Frame, UIParent = ui.Frame, ns.g.UIParent
+local ui = ns.ui
+local Frame = ui.Frame
 
-local HideUIPanel, UnitExists, UnitAffectingCombat = ns.g.HideUIPanel, ns.g.UnitExists, ns.g.UnitAffectingCombat
-local MainMenuBar, Bar2 = ns.g.MainMenuBar, ns.g.MultiBarBottomLeft
+local HideUIPanel, UnitExists, UnitAffectingCombat = ns.wowui.HideUIPanel, ns.wow.UnitExists, ns.wow.UnitAffectingCombat
+local MainMenuBar, Bar2 = ns.wowui.MainMenuBar, ns.wowui.MultiBarBottomLeft
 
 -- for showing "clock-like" swaap and leading-edge effects
 -- https://wowpedia.fandom.com/wiki/UIOBJECT_Cooldown
@@ -69,8 +69,8 @@ end
 
 function BarControl:PLAYER_ENTERING_WORLD(login, reload)
   if login or reload then
-    HideUIPanel(ns.g.BagsBar)
-    HideUIPanel(ns.g.MicroMenuContainer)
+    HideUIPanel(ns.wowui.BagsBar)
+    HideUIPanel(ns.wowui.MicroMenuContainer)
     -- MainMenuBar:SetParent(UIParent)
     -- Bar2:SetParent(UIParent)
     self.vis = nil

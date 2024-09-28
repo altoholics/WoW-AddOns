@@ -3,7 +3,7 @@ local ui = ns.ui
 local views = ns.views
 
 -- set up the main addon window
-local Class, TitleFrame = ui.Class, ui.TitleFrame
+local Class, TitleFrame = ns.lua.Class, ui.TitleFrame
 local RaceGridView, SummaryView = views.RaceGridView, views.SummaryView
 
 local MainWindow = Class(TitleFrame, function(self)

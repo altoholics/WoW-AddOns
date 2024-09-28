@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local globals = {
+local lua = {
   -- lua
   unpack = unpack,
 
@@ -15,7 +15,11 @@ local globals = {
   MergeTable = ns.MergeTable,
   Select = ns.Select,
   Map = ns.Map,
+  ToMap = ns.ToMap,
+  Class = ns.Class,
+}
 
+local wow = {
   SlashCmdList = SlashCmdList,
   ShowOptionsCategory = InterfaceOptionsFrame_OpenToCategory,
 
@@ -51,8 +55,43 @@ local globals = {
   UnitLevel = UnitLevel,
   UnitName = UnitName,
   UnitRace = UnitRace,
+
+  IsAddOnLoaded = C_AddOns.IsAddOnLoaded,
+  UnitXP = UnitXP,
+  UnitXPMax = UnitXPMax,
+  GetXPExhaustion = GetXPExhaustion,
+  GetRestState = GetRestState,
+  UnitExists = UnitExists,
+  UnitAffectingCombat = UnitAffectingCombat,
+  GetFactionInfoByID = GetFactionInfoByID,
+  GetMajorFactionRenownInfo = C_MajorFactions.GetMajorFactionRenownInfo,
 }
 
-function ns.linkGlobals(addOn, g)
-  addOn[g] = globals
+local wowui = {
+  -- WoW FrameXML API
+  CreateFrame = CreateFrame,
+  ShowUIPanel = ShowUIPanel,
+  HideUIPanel = HideUIPanel,
+  UISpecialFrames = UISpecialFrames,
+  UIParent = UIParent,
+
+  Settings = Settings,
+  StatusTrackingBarManager = StatusTrackingBarManager,
+  BagsBar = BagsBar,
+  MicroMenuContainer = MicroMenuContainer,
+  MainMenuBar = MainMenuBar,
+  MultiBarBottomLeft = MultiBarBottomLeft,
+  MultiBarBottomRight = MultiBarBottomRight,
+  MultiBarRight = MultiBarRight,
+  MultiBarLeft = MultiBarLeft,
+  MultiBar5 = MultiBar5,
+  MultiBar6 = MultiBar6,
+  MultiBar7 = MultiBar7,
+  Tutorials = Tutorials,
+}
+
+function ns.linkGlobals(addOn, features)
+  addOn[features.lua or "lua"] = lua
+  addOn[features.wow or "wow"] = wow
+  addOn[features.wowui or "wowui"] = wowui
 end

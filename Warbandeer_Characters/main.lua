@@ -1,9 +1,9 @@
 local _, ns = ...
 local API = ns.api
 
-local UnitName, UnitLevel, UnitClassBase, UnitRace = ns.g.UnitName, ns.g.UnitLevel, ns.g.UnitClassBase, ns.g.UnitRace
-local GetClassInfo, GetProfessions, GetProfessionInfo = ns.g.GetClassInfo, ns.g.GetProfessions, ns.g.GetProfessionInfo
-local GetAverageItemLevel = ns.g.GetAverageItemLevel
+local UnitName, UnitLevel, UnitClassBase, UnitRace = ns.wow.UnitName, ns.wow.UnitLevel, ns.wow.UnitClassBase, ns.wow.UnitRace
+local GetClassInfo, GetProfessions, GetProfessionInfo = ns.wow.GetClassInfo, ns.wow.GetProfessions, ns.wow.GetProfessionInfo
+local GetAverageItemLevel = ns.wow.GetAverageItemLevel
 
 local function getProfessionInfo(profID)
   local name, icon, skillLvl, max, abils, offset, skillID, skillMod, specIdx, specOffset = GetProfessionInfo(profID)
@@ -50,7 +50,7 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
   c.raceIdx = raceIndex
   c.isAlliance = isAlliance
   c.ilvl = math.floor(ilvl)
-  c.realm = ns.g.RealmName
+  c.realm = ns.wow.RealmName
 
   local prof1, prof2, _, fishingIdx, cookingIdx = GetProfessions() -- arch
   c.prof1 = prof1 and getProfessionInfo(prof1)
@@ -100,7 +100,7 @@ function API:GetNumCharacters() return ns.db.numCharacters end
 function API:GetNumMaxLevel()
   local n = 0
   for _,c in pairs(ns.db.characters) do
-    if c.level == ns.g.maxLevel then n = n + 1 end
+    if c.level == ns.wow.maxLevel then n = n + 1 end
   end
   return n
 end

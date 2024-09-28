@@ -22,7 +22,7 @@ end
 function ns:SlashCmd(_, msg) -- cmd, msg
   local _, _, cmd = string.find(msg, "(%w+) ?(.*)") --, args
   if cmd == nil then
-    ns.g.ShowOptionsCategory("Warbandeer_Characters")
+    ns.wowui.ShowOptionsCategory("Warbandeer_Characters")
   elseif "list" == cmd then
     listCharacters(self.db.characters)
   else

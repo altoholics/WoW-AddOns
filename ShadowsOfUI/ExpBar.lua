@@ -1,12 +1,12 @@
 local _, ns = ...
 
-local ui = ns.g.ui
+local ui = ns.ui
 local min = ns.min
 local StatusBar = ui.StatusBar
 local TopLeft, TopRight, BottomLeft, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.BottomRight
 
-local CreateColor = ns.g.CreateColor
-local GetXPExhaustion, GetRestState = ns.g.GetXPExhaustion, ns.g.GetRestState
+local CreateColor = ns.wow.CreateColor
+local GetXPExhaustion, GetRestState = ns.wow.GetXPExhaustion, ns.wow.GetRestState
 
 -- default xp bar: https://github.com/Gethe/wow-ui-source/blob/c0f3b4f1794953ba72fa3bc5cd25a6f2cdd696a1/Interface/AddOns/Blizzard_ActionBar/Mainline/ExpBar.lua
 
@@ -64,7 +64,7 @@ local function onLoad(self)
 end
 
 local ExpBar = StatusBar:new{
-  parent = ns.g.UIParent,
+  parent = ns.wowui.UIParent,
   position = {
     height = 7,
     bottomLeft = {},
@@ -153,11 +153,11 @@ end
 function ExpBar:PLAYER_ENTERING_WORLD(login, reload)
   -- hide the default blizzard frame
   if login or reload then
-    ns.g.StatusTrackingBarManager:Hide()
+    ns.wowui.StatusTrackingBarManager:Hide()
   end
   -- if player at max level, hide bar
-  local level = ns.g.UnitLevel("player")
-  if level == ns.g.maxLevel then
+  local level = ns.wow.UnitLevel("player")
+  if level == ns.wow.maxLevel then
     self:hide()
     return
   end

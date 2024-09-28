@@ -1,6 +1,6 @@
 local _, ns = ...
 local ui = ns.ui
-local ToMap = ns.util.ToMap
+local ToMap = ns.lua.ToMap
 
 ui.edge = ToMap({
   "Top", "Center", "TopLeft", "TopRight",

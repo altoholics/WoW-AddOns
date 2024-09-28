@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local Class, Frame = ns.ui.Class, ns.ui.Frame
+local Class, Frame = ns.lua.Class, ns.ui.Frame
 
 -- todo: make button
 local FactionIcon = Class(Frame, function(o)

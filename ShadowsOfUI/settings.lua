@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local Settings = ns.g.Settings
+local Settings = ns.wowui.Settings
 
 function ns:registerSettings()
   print("registering settings...")

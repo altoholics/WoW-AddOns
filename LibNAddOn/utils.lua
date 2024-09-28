@@ -21,7 +21,7 @@ function ns.MergeTable(destination, source)
   for k, v in pairs(source) do
     destination[k] = v;
   end
-    return destination
+  return destination
 end
 
 -- return a new table by transforming each value by the given function
@@ -30,6 +30,13 @@ function ns.Map(t, f)
   for k,v in pairs(t) do
     r[k] = f and f(v) or v
   end
+  return r
+end
+
+-- return a new table by transforming each value by the given function
+function ns.ToMap(t, f)
+  local r, x = {}, #t
+  for i=1,x do r[t[i]] = f and f(t[i]) or t[i] end
   return r
 end
 

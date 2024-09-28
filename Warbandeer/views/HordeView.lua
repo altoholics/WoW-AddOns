@@ -1,7 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame, TableFrame = ui.Class, ui.Frame, ui.TableFrame
+local Class, Frame, TableFrame = ns.lua.Class, ui.Frame, ui.TableFrame
 
 local HORDE_RACES, CLASS_NAMES, CLASSES = ns.HORDE_RACES, ns.CLASS_NAMES, ns.CLASSES
 
@@ -11,7 +11,7 @@ local HeaderHeight = CELL_HEIGHT * 1.5
 
 local HordeView = Class(TableFrame, function(o)
   -- color the backgrounds of the rows by class color
-  for i=1,ns.g.NUM_CLASSES do
+  for i=1,ns.wow.NUM_CLASSES do
     o:row(i):backdropColor(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
   end
 
@@ -37,7 +37,7 @@ local HordeView = Class(TableFrame, function(o)
       },
       justifyH = "CENTER",
       justifyV = "MIDDLE",
-      color = data.level ~= ns.g.maxLevel and {0.7, 0.7, 0.7, 1}
+      color = data.level ~= ns.wow.maxLevel and {0.7, 0.7, 0.7, 1}
     })
 
     -- https://wowpedia.fandom.com/wiki/UIOBJECT_GameTooltip

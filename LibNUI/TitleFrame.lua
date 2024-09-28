@@ -1,9 +1,9 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame = ns.util.Class, ui.Frame
-local TopLeft, TopRight, BottomRight = ns.ui.edge.TopLeft, ns.ui.edge.TopRight, ns.ui.edge.BottomRight
-local Left, Right, Center = ns.ui.edge.Left, ns.ui.edge.Right, ns.ui.edge.Center
+local Class, Frame = ns.lua.Class, ui.Frame
+local TopLeft, TopRight, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomRight
+local Left, Right, Center = ui.edge.Left, ui.edge.Right, ui.edge.Center
 
 local TitleFrame = Class(Frame, function(o)
   o.border = Frame:new{
@@ -88,7 +88,7 @@ local TitleFrame = Class(Frame, function(o)
   o.closeButton.icon.texture:SetVertexColor(0.7, 0.7, 0.7, 1)
 
 end, {
-  parent = ns.g.UIParent,
+  parent = ns.wowui.UIParent,
   clamped = true,
   strata = "MEDIUM",
   background = {0.11372549019, 0.14117647058, 0.16470588235, 1},

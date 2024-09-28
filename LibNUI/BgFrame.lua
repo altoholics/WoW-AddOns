@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local ui = ns.ui
-local Class = ns.util.Class
+local Class = ns.lua.Class
 local Frame = ui.Frame
 
 -- frame with a background

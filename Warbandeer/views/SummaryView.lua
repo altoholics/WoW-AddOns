@@ -1,7 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame, TableFrame = ui.Class, ui.Frame, ui.TableFrame
+local Class, TableFrame = ns.lua.Class, ui.TableFrame
 
 local SummaryView = Class(TableFrame, function(self)
   local toons = {}

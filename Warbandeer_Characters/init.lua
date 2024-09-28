@@ -48,7 +48,7 @@ local characterMT = {
 }
 
 function Data.newCharacter()
-  local c = ns.g.CopyTable(Data.emptyCharacter)
+  local c = ns.lua.CopyTable(Data.emptyCharacter)
   setmetatable(c, characterMT)
   return c
 end
@@ -259,11 +259,10 @@ raceIdToFactionIndex[84] = {14, false}
 raceIdToFactionIndex[85] = {14, true}
 
 function ns.NormalizeRaceId(raceId)
-  return ns.g.unpack(raceIdToFactionIndex[raceId])
+  return unpack(raceIdToFactionIndex[raceId])
 end
 
-/*
-
+--[[
 https://warcraft.wiki.gg/wiki/World_of_Warcraft_API
 
 C_WeeklyRewards
@@ -287,4 +286,4 @@ C_WeeklyRewards.IsWeeklyChestRetired() : isRetired
 C_WeeklyRewards.OnUIInteract()
 C_WeeklyRewards.ShouldShowFinalRetirementMessage() : showRetirementMessage
 C_WeeklyRewards.ShouldShowRetirementMessage() : showRetirementMessage
-*/
+]]

@@ -1,6 +1,6 @@
 local _, ns = ...
 local ui = ns.ui
-local Class, Frame, BgFrame = ns.util.Class, ui.Frame, ui.BgFrame
+local Class, Frame, BgFrame = ns.lua.Class, ui.Frame, ui.BgFrame
 
 -- Creates an empty frame, but lays out its children in a tabular manner.
 -- ops:

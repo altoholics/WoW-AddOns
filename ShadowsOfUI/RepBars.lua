@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local ui = ns.g.ui
+local ui = ns.ui
 local Frame, StatusBar = ui.Frame, ui.StatusBar
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
@@ -28,7 +28,7 @@ local SeveredThreadsStart = rgb(169, 71, 59)
 local SeveredThreadsEnd = rgb(244, 124, 102)
 
 local Container = Frame:new{
-  parent = ns.g.UIParent,
+  parent = ns.wowui.UIParent,
   level = 2,
   position = {
     height = 7,
@@ -118,14 +118,14 @@ function Container:reposition()
 end
 
 local function factionFill(factionID)
-  local info = ns.g.GetMajorFactionRenownInfo(factionID)
+  local info = ns.wow.GetMajorFactionRenownInfo(factionID)
   return info.renownReputationEarned / info.renownLevelThreshold
 end
 
 -- name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep,
 -- isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(2)
 function Container:PLAYER_ENTERING_WORLD(login, reload)
-  if (login or reload) and ns.g.UnitLevel("player") == ns.g.maxLevel then
+  if (login or reload) and ns.wow.UnitLevel("player") == ns.wow.maxLevel then
     self:show()
     self:reposition()
     self.dornogal.fill.texture:SetWidth(factionFill(DornogalID) * self.dornogal.frame:GetWidth())

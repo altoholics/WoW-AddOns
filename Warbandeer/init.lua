@@ -28,8 +28,8 @@ ns.api = WarbandeerApi
 
 -- https://wowpedia.fandom.com/wiki/Create_a_WoW_AddOn_in_15_Minutes#Options_Panel
 
-local GetClassInfo, GetClassColor = ns.g.GetClassInfo, ns.g.GetClassColor
-local Generate, Map, Select = ns.g.Generate, ns.g.Map, ns.g.Select
+local unpack, Generate, Map, Select = ns.lua.unpack, ns.lua.Generate, ns.lua.Map, ns.lua.Select
+local GetClassInfo, GetClassColor = ns.wow.GetClassInfo, ns.wow.GetClassColor
 
 -- class colors: https://wowpedia.fandom.com/wiki/Class_colors
 
@@ -73,7 +73,7 @@ ns.CLASSES = Generate(
     local c = GetClassColor(id)
     return {name = n, id = id, color = c}
   end,
-  ns.g.NUM_CLASSES
+  ns.wow.NUM_CLASSES
 )
 ns.CLASS_NAMES = Map(ns.CLASSES, Select("name"))
 
@@ -110,5 +110,5 @@ raceIdToFactionIndex[84] = {14, false}
 raceIdToFactionIndex[85] = {14, true}
 
 function ns.NormalizeRaceId(raceId)
-  return ns.g.unpack(raceIdToFactionIndex[raceId])
+  return unpack(raceIdToFactionIndex[raceId])
 end

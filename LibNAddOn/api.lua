@@ -30,5 +30,5 @@ function LibNAddOn(features)
     end
   end
 
-  ns.linkGlobals(addOn, features.globals or "g")
+  ns.linkGlobals(addOn, features)
 end

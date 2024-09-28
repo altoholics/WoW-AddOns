@@ -1,11 +1,11 @@
 local _, ns = ...
 local ui = ns.ui
 
-local CreateFrame, ShowUIPanel, HideUIPanel = ns.g.CreateFrame, ns.g.ShowUIPanel, ns.g.HideUIPanel
-local UISpecialFrames = ns.g.UISpecialFrames
+local CreateFrame, ShowUIPanel, HideUIPanel = ns.wowui.CreateFrame, ns.wowui.ShowUIPanel, ns.wowui.HideUIPanel
+local UISpecialFrames = ns.wowui.UISpecialFrames
 local _G, tinsert = _G, table.insert
 
-local Class, CopyTables = ns.util.Class, ns.util.CopyTables
+local Class, CopyTables = ns.lua.Class, ns.lua.CopyTables
 local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.layer.Overlay
 local Texture, Label = ui.Texture, ui.Label
 

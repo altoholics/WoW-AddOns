@@ -1,11 +1,11 @@
 local _, ns = ...
 
 local ui = ns.ui
-local Class = ns.util.Class
+local Class = ns.lua.Class
 local Frame = ui.Frame
 
 local _G, tinsert = _G, table.insert
-local UISpecialFrames = ns.g.UISpecialFrames
+local UISpecialFrames = ns.wowui.UISpecialFrames
 
 -- dialog with title bar and close button, closable with escape
 local Dialog = Class(Frame, function(o)

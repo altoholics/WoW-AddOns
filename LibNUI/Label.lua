@@ -1,9 +1,9 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class = ns.util.Class
+local Class = ns.lua.Class
 
-ui.fonts = ns.util.ToMap({
+ui.fonts = ns.lua.ToMap({
   "GameFontHighlight", "GameFontHighlightSmall",
   "SystemFont_Med2",
 })

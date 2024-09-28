@@ -1,11 +1,11 @@
 local _, ns = ...
 local ui = ns.ui
-local Class, Dialog = ns.util.Class, ui.Dialog
+local Class, Dialog = ns.lua.Class, ui.Dialog
 
 -- Creates a Portrait Frame, a default styled frame with textured background, border, close button,
 -- title bar, and a large circular portrait in the top left.
 
-local IsAddOnLoaded, UIParent = ns.g.IsAddOnLoaded, ns.g.UIParent
+local IsAddOnLoaded, UIParent = ns.wow.IsAddOnLoaded, ns.wowui.UIParent
 
 -- this gives us a full window with:
 --   a circle portrait in the top left
