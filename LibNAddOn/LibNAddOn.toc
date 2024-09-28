@@ -8,6 +8,10 @@ eventListener.lua
 database.lua
 slashCommands.lua
 utils.lua
+
+globals/lua.lua
+globals/wow.lua
+globals/ui.lua
 globals.lua
 
 api.lua
