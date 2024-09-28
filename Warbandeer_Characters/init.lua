@@ -261,3 +261,30 @@ raceIdToFactionIndex[85] = {14, true}
 function ns.NormalizeRaceId(raceId)
   return ns.g.unpack(raceIdToFactionIndex[raceId])
 end
+
+/*
+
+https://warcraft.wiki.gg/wiki/World_of_Warcraft_API
+
+C_WeeklyRewards
+C_WeeklyRewards.AreRewardsForCurrentRewardPeriod() : isCurrentPeriod
+C_WeeklyRewards.CanClaimRewards() : canClaimRewards
+C_WeeklyRewards.ClaimReward(id)
+C_WeeklyRewards.CloseInteraction()
+C_WeeklyRewards.GetActivities([type]) : activities
+C_WeeklyRewards.GetActivityEncounterInfo(type, index) : info
+C_WeeklyRewards.GetConquestWeeklyProgress() : weeklyProgress
+C_WeeklyRewards.GetDifficultyIDForActivityTier(activityTierID) : difficultyID
+C_WeeklyRewards.GetExampleRewardItemHyperlinks(id) : hyperlink, upgradeHyperlink
+C_WeeklyRewards.GetItemHyperlink(itemDBID) : hyperlink
+C_WeeklyRewards.GetNextActivitiesIncrease(activityTierID, level) : hasSeasonData, nextActivityTierID, nextLevel, itemLevel
+C_WeeklyRewards.GetNextMythicPlusIncrease(mythicPlusLevel) : hasSeasonData, nextMythicPlusLevel, itemLevel
+C_WeeklyRewards.GetNumCompletedDungeonRuns() : numHeroic, numMythic, numMythicPlus
+C_WeeklyRewards.HasAvailableRewards() : hasAvailableRewards
+C_WeeklyRewards.HasGeneratedRewards() : hasGeneratedRewards
+C_WeeklyRewards.HasInteraction() : isInteracting
+C_WeeklyRewards.IsWeeklyChestRetired() : isRetired
+C_WeeklyRewards.OnUIInteract()
+C_WeeklyRewards.ShouldShowFinalRetirementMessage() : showRetirementMessage
+C_WeeklyRewards.ShouldShowRetirementMessage() : showRetirementMessage
+*/

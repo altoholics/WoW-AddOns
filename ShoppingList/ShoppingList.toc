@@ -1,6 +1,12 @@
-
-
+## Interface: 110002, 110005
+## Title: Shopping List
+## Author: Nazuraki
+## Version: 11.0.000-1
+## IconTexture: Interface\Icons\inv_10_tailoring2_banner_green.blp
+## SavedVariables: WarbandeerCharDB
+## Dependencies: LibNAddOn, LibNUI
 
 # - ctrl+click an item at a vendor to add it to the shopping list
 # - show shopping list items requiring that currency when hovering the currency (in currency view, at vendor, ...)
 # - show a window with shopping list items and allow re-ordering
+# basic shared functions and definitions
