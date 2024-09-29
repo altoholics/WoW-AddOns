@@ -44,7 +44,7 @@ function ns.createEventListener(addOn, addOnName)
   addOn._eventListener:SetScript("OnEvent", function(_, e, ...) addOn._eventListener:OnEvent(e, ...) end)
 
   -- convenience event listeners
-  addOn:registerEvent("ADDON_LOADED", function(name)
+  addOn:registerEvent("ADDON_LOADED", function(self, name)
     if name ~= addOnName then return end -- we're only interested in the target add-on
     if addOn.onLoad then addOn:onLoad() end -- if an onLoad func is defined, call it
     -- if any other supported convenience event handlers are defined, set those up

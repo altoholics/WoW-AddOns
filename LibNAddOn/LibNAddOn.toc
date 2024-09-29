@@ -4,14 +4,13 @@
 ## Version: 11.0.000-1
 ## IconTexture: Interface\Icons\achievement_guildperk_bountifulbags
 
-eventListener.lua
-database.lua
-slashCommands.lua
-utils.lua
-
 globals/lua.lua
 globals/wow.lua
 globals/ui.lua
 globals.lua
+
+eventListener.lua
+database.lua
+slashCommands.lua
 
 api.lua

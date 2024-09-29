@@ -5,7 +5,7 @@ local Frame, StatusBar = ui.Frame, ui.StatusBar
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 
-local rgb = ns.CreateColor
+local rgba = ns.wowui.rgba
 
 -- Major Factions IDs:
 local HallowfallID = 2570
@@ -18,14 +18,14 @@ local SeveredThreadsID = 2600
 -- local VizierID = 2607
 -- local BrannID = 2640
 
-local DornogalStart = rgb(55, 138, 191)
-local DornogalEnd = rgb(124, 135, 190)
-local RingingDeepsStart = rgb(239, 111, 53)
-local RingingDeepsEnd = rgb(247, 217, 122)
-local HallowfallStart = rgb(247, 190, 143)
-local HallowfallEnd = rgb(251, 216, 178)
-local SeveredThreadsStart = rgb(169, 71, 59)
-local SeveredThreadsEnd = rgb(244, 124, 102)
+local DornogalStart = rgba(55, 138, 191)
+local DornogalEnd = rgba(124, 135, 190)
+local RingingDeepsStart = rgba(239, 111, 53)
+local RingingDeepsEnd = rgba(247, 217, 122)
+local HallowfallStart = rgba(247, 190, 143)
+local HallowfallEnd = rgba(251, 216, 178)
+local SeveredThreadsStart = rgba(169, 71, 59)
+local SeveredThreadsEnd = rgba(244, 124, 102)
 
 local Container = Frame:new{
   parent = ns.wowui.UIParent,
@@ -85,7 +85,7 @@ local Container = Frame:new{
     self:withTextureOverlay("edge", {
       color = {1, 1, 1},
       blendMode = "BLEND",
-      gradient = {"VERTICAL", rgb(0, 0, 0, 0), rgb(0, 0, 0, 0.5)},
+      gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
       clamp = {
         {TopLeft},
         {BottomRight, self.frame, TopRight, 0, -3}
@@ -96,7 +96,7 @@ local Container = Frame:new{
     self:withTextureBackground("fade", {
       color = {1, 1, 1},
       blendMode = "BLEND",
-      gradient = {"VERTICAL", rgb(0, 0, 0, 0.3), rgb(0, 0, 0, 0)},
+      gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
       clamp = {
         {TopLeft, 0, 3},
         {BottomRight, self.frame, TopRight},
