@@ -1,4 +1,4 @@
-local ADDON_NAME, ns = ...
+local _, ns = ...
 
 function ns:SlashCmd(_, msg) -- cmd, msg
   local _, _, cmd = string.find(msg, "(%w+) ?(.*)") --, args
@@ -8,28 +8,13 @@ function ns:SlashCmd(_, msg) -- cmd, msg
     self:view("summary")
   elseif "raceGrid" == cmd then
     self:view("raceGrid")
-  elseif "details" == cmd then
-    local data = ns.api:GetCharacterData()
-    local f = ns.ui.TitleFrame:new{
-      name = ADDON_NAME.."Details",
-      title = ADDON_NAME.." | Character details: "..data.name,
-      position = {
-        width = 500,
-        height = 500,
-        center = {},
-      },
-      level = 8000,
-      special = true,
-    }
-
-    f:withLabel("r", {
-      text = data.level.." "..data.race.." "..data.className.." on "..data.realm,
-      position = {topLeft = {5, -35}},
-    })
-    f:withLabel("r2", {
-      font = ns.ui.fonts.GameFontHighlightSmall,
-      text = "ilvl "..data.ilvl,
-      position = {topLeft = {5, -55}},
-    })
+  elseif "alliance" == cmd then
+    self:view("raceGrid")
+    self.views.raceGrid:showAlliance()
+  elseif "horde" == cmd then
+    self:view("raceGrid")
+    self.views.raceGrid:showHorde()
+  elseif "detail" == cmd then
+    self:view("detail")
   end
 end

@@ -51,3 +51,14 @@ ns.wow = {
 }
 
 ns.wow.Player = {}
+
+-- C_WeeklyRewards.GetActivityEncounterInfo(3,1) -- raid box 1
+-- -> { {uiOrder, bestDifficulty, instanceID, encounterID}, ... }
+-- uiOrder 1-8 (seems to be in reverse order of this)
+-- bestDifficulty 17 is LFR (for 584 gear) - 3 with best difficulty > 0 means 3 bosses down
+-- EJ_GetInstanceInfo(instanceID) e.g. 1273
+-- -> name, desc, bgImageID, btnImageID, loreImgID, btnImg2ID, dungeonMapID, journalLink, shouldDisplayDifficulty, mapID, bool
+-- https://wowpedia.fandom.com/wiki/API_EJ_GetInstanceInfo
+-- https://wowpedia.fandom.com/wiki/API_EJ_GetEncounterInfo
+-- EJ_GetEncounterInfo(encounterID) e.g. 2607
+-- -> name, description, journalEncounterID, rootSectionID, link, journalInstanceID, dungeonEncounterID, instanceID

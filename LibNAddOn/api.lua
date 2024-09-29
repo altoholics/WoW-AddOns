@@ -5,6 +5,7 @@ local _G = _G
 
 function ns.print(...) print("|cFF33FF99LibNAddOn|r:", ...) end
 
+-- C_AddOns.GetAddOnMetadata(name, variable)
 function LibNAddOn(features)
   if not features.name then ns.print("missing field name"); return end
   if not features.addOn then ns.print("missing field addOn"); return end

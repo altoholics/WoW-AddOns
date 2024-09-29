@@ -95,14 +95,10 @@ function Frame:height(h)
   if h ~= nil then self.frame:SetHeight(h); return self end
   return self.frame:GetHeight()
 end
-function Frame:show() ShowUIPanel(self.frame); return self end
-function Frame:hide() HideUIPanel(self.frame); return self end
+function Frame:show() self.frame:Show(); return self end
+function Frame:hide() self.frame:Hide(); return self end
 function Frame:toggle()
-  if self.frame:IsVisible() then
-    self.frame:Hide()
-  else
-    self.frame:Show()
-  end
+  self.frame:SetShown(not self.frame:IsVisible())
 end
 function Frame:listenForEvents()
   local o = self

@@ -56,3 +56,9 @@ function Label:right(...) self.label:SetPoint(ui.edge.Right, ...); return self e
 function Label:size(x, y) self.label:SetSize(x, y); return self end
 function Label:width(w) self.label:SetWidth(w); return self end
 function Label:height(h) self.label:SetHeight(h); return self end
+
+function Label:Text(text)
+  if not text then return self.label:GetText() end
+  self.label:SetText(text)
+  return self
+end

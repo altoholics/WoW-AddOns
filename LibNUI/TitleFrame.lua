@@ -95,3 +95,7 @@ end, {
   drag = true,
 })
 ui.TitleFrame = TitleFrame
+
+function TitleFrame:Title(text)
+  self.titlebar.title:Text(text)
+end

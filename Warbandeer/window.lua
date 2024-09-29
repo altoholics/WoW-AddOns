@@ -4,9 +4,9 @@ local views = ns.views
 
 -- set up the main addon window
 local Class, TitleFrame = ns.lua.Class, ui.TitleFrame
-local RaceGridView, SummaryView = views.RaceGridView, views.SummaryView
+local RaceGridView, SummaryView, DetailView = views.RaceGridView, views.SummaryView, views.DetailView
 
-local viewIdx = {"raceGrid", "raceGrid", "summary", "summary"}
+local viewIdx = {"raceGrid", "raceGrid", "summary", "detail"}
 
 local MainWindow = Class(TitleFrame, function(self)
   -- add the contents
@@ -27,6 +27,14 @@ local MainWindow = Class(TitleFrame, function(self)
   }
   self.views.summary:hide()
 
+  self.views.detail = DetailView:new{
+    parent = self,
+    position = {
+      topLeft = {3, -32},
+    },
+  }
+  self.views.detail:hide()
+
   local defaultView = ns.db.settings.defaultView
   self:view(viewIdx[defaultView])
   if defaultView == 2 then
@@ -44,8 +52,12 @@ end, {
 function MainWindow:view(name)
   if self._view then self._view:hide() end
   self._view = self.views[name]
+  if self._view._title then
+    self:Title(ADDON_NAME.." | "..self._view._title)
+  else
+    self:Title(ADDON_NAME)
+  end
   self._view:show()
-
   self:width(self._view:width()  + 6)
   self:height(self._view:height() + 30)
 end
