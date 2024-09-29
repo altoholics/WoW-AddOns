@@ -5,9 +5,9 @@ local Class, Frame, TableFrame = ns.lua.Class, ui.Frame, ui.TableFrame
 
 local ALLIANCE_RACES, CLASS_NAMES, CLASSES = ns.ALLIANCE_RACES, ns.CLASS_NAMES, ns.CLASSES
 
-local CELL_WIDTH = 85
-local CELL_HEIGHT = 24
-local HeaderHeight = CELL_HEIGHT * 1.5
+local cellWidth = 85
+local cellHeight = 24
+local HeaderHeight = cellHeight * 1.5
 
 local AllianceView = Class(TableFrame, function(o)
   -- color the backgrounds of the rows by class color
@@ -33,7 +33,7 @@ local AllianceView = Class(TableFrame, function(o)
       text = data.name,
       position = {
         topLeft = {},
-        size = {CELL_WIDTH, CELL_HEIGHT},
+        size = {cellWidth, cellHeight},
       },
       justifyH = "CENTER",
       justifyV = "MIDDLE",
@@ -85,15 +85,15 @@ local AllianceView = Class(TableFrame, function(o)
     end)
   end
 end, {
-  CELL_WIDTH = CELL_WIDTH,
-  CELL_HEIGHT = CELL_HEIGHT,
+  cellWidth = cellWidth,
+  cellHeight = cellHeight,
   headerHeight = HeaderHeight,
   colNames = ALLIANCE_RACES,
   rowNames = CLASS_NAMES,
   position = {
     topLeft = {},
-    width = (#ALLIANCE_RACES + 1) * CELL_WIDTH,
-    height = #CLASS_NAMES * CELL_HEIGHT + HeaderHeight,
+    width = (#ALLIANCE_RACES + 1) * cellWidth,
+    height = #CLASS_NAMES * cellHeight + HeaderHeight,
   },
   headerFont = ui.fonts.GameFontHighlightSmall,
 })

@@ -1,6 +1,9 @@
 local _, ns = ...
 local ui = ns.ui
+local tinsert = ns.lua.tinsert
 local Class, Frame, BgFrame = ns.lua.Class, ui.Frame, ui.BgFrame
+local Center, Middle, Left = ui.justify.Center, ui.justify.Middle, ui.justify.Left
+local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 
 -- Creates an empty frame, but lays out its children in a tabular manner.
 -- ops:
@@ -8,99 +11,138 @@ local Class, Frame, BgFrame = ns.lua.Class, ui.Frame, ui.BgFrame
 --   numRows?     int          - defaults to count of row names
 --   colNames?    string array - list of header names at top of columns
 --   rowNames?    string array - list of header names at left of rows
---   CELL_WIDTH   int          - width of cells in pixels
---   CELL_HEIGHT  int          - height of cells in pixels
+--   cellWidth   int          - width of cells in pixels
+--   cellHeight  int          - height of cells in pixels
 
-local TableRow = Class(BgFrame, function(o)
-  o:topLeft(0, o.index * -o.frame:GetHeight() - o.insetTop)
-  o:withLabel({
-    text = o.label,
+local TableRow = Class(BgFrame, function(self)
+  self:topLeft(0, self.index * -self.frame:GetHeight() - self.insetTop)
+  self:withLabel({
+    text = self.label,
     position = {left = {2, 0}},
-    template = o.font,
-    color = o.color or {1, 1, 1, 1},
+    template = self.font,
+    color = self.color or {1, 1, 1, 1},
   })
 end, {
   level = 2,
 })
 
-local TableCol = Class(BgFrame, function(o)
-  o:topLeft(o.index * o.frame:GetWidth() + o.insetLeft, 0)
-  o:withLabel({
-    text = o.label,
+local TableCol = Class(BgFrame, function(self)
+  self:withLabel({
+    text = self.label,
     position = {
       topLeft = {},
-      size = {o.frame:GetWidth(), o.headerHeight}
+      bottomRight = {self.frame, TopRight, 0, -self.headerHeight},
     },
-    template = o.font,
-    color = o.color or {1, 215/255, 0, 1},
-    justifyH = "CENTER",
-    justifyV = "MIDDLE",
+    template = self.font,
+    color = self.color or {1, 215/255, 0, 1},
+    justifyH = Center,
+    justifyV = Middle,
   })
 end, {
   level = 1,
 })
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
-local TableFrame = Class(Frame, function(o)
-  o.numCols = o.numCols or (o.colNames and #o.colNames) or 0
-  o.numRows = o.numRows or (o.rowNames and #o.rowNames) or 0
+local TableFrame = Class(Frame, function(self)
+  self.numCols = self.numCols or (self.colNames and #self.colNames) or 0
+  self.numRows = self.numRows or (self.rowNames and #self.rowNames) or 0
 
-  local offsetX = o.rowNames ~= nil and o.CELL_WIDTH or 0
-  local offsetY = o.colNames ~= nil and o.headerHeight or o.CELL_HEIGHT or 0
+  self.headerHeight = self.headerHeight or self.cellHeight
+  local offsetX = self.rowNames ~= nil and self.cellWidth or 0
+  local offsetY = self.colNames ~= nil and self.headerHeight or 0
+  local colHeight = self.cellHeight * (self.numRows) + self.headerHeight
+  local rowWidth = self.cellWidth * (self.numCols + 1)
 
-  o.cols = {}
-  o.rows = {}
+  if not self.colNames and self.colInfo then
+    self.colNames = {}
+    for _,i in ipairs(self.colInfo) do tinsert(self.colNames, i.name) end
+  end
 
-  if o.colNames then
-    local colHeight = o.CELL_HEIGHT * (o.numRows) + (o.headerHeight or o.CELL_HEIGHT)
-    for i=1,#o.colNames do
-      o:addCol(o.colNames[i], o.CELL_WIDTH, colHeight, o.headerHeight or o.CELL_HEIGHT, offsetX, o.colHeaderFont or o.headerFont)
+  self.cols = {}
+  self.rows = {}
+
+  if self.colNames then
+    local left = 0
+    for i=1,#self.colNames do
+      tinsert(self.cols, TableCol:new{
+        parent = self,
+        label = self.colNames[i],
+        headerHeight = self.headerHeight,
+        position = {
+          topLeft = {left + offsetX, 0},
+          width = self.colInfo and self.colInfo[i].width or self.cellWidth,
+          height = colHeight,
+        },
+        font = self.colHeaderFont or self.headerFont,
+        backdrop = {color = {0, 0, 0, math.fmod(#self.cols, 2) == 0 and 0.6 or 0.4}},
+      })
+      left = left + (self.colInfo and self.colInfo[i].width or self.cellWidth)
     end
   end
 
-  if o.rowNames then
-    local rowWidth = o.CELL_WIDTH * (o.numCols + 1)
-    for i=1,#o.rowNames do
-      o:addRow(o.rowNames[i], rowWidth, o.CELL_HEIGHT, offsetY, o.rowHeaderFont or o.headerFont)
+  if self.rowNames then
+    for i=1,#self.rowNames do
+      tinsert(self.rows, TableRow:new{
+        parent = self,
+        index = #self.rows,
+        label = self.rowNames[i],
+        insetTop = offsetY,
+        position = {
+          width = rowWidth,
+          height = self.cellHeight,
+        },
+        font = self.rowHeaderFont or self.headerFont,
+      })
     end
   end
 
-  o.cells = {}
-  for i=1,o.numRows do
-    o.cells[i] = {}
+  self.cells = {}
+  for i=1,self.numRows do
+    tinsert(self.cells, i, {})
   end
-end)
+end, {
+  cellWidth = 100,
+  cellHeight = 20,
+})
 ui.TableFrame = TableFrame
-
-function TableFrame:addCol(text, width, height, headerHeight, insetLeft, font)
-  table.insert(self.cols, TableCol:new{
-    parent = self.frame,
-    index = #self.cols,
-    label = text,
-    insetLeft = insetLeft,
-    headerHeight = headerHeight,
-    position = {
-      width = width,
-      height = height,
-    },
-    font = font,
-    backdrop = {color = {0, 0, 0, math.fmod(#self.cols, 2) == 0 and 0.6 or 0.4}},
-  })
-end
-
-function TableFrame:addRow(text, width, height, insetTop, font)
-  table.insert(self.rows, TableRow:new{
-    parent = self.frame,
-    index = #self.rows,
-    label = text,
-    insetTop = insetTop,
-    position = {
-      width = width,
-      height = height,
-    },
-    font = font,
-  })
-end
 
 function TableFrame:row(n) return self.rows[n] end
 function TableFrame:col(n) return self.cols[n] end
+
+function TableFrame:set(row, col, element)
+  if #self.cells < row then
+    for i=#self.cells,row do
+      tinsert(self.cells, i, {})
+    end
+  end
+  self.cells[row][col] = element
+end
+
+function TableFrame:update()
+  self.colHeight = #self.data * self.cellHeight + self.headerHeight
+  for _,c in ipairs(self.cols) do
+    c:height(self.colHeight)
+  end
+  for rowN,row in pairs(self.data) do
+    if not self.cells[rowN] then tinsert(self.cells, rowN, {}) end -- make sure row exists
+    for colN,data in pairs(row) do
+      if not self.cells[rowN][colN] then
+        local cell = Frame:new{
+          parent = self,
+          level = 3,
+          position = {
+            topLeft = {self.cols[colN].frame, TopLeft, 0, (rowN-1) * -self.cellHeight - self.headerHeight},
+            width = self.colInfo[colN].width - 6,
+            height = self.cellHeight,
+          },
+        }
+        cell:withLabel({
+          text = data,
+          position = { fill = true },
+          justifyH = Left,
+        })
+        self.cells[rowN][colN] = cell
+      end
+    end
+  end
+end

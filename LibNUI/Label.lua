@@ -1,6 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 
+local unpack = ns.lua.unpack
 local Class = ns.lua.Class
 
 ui.fonts = ns.lua.ToMap({
@@ -44,6 +45,7 @@ end, {
 })
 ui.Label = Label
 
+function Label:fill() self.label:SetAllPoints(); return self end
 function Label:center() self.label:SetPoint(ui.edge.Center); return self end
 function Label:topLeft(...) self.label:SetPoint(ui.edge.TopLeft, ...); return self end
 function Label:topRight(...) self.label:SetPoint(ui.edge.TopRight, ...); return self end

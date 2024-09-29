@@ -1,57 +1,35 @@
 local _, ns = ...
 local ui = ns.ui
 
+local tinsert = ns.lua.tinsert
 local Class, TableFrame = ns.lua.Class, ui.TableFrame
 
 local SummaryView = Class(TableFrame, function(self)
-  local toons = {}
-  for _,data in pairs(ns.api.GetAllCharacters()) do
-    table.insert(toons, data)
-  end
+  local toons = ns.api.GetAllCharacters() -- returns a copy
+  -- sort by level, then ilvl, then name
   table.sort(toons, function(c1, c2)
     if c1.level ~= c2.level then return c1.level > c2.level end
     if c1.ilvl ~= c2.ilvl then return c1.ilvl > c2.ilvl end
     return c1.name > c2.name
   end)
-  local i = 0
-  for _,data in pairs(toons) do
-    self:withLabel{
-      name = "Character"..data.name,
-      text = data.name,
-      position = {
-        topLeft = {3, i * -20 - 3},
-        size = {80, 20},
-      },
-      justifyH = "LEFT",
-      justifyV = "MIDDLE",
-    }
-    self:withLabel{
-      name = "Character"..data.name.."Level",
-      text = data.level,
-      position = {
-        topLeft = {83, i * -20 - 3},
-        size = {40, 20},
-      },
-      justifyH = "LEFT",
-      justifyV = "MIDDLE",
-    }
-    self:withLabel{
-      name = "Character"..data.name.."ItemLevel",
-      text = data.ilvl,
-      position = {
-        topLeft = {123, i * -20 - 3},
-        size = {40, 20},
-      },
-      justifyH = "LEFT",
-      justifyV = "MIDDLE",
-    }
-    i = i + 1
+
+  self.data = {}
+  for _,t in pairs(toons) do
+    tinsert(self.data, {
+      t.name,
+      t.level,
+      t.ilvl
+    })
   end
 
   self:width(166)
-  self:height(ns.api.GetNumCharacters() * 20 + 6)
+  self:height(#self.data * self.cellHeight + self.headerHeight + 6)
+  self:update()
 end, {
-  CELL_WIDTH = 100,
-  CELL_HEIGHT = 20,
+  colInfo = {
+    { name = "Character", width = 80, },
+    { name = "Level", width = 40 },
+    { name = "iLvl", width = 40 },
+  },
 })
 ns.views.SummaryView = SummaryView

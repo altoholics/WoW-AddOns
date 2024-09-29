@@ -1,6 +1,7 @@
 local _, ns = ...
 local API = ns.api
 
+local tinsert = ns.lua.tinsert
 local UnitName, UnitLevel, UnitClassBase, UnitRace = ns.wow.UnitName, ns.wow.UnitLevel, ns.wow.UnitClassBase, ns.wow.UnitRace
 local GetClassInfo, GetProfessions, GetProfessionInfo = ns.wow.GetClassInfo, ns.wow.GetProfessions, ns.wow.GetProfessionInfo
 local GetAverageItemLevel = ns.wow.GetAverageItemLevel
@@ -103,8 +104,9 @@ function API:GetNumMaxLevel()
 end
 
 function API:GetAllCharacters()
-  -- todo: return a copy so it is immutable
-  return ns.db.characters
+  local list = {}
+  for _,c in pairs(ns.db.characters) do tinsert(list, c) end
+  return list
 end
 
 function API:GetAllianceCharacters()
