@@ -6,6 +6,8 @@ local views = ns.views
 local Class, TitleFrame = ns.lua.Class, ui.TitleFrame
 local RaceGridView, SummaryView = views.RaceGridView, views.SummaryView
 
+local viewIdx = {"raceGrid", "raceGrid", "summary", "summary"}
+
 local MainWindow = Class(TitleFrame, function(self)
   -- add the contents
   self.views = {}
@@ -25,7 +27,11 @@ local MainWindow = Class(TitleFrame, function(self)
   }
   self.views.summary:hide()
 
-  self:view("raceGrid")
+  local defaultView = ns.db.settings.defaultView
+  self:view(viewIdx[defaultView])
+  if defaultView == 2 then
+    self.views.raceGrid:showHorde()
+  end
 end, {
   name = ADDON_NAME,
   title = ADDON_NAME,

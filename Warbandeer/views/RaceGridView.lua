@@ -22,16 +22,7 @@ local RaceGridView = Class(Frame, function(o)
       height = 32,
     },
   }
-  o.factionIcon.frame:SetScript("OnMouseUp", function()
-    o.factionIcon:swap()
-    if o.factionIcon.isAlliance then
-      o.hordeView:hide()
-      o.allianceView:show()
-    else
-      o.allianceView:hide()
-      o.hordeView:show()
-    end
-  end)
+  o.factionIcon.frame:SetScript("OnMouseUp", o.swap)
 
   local status = Frame:new{
     parent = o.frame,
@@ -71,3 +62,17 @@ local RaceGridView = Class(Frame, function(o)
   o:height(o.allianceView:height() + 12)
 end)
 ns.views.RaceGridView = RaceGridView
+
+function RaceGridView:swap()
+  self.factionIcon:swap()
+  if self.factionIcon.isAlliance then
+    self.hordeView:hide()
+    self.allianceView:show()
+  else
+    self.allianceView:hide()
+    self.hordeView:show()
+  end
+end
+
+function RaceGridView:showHorde() if self.factionIcon.isAlliance then self:swap() end end
+function RaceGridView:showAlliance() if not self.factionIcon.isAlliance then self:swap() end end

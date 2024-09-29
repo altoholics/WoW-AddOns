@@ -19,6 +19,26 @@ LibNAddOn{
     name = "ShadowsOfUIDB",
     defaults = defaults,
   },
+  settings = {
+    {
+      title = "Shadows of UI",
+      fields = {
+        {
+          name = "XpBarEnabled",
+          typ = "checkbox",
+          default = true,
+          table = function(db) return db.settings.xpBar end,
+          key = "enabled",
+          label = "XP Bar enabled",
+          tooltip = "Enable the xp bar at the bottom of the screen",
+        },
+      }
+    },
+  },
 }
+
+function ns:settingChanged(var, name) --, setting
+  ns.Print("setting changed", var, name)
+end
 
 ns.ui = LibNUI

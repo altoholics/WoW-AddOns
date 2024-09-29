@@ -18,6 +18,10 @@ function LibNAddOn(features)
   if features.db then
     if not features.db.name then ns.print("missing field db.name"); return end
     ns.setupDB(addOnName, addOn, features.db)
+
+    if features.settings then
+      ns.registerSettings(addOn, addOnName, features.settings)
+    end
   end
 
   if features.slashCommands then ns.registerSlashCommands(addOn, features.slashCommands) end

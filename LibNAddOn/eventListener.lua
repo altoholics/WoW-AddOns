@@ -16,13 +16,17 @@ function ns.createEventListener(addOn, addOnName)
       end
     end
   end
-  function addOn:registerEvent(name, handler)
+  function addOn:registerEvent(name, handler, idx)
     if not addOn._eventHandlers[name] then
       addOn._eventListener:RegisterEvent(name)
       addOn._eventHandlers[name] = {}
     end
     if handler then
-      tinsert(addOn._eventHandlers, handler)
+      if idx then
+        tinsert(addOn._eventHandlers, idx, handler)
+      else
+        tinsert(addOn._eventHandlers, handler)
+      end
     end
   end
   function addOn:unregisterEvent(name, handler)
@@ -49,7 +53,7 @@ function ns.createEventListener(addOn, addOnName)
     if addOn.onLoad then addOn:onLoad() end -- if an onLoad func is defined, call it
     -- if any other supported convenience event handlers are defined, set those up
     if addOn.onLogin then
-      addOn:registerEvent("PLAYER_ENTERING_WORLD", function(login, reload)
+      addOn:registerEvent("PLAYER_ENTERING_WORLD", function(_, login, reload)
         if login or reload then addOn:onLogin() end
       end)
     end

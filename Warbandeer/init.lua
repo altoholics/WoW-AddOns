@@ -1,11 +1,36 @@
 local ADDON_NAME, ns = ...
 -- luacheck: globals LibNAddOn LibNUI WarbandeerApi
 
+ns.views = {"Alliance Grid", "Horde Grid", "Summary", "Details"}
+
 LibNAddOn{
   name = ADDON_NAME,
   addOn = ns,
   db = {
     name = "WarbandeerDB",
+    defaults = {
+      version = 1,
+      settings = {
+        defaultView = 1,
+      },
+    }
+  },
+  settings = {
+    {
+      title = "Warbandeer",
+      fields = {
+        {
+          name = "Default View",
+          typ = "dropdown",
+          default = 1,
+          table = function(db) return db.settings end,
+          key = "defaultView",
+          label = "default view",
+          tooltip = "View to open by default",
+          options = ns.views,
+        },
+      },
+    },
   },
   slashCommands = {
     warband = {"/warband", "/wb"},
@@ -111,4 +136,17 @@ raceIdToFactionIndex[85] = {14, true}
 
 function ns.NormalizeRaceId(raceId)
   return unpack(raceIdToFactionIndex[raceId])
+end
+
+function ns:settingChanged(key, value) --, setting
+  ns.Print("setting changed", key, value)
+end
+
+function ns:MigrateDB()
+  local db = self.db
+  if not db.version then
+    db.settings = {}
+    db.settings.defaultView = 1
+    db.version = 1
+  end
 end

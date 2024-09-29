@@ -11,6 +11,7 @@ globals.lua
 
 eventListener.lua
 database.lua
+settings.lua
 slashCommands.lua
 
 api.lua

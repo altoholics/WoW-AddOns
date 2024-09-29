@@ -9,8 +9,6 @@
 init.lua
 globals.lua
 
-settings.lua
-
 HideBlizzard.lua
 ActionBars.lua
 ExpBar.lua
