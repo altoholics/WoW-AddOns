@@ -22,9 +22,7 @@ local function getProfessionInfo(profID)
   }
 end
 
-function ns:PLAYER_ENTERING_WORLD(login, reload)
-  if not (login or reload) then return end
-
+function ns:onLogin()
   local name = UnitName("player")
   local level = UnitLevel("player")
   local _, classId = UnitClassBase("player")
@@ -74,7 +72,6 @@ function ns:PLAYER_ENTERING_WORLD(login, reload)
     c.cooking.isKhazAlgar = "Khaz Algar Cooking" == v
   end
 end
-ns:registerEvent("PLAYER_ENTERING_WORLD")
 
 function ns:PLAYER_LEVEL_UP()
   local data = self.db.characters[self.currentPlayer]

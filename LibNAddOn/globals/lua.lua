@@ -1,9 +1,14 @@
 local _, ns = ...
--- luacheck: globals CopyTable Mixin
+-- luacheck: globals unpack table CopyTable Mixin
+
+local table = table
 
 ns.lua = {
   -- lua
   unpack = unpack,
+  table = table,
+  tinsert = table.insert,
+  tremove = table.remove,
 
   -- WoW lua extensions
   CopyTable = CopyTable,
@@ -22,3 +27,7 @@ ns.lua = {
 
   Class = ns.Class,
 }
+
+function ns.lua.max(a, b)
+  return a > b and a or b
+end

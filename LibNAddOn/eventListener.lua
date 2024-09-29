@@ -1,8 +1,10 @@
 local _, ns = ...
 -- luacheck: globals CreateFrame
 
-function ns.createEventListener(addOn)
-  addOn._eventListener = CreateFrame("Frame")
+local getn, tinsert, tremove = ns.lua.table.getn, ns.lua.tinsert, ns.lua.tremove
+
+function ns.createEventListener(addOn, addOnName)
+  addOn._eventListener = ns.wowui.CreateFrame("Frame")
   addOn._eventHandlers = {}
   function addOn._eventListener:OnEvent(e, ...)
     if addOn[e] and type(addOn[e]) == "function" then
@@ -20,7 +22,7 @@ function ns.createEventListener(addOn)
       addOn._eventHandlers[name] = {}
     end
     if handler then
-      table.insert(addOn._eventHandlers, handler)
+      tinsert(addOn._eventHandlers, handler)
     end
   end
   function addOn:unregisterEvent(name, handler)
@@ -29,8 +31,8 @@ function ns.createEventListener(addOn)
       for i,h in ipairs(addOn._eventHandlers) do
         if h == handler then idx = i; break end
       end
-      if idx then table.remove(addOn._eventHandlers[name], idx) end
-      if table.getn(addOn._eventHandlers[name]) == 0 then
+      if idx then tremove(addOn._eventHandlers[name], idx) end
+      if getn(addOn._eventHandlers[name]) == 0 then
         addOn._eventListener:UnregisterEvent(name)
         addOn._eventHandlers[name] = nil
       end
@@ -40,4 +42,16 @@ function ns.createEventListener(addOn)
     end
   end
   addOn._eventListener:SetScript("OnEvent", function(_, e, ...) addOn._eventListener:OnEvent(e, ...) end)
+
+  -- convenience event listeners
+  addOn:registerEvent("ADDON_LOADED", function(name)
+    if name ~= addOnName then return end -- we're only interested in the target add-on
+    if addOn.onLoad then addOn:onLoad() end -- if an onLoad func is defined, call it
+    -- if any other supported convenience event handlers are defined, set those up
+    if addOn.onLogin then
+      addOn:registerEvent("PLAYER_ENTERING_WORLD", function(login, reload)
+        if login or reload then addOn:onLogin() end
+      end)
+    end
+  end)
 end

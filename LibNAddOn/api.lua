@@ -13,7 +13,7 @@ function LibNAddOn(features)
 
   function addOn.Print(...) print("|cFF33FF99".. addOnName.. "|r:", ...) end
 
-  ns.createEventListener(addOn)
+  ns.createEventListener(addOn, addOnName)
 
   if features.db then
     if not features.db.name then ns.print("missing field db.name"); return end
