@@ -6,20 +6,22 @@ local tinsert = ns.lua.tinsert
 local Class, TableFrame = ns.lua.Class, ui.TableFrame
 
 local function formatBestVaultRewardOption(o)
-  if not o then return nil end
+  if not o or o.best == 0 then return nil end
   local t
   if o.bestN > 1 then
     t = o.best.." x"..o.bestN
   else
     t = o.best
   end
-  return {
+  local r = {
     text = t,
     onClick = function()
       if not ns.wow.IsAddOnLoaded("Blizzard_WeeklyRewards") then ns.wow.LoadAddOn("Blizzard_WeeklyRewards") end
       WeeklyRewardsFrame:Show()
     end,
-    onEnter = function(self)
+  }
+  if #o.counts > 1 then
+    r.onEnter = function(self)
       GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
       GameTooltip:ClearLines()
       local lines = {}
@@ -28,9 +30,10 @@ local function formatBestVaultRewardOption(o)
       end
       for _,l in ipairs(lines) do GameTooltip:AddLine(l, 1, 1, 1) end
       GameTooltip:Show()
-    end,
-    onLeave = function() GameTooltip:Hide() end,
-  }
+    end
+    r.onLeave = function() GameTooltip:Hide() end
+  end
+  return r
 end
 
 local SummaryView = Class(TableFrame, function(self)
@@ -52,15 +55,17 @@ local SummaryView = Class(TableFrame, function(self)
     })
   end
 
-  self:width(166)
+  local w = 6 -- inset of 3 per side
+  for _,c in ipairs(self.colInfo) do w = w + c.width end
+  self:width(w)
   self:height(#self.data * self.cellHeight + self.headerHeight + 6)
   self:update()
 end, {
   colInfo = {
-    { name = "Character", width = 80, },
-    { name = "Level", width = 40 },
-    { name = "iLvl", width = 40 },
-    { name = "Vault", width = 100 },
+    { name = "Character", width = 80, backdrop = {color = {0, 0, 0, 0}} },
+    { name = "Level", width = 40, backdrop = {color = {0, 0, 0, 0}} },
+    { name = "iLvl", width = 40, backdrop = {color = {0, 0, 0, 0}} },
+    { name = "Vault", width = 50, backdrop = {color = {0, 0, 0, 0}} },
   },
 })
 ns.views.SummaryView = SummaryView

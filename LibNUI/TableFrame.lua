@@ -74,7 +74,8 @@ local TableFrame = Class(Frame, function(self)
           height = colHeight,
         },
         font = self.colHeaderFont or self.headerFont,
-        backdrop = {color = {0, 0, 0, math.fmod(#self.cols, 2) == 0 and 0.6 or 0.4}},
+        backdrop = self.colInfo and self.colInfo[i].backdrop or
+          {color = {0, 0, 0, math.fmod(#self.cols, 2) == 0 and 0.6 or 0.4}},
       })
       left = left + (self.colInfo and self.colInfo[i].width or self.cellWidth)
     end
@@ -139,9 +140,9 @@ function TableFrame:update()
         local t = data
         if type(data) == "table" then
           t = data.text
-          if data.onClick then cell:SetScript("OnMouseUp", data.onClick) end
-          if data.onEnter then cell:SetScript("OnEnter", data.onEnter) end
-          if data.onLeave then cell:SetScript("OnLeave", data.onLeave) end
+          if data.onClick then cell.frame:SetScript("OnMouseUp", data.onClick) end
+          if data.onEnter then cell.frame:SetScript("OnEnter", data.onEnter) end
+          if data.onLeave then cell.frame:SetScript("OnLeave", data.onLeave) end
         end
         cell:withLabel({
           text = t,

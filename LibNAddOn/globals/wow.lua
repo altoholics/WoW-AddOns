@@ -47,7 +47,7 @@ ns.wow = {
   UnitName = UnitName,
   UnitRace = UnitRace,
 
-  LoadAddOn = LoadAddOn,
+  LoadAddOn = C_AddOns.LoadAddOn,
   IsAddOnLoaded = C_AddOns.IsAddOnLoaded,
   UnitXP = UnitXP,
   UnitXPMax = UnitXPMax,
