@@ -16,7 +16,7 @@ local GetXPExhaustion, GetRestState = ns.wow.GetXPExhaustion, ns.wow.GetRestStat
 local UnrestedGradientStart = rgba(88, 0, 145, 0.5)
 local UnrestedGradientEnd = rgba(154, 8, 252, 0.5)
 local RestedGradientStart = rgba(0, 32, 128, 0.5)
-local RestedGradientEnd = rgba(0, 64, 1, 0.5)
+local RestedGradientEnd = rgba(0, 64, 255, 0.5)
 
 local function onLoad(self)
   -- darken top edge of bar
@@ -43,7 +43,7 @@ local function onLoad(self)
 
   -- secondary bar to show rested amount
   self:withTextureArtwork("secondary", {
-    color = {RestedGradientEnd.r, RestedGradientEnd.g, RestedGradientEnd.b, 0.5},
+    color = {0, 64/255, 1, 0.5},
   })
   self.secondary.texture:SetHeight(self.frame:GetHeight())
 
@@ -124,9 +124,6 @@ function ExpBar:update()
     self.secondary.texture:SetWidth(s)
   else
     pcnt = 0
-    s = 0
-  end
-  if (not rested) and self.secondary.texture:GetWidth() > 0 then
     self.secondary.texture:SetWidth(0)
   end
   self.secondary.texture:SetPoint(TopLeft, self.fill.texture:GetWidth(), 0)
