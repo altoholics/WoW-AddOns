@@ -22,7 +22,7 @@ local MainWindow = Class(TitleFrame, function(self)
   self.views.summary = SummaryView:new{
     parent = self,
     position = {
-      topLeft = {3, -27},
+      topLeft = {3, -30},
     },
   }
   self.views.summary:hide()

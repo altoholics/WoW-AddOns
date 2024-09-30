@@ -16,12 +16,14 @@ local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 
 local TableRow = Class(BgFrame, function(self)
   self:topLeft(0, self.index * -self.frame:GetHeight() - self.insetTop)
-  self:withLabel({
-    text = self.label,
-    position = {left = {2, 0}},
-    template = self.font,
-    color = self.color or {1, 1, 1, 1},
-  })
+  if self.label then
+    self:withLabel({
+      text = self.label,
+      position = {left = {2, 0}},
+      template = self.font,
+      color = self.color or {1, 1, 1, 1},
+    })
+  end
 end, {
   level = 2,
 })
@@ -48,10 +50,10 @@ local TableFrame = Class(Frame, function(self)
   self.numRows = self.numRows or (self.rowNames and #self.rowNames) or 0
 
   self.headerHeight = self.headerHeight or self.cellHeight
-  local offsetX = self.rowNames ~= nil and self.cellWidth or 0
-  local offsetY = self.colNames ~= nil and self.headerHeight or 0
-  local colHeight = self.cellHeight * (self.numRows) + self.headerHeight
-  local rowWidth = self.cellWidth * (self.numCols + 1)
+  self.offsetX = self.rowNames ~= nil and self.cellWidth or 0
+  self.offsetY = self.colNames ~= nil and self.headerHeight or 0
+  self.colHeight = self.cellHeight * (self.numRows) + self.headerHeight
+  self.rowWidth = self.cellWidth * (self.numCols + 1)
 
   if not self.colNames and self.colInfo then
     self.colNames = {}
@@ -63,15 +65,18 @@ local TableFrame = Class(Frame, function(self)
 
   if self.colNames then
     local left = 0
+    self.rowWidth = 0
     for i=1,#self.colNames do
+      local w = self.colInfo and self.colInfo[i].width or self.cellWidth
+      self.rowWidth = self.rowWidth + w
       tinsert(self.cols, TableCol:new{
         parent = self,
         label = self.colNames[i],
         headerHeight = self.headerHeight,
         position = {
-          topLeft = {left + offsetX, 0},
-          width = self.colInfo and self.colInfo[i].width or self.cellWidth,
-          height = colHeight,
+          topLeft = {left + self.offsetX, 0},
+          width = w,
+          height = self.colHeight,
         },
         font = self.colHeaderFont or self.headerFont,
         backdrop = self.colInfo and self.colInfo[i].backdrop or
@@ -87,9 +92,9 @@ local TableFrame = Class(Frame, function(self)
         parent = self,
         index = #self.rows,
         label = self.rowNames[i],
-        insetTop = offsetY,
+        insetTop = self.offsetY,
         position = {
-          width = rowWidth,
+          width = self.rowWidth,
           height = self.cellHeight,
         },
         font = self.rowHeaderFont or self.headerFont,
@@ -119,13 +124,29 @@ function TableFrame:set(row, col, element)
   self.cells[row][col] = element
 end
 
+function TableFrame:ensureRow(rowN)
+  if not self.cells[rowN] then tinsert(self.cells, rowN, {}) end
+  if not self.rows[rowN] then
+    tinsert(self.rows, rowN, TableRow:new{
+      parent = self,
+      index = rowN,
+      insetTop = self.offsetY,
+      position = {
+        width = self.rowWidth,
+        height = self.cellHeight,
+      },
+      backdrop = {color = {0, 0, 0, math.fmod(rowN, 2) == 0 and 0.1 or 0}},
+    })
+  end
+end
+
 function TableFrame:update()
   self.colHeight = #self.data * self.cellHeight + self.headerHeight
   for _,c in ipairs(self.cols) do
     c:height(self.colHeight)
   end
   for rowN,row in pairs(self.data) do
-    if not self.cells[rowN] then tinsert(self.cells, rowN, {}) end -- make sure row exists
+    self:ensureRow(rowN) -- make sure row exists
     for colN,data in pairs(row) do
       if data and not self.cells[rowN][colN] then
         local cell = Frame:new{

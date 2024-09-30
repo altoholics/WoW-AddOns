@@ -76,16 +76,18 @@ function ns.wow.GreatVault.getRewardOptions()
       local link = ns.wow.GetExampleRewardItemHyperlinks(activity.id)
       if link then
         local ilvl = ns.wow.GetDetailedItemLevelInfo(link)
-        if not counts[ilvl] then
-          counts[ilvl] = 1
-        else
-          counts[ilvl] = counts[ilvl] + 1
-        end
-        if ilvl > best then
-          best = ilvl
-          bestN = 1
-        elseif ilvl == best then
-          bestN = bestN + 1
+        if ilvl then
+          if not counts[ilvl] then
+            counts[ilvl] = 1
+          else
+            counts[ilvl] = counts[ilvl] + 1
+          end
+          if ilvl > best then
+            best = ilvl
+            bestN = 1
+          elseif ilvl == best then
+            bestN = bestN + 1
+          end
         end
       end
     end
