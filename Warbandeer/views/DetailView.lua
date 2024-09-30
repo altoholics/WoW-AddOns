@@ -3,6 +3,7 @@ local ui = ns.ui
 local Class, Frame = ns.lua.Class, ui.Frame
 
 local DetailView = Class(Frame, function(self)
+  self:hide()
   local data = ns.api:GetCharacterData()
   self:withLabel("r", {
     text = data.level.." "..data.race.." "..data.className.." on "..data.realm,

@@ -30,3 +30,5 @@ ui.Texture = Texture
 function Texture:setTexture(texture)
   self.texture:SetTexture(texture)
 end
+
+function Texture:Color(r, g, b, a) self.texture:SetColorTexture(r, g, b, a) end

@@ -12,16 +12,19 @@ globals.lua
 
 constants.lua
 
+# core wrappers
 Texture.lua
-
 Label.lua
 Frame.lua
 BgFrame.lua
 Dialog.lua
 StatusBar.lua
 PortraitFrame.lua
-TableFrame.lua
 
+# "Clean UI" classes
+CleanFrame.lua
+TableFrame.lua
 TitleFrame.lua
+Tooltip.lua
 
 FrameColor.lua

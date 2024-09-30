@@ -1,28 +1,11 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame = ns.lua.Class, ui.Frame
-local TopLeft, TopRight, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomRight
+local Class, Frame, CleanFrame = ns.lua.Class, ui.Frame, ui.CleanFrame
+local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local Left, Right, Center = ui.edge.Left, ui.edge.Right, ui.edge.Center
 
-local TitleFrame = Class(Frame, function(o)
-  o.border = Frame:new{
-    parent = o,
-    name = "$parentBorder",
-    template = "BackdropTemplate",
-    position = {
-      topLeft = {o.frame, TopLeft, -3, 3},
-      bottomRight = {o.frame, BottomRight, 3, -3},
-    },
-  }
-  -- from BackdropTemplate
-  o.border.frame:SetBackdrop({
-    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-    edgeSize = 16,
-    insets = {left = 4, right = 4, top = 4, bottom = 4},
-  })
-  o.border.frame:SetBackdropBorderColor(0, 0, 0, .5)
-
+local TitleFrame = Class(CleanFrame, function(o)
   -- title bar
   o.titlebar = Frame:new{
     parent = o,
@@ -35,15 +18,6 @@ local TitleFrame = Class(Frame, function(o)
     dragTarget = o.frame,
     background = {0, 0, 0, 0.5},
   }
-  o.titlebar:withTextureArtwork({
-    name = "icon",
-    textureName = "$parentIcon",
-    texturePath = "Interface/Icons/inv_10_tailoring2_banner_green.blp",
-    clamp = {
-      {Left, o.titlebar.frame, Left, 6, 0},
-    },
-  })
-  o.titlebar.icon.texture:SetSize(20, 20)
   o.titlebar:withLabel("title", {
     name = "$parentText",
     layer = "OVERLAY",
@@ -54,6 +28,22 @@ local TitleFrame = Class(Frame, function(o)
     text = o.title,
     justifyH = Left,
     justifyV = "MIDDLE",
+  })
+
+  -- icon
+  o.titlebar.icon = Frame:new{
+    parent = o.titlebar,
+    position = {
+      left = {6, 0},
+      size = {20, 20},
+    },
+  }
+  o.titlebar.icon:withTextureArtwork({
+    name = "icon",
+    textureName = "$parentIcon",
+    texturePath = "Interface/Icons/inv_10_tailoring2_banner_green.blp",
+    coords = {0.1, 0.9, 0.1, 0.9},
+    positionAll = true,
   })
 
   -- close button
@@ -88,10 +78,6 @@ local TitleFrame = Class(Frame, function(o)
   o.closeButton.icon.texture:SetVertexColor(0.7, 0.7, 0.7, 1)
 
 end, {
-  parent = ns.wowui.UIParent,
-  clamped = true,
-  strata = "MEDIUM",
-  background = {0.11372549019, 0.14117647058, 0.16470588235, 1},
   drag = true,
 })
 ui.TitleFrame = TitleFrame

@@ -10,6 +10,7 @@ local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 local rgba = ns.wowui.rgba
 
 local RaceGridView = Class(Frame, function(o)
+  o:hide()
   o.allianceView = AllianceView:new{parent = o}
   o.hordeView = HordeView:new{parent = o}
   o.hordeView:hide()
