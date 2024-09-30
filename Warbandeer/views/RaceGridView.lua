@@ -15,17 +15,17 @@ local RaceGridView = Class(Frame, function(o)
   o.hordeView:hide()
 
   o.factionIcon = FactionIcon:new{
-    parent = o.frame,
+    parent = o,
     position = {
       topLeft = {53, -4},
       width = 32,
       height = 32,
     },
   }
-  o.factionIcon.frame:SetScript("OnMouseUp", o.swap)
+  o.factionIcon.frame:SetScript("OnMouseUp", function() o:swap() end)
 
   local status = Frame:new{
-    parent = o.frame,
+    parent = o,
     position = {
       topLeft = {o.frame, BottomLeft, 0, 12},
       bottomRight = {},

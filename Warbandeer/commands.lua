@@ -10,10 +10,10 @@ function ns:SlashCmd(_, msg) -- cmd, msg
     self:view("raceGrid")
   elseif "alliance" == cmd then
     self:view("raceGrid")
-    self.views.raceGrid:showAlliance()
+    self.MainWindow.views.raceGrid:showAlliance()
   elseif "horde" == cmd then
     self:view("raceGrid")
-    self.views.raceGrid:showHorde()
+    self.MainWindow.views.raceGrid:showHorde()
   elseif "detail" == cmd then
     self:view("detail")
   end
