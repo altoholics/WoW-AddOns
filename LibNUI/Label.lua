@@ -62,3 +62,7 @@ function Label:Text(text)
   self.label:SetText(text)
   return self
 end
+
+function Label:Color(r, g, b, a)
+  self.label:SetTextColor(r, g, b, a)
+end

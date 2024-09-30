@@ -161,9 +161,9 @@ function TableFrame:update()
         local t = data
         if type(data) == "table" then
           t = data.text
-          if data.onClick then cell.frame:SetScript("OnMouseUp", data.onClick) end
-          if data.onEnter then cell.frame:SetScript("OnEnter", data.onEnter) end
-          if data.onLeave then cell.frame:SetScript("OnLeave", data.onLeave) end
+          if data.onClick then cell.frame:SetScript("OnMouseUp", function() data.onClick(cell) end) end
+          if data.onEnter then cell.frame:SetScript("OnEnter", function() data.onEnter(cell) end) end
+          if data.onLeave then cell.frame:SetScript("OnLeave", function() data.onLeave(cell) end) end
         end
         cell:withLabel({
           text = t,

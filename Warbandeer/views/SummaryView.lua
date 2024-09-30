@@ -13,27 +13,32 @@ local function formatBestVaultRewardOption(o)
   else
     t = o.best
   end
-  local r = {
+  return {
     text = t,
     onClick = function()
       if not ns.wow.IsAddOnLoaded("Blizzard_WeeklyRewards") then ns.wow.LoadAddOn("Blizzard_WeeklyRewards") end
       WeeklyRewardsFrame:Show()
     end,
-  }
-  if #o.counts > 1 then
-    r.onEnter = function(self)
-      GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-      GameTooltip:ClearLines()
-      local lines = {}
-      for i,n in pairs(o.counts) do
-        tinsert(lines, 1, i.." x"..n)
+    onEnter = function(self)
+      self.label:Color(1, 1, 1, 0.8)
+      if #o.counts > 1 then
+        GameTooltip:SetOwner(self.frame, "ANCHOR_RIGHT")
+        GameTooltip:ClearLines()
+        local lines = {}
+        for i,n in pairs(o.counts) do
+          tinsert(lines, 1, i.." x"..n)
+        end
+        for _,l in ipairs(lines) do GameTooltip:AddLine(l, 1, 1, 1) end
+        GameTooltip:Show()
       end
-      for _,l in ipairs(lines) do GameTooltip:AddLine(l, 1, 1, 1) end
-      GameTooltip:Show()
-    end
-    r.onLeave = function() GameTooltip:Hide() end
-  end
-  return r
+    end,
+    onLeave = function(self)
+      self.label:Color(1, 1, 1, 1)
+      if #o.counts > 1 then
+        GameTooltip:Hide()
+      end
+    end,
+  }
 end
 
 local SummaryView = Class(TableFrame, function(self)
