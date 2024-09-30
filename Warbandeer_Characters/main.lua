@@ -51,6 +51,14 @@ function ns:onLogin()
   c.ilvl = math.floor(ilvl)
   c.realm = ns.wow.RealmName
 
+  local rewards, counts, best, bestN = ns.wow.GreatVault.getRewardOptions()
+  c.greatVault = {
+    rewards = rewards,
+    counts = counts,
+    best = best,
+    bestN = bestN,
+  }
+
   local prof1, prof2, _, fishingIdx, cookingIdx = GetProfessions() -- arch
   c.prof1 = prof1 and getProfessionInfo(prof1)
   c.prof2 = prof2 and getProfessionInfo(prof2)

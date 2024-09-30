@@ -3,6 +3,7 @@ local _, ns = ...
 -- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetProfessions GetProfessionInfo GetRealmName
 -- luacheck: globals GetServerTime C_DateAndTime UnitClassBase UnitLevel UnitName UnitRace C_AddOns UnitXP UnitXPMax
 -- luacheck: globals GetXPExhaustion GetRestState UnitExists UnitAffectingCombat GetFactionInfoByID C_MajorFactions
+-- luacheck: globals C_WeeklyRewards C_Item LoadAddOn
 
 ns.wow = {
   SlashCmdList = SlashCmdList,
@@ -20,6 +21,9 @@ ns.wow = {
   -- Expansions
   maxLevel = GetMaxLevelForPlayerExpansion(),
 
+  -- Items
+  GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo,
+
   -- Professions
   GetProfessions = GetProfessions,
   GetProfessionInfo = GetProfessionInfo,
@@ -33,12 +37,17 @@ ns.wow = {
   -- GetServerTime() + C_DateAndTime.GetSecondsUntilWeeklyReset() - 604800
   -- if last recorded time <= GetServerTime(), do weekly reset
 
+  -- Weekly Rewards
+  GetActivities = C_WeeklyRewards.GetActivities,
+  GetExampleRewardItemHyperlinks = C_WeeklyRewards.GetExampleRewardItemHyperlinks,
+
   -- Units
   UnitClassBase = UnitClassBase,
   UnitLevel = UnitLevel,
   UnitName = UnitName,
   UnitRace = UnitRace,
 
+  LoadAddOn = LoadAddOn,
   IsAddOnLoaded = C_AddOns.IsAddOnLoaded,
   UnitXP = UnitXP,
   UnitXPMax = UnitXPMax,
@@ -51,8 +60,38 @@ ns.wow = {
 }
 
 ns.wow.Player = {}
+function ns.wow.Player.name() return UnitName("player") end
+function ns.wow.Player.level() return UnitLevel("player") end
 
--- C_WeeklyRewards.GetActivities()
+ns.wow.GreatVault = {}
+function ns.wow.GreatVault.getRewardOptions()
+  local rewards = {}
+  local counts = {}
+  local best = 0
+  local bestN = 0
+  -- https://wowpedia.fandom.com/wiki/API_C_WeeklyRewards.GetActivities
+  local activities = ns.wow.GetActivities()
+  for _,activity in ipairs(activities) do
+    if activity.progress >= activity.threshold then
+      local link = ns.wow.GetExampleRewardItemHyperlinks(activity.id)
+      if link then
+        local ilvl = ns.wow.GetDetailedItemLevelInfo(link)
+        if not counts[ilvl] then
+          counts[ilvl] = 1
+        else
+          counts[ilvl] = counts[ilvl] + 1
+        end
+        if ilvl > best then
+          best = ilvl
+          bestN = 1
+        elseif ilvl == best then
+          bestN = bestN + 1
+        end
+      end
+    end
+  end
+  return rewards, counts, best, bestN
+end
 
 -- type 1 dungeon
 -- type 3 raid

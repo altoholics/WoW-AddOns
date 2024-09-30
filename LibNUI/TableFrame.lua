@@ -126,7 +126,7 @@ function TableFrame:update()
   for rowN,row in pairs(self.data) do
     if not self.cells[rowN] then tinsert(self.cells, rowN, {}) end -- make sure row exists
     for colN,data in pairs(row) do
-      if not self.cells[rowN][colN] then
+      if data and not self.cells[rowN][colN] then
         local cell = Frame:new{
           parent = self,
           level = 3,
@@ -136,8 +136,15 @@ function TableFrame:update()
             height = self.cellHeight,
           },
         }
+        local t = data
+        if type(data) == "table" then
+          t = data.text
+          if data.onClick then cell:SetScript("OnMouseUp", data.onClick) end
+          if data.onEnter then cell:SetScript("OnEnter", data.onEnter) end
+          if data.onLeave then cell:SetScript("OnLeave", data.onLeave) end
+        end
         cell:withLabel({
-          text = data,
+          text = t,
           position = { fill = true },
           justifyH = Left,
         })
