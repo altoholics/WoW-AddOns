@@ -85,8 +85,10 @@ local AllianceView = Class(TableFrame, function(o)
     end)
   end
 end, {
+  _title = "Alliance",
   cellWidth = cellWidth,
   cellHeight = cellHeight,
+  headerWidth = cellWidth,
   headerHeight = HeaderHeight,
   colNames = ALLIANCE_RACES,
   rowNames = CLASS_NAMES,

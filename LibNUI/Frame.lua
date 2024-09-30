@@ -80,8 +80,10 @@ function Frame:OnEvent(event, ...)
 end
 
 function Frame:center() self.frame:SetPoint(ui.edge.Center); return self end
+function Frame:top(...) self.frame:SetPoint(ui.edge.Top, ...); return self end
 function Frame:topLeft(...) self.frame:SetPoint(ui.edge.TopLeft, ...); return self end
 function Frame:topRight(...) self.frame:SetPoint(ui.edge.TopRight, ...); return self end
+function Frame:bottom(...) self.frame:SetPoint(ui.edge.Bottom, ...); return self end
 function Frame:bottomLeft(...) self.frame:SetPoint(ui.edge.BottomLeft, ...); return self end
 function Frame:bottomRight(...) self.frame:SetPoint(ui.edge.BottomRight, ...); return self end
 function Frame:left(...) self.frame:SetPoint(ui.edge.Left, ...); return self end

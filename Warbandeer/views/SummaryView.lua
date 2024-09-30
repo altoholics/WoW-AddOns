@@ -60,10 +60,6 @@ local SummaryView = Class(TableFrame, function(self)
     })
   end
 
-  local w = 6 -- inset of 3 per side
-  for _,c in ipairs(self.colInfo) do w = w + c.width end
-  self:width(w)
-  self:height(#self.data * self.cellHeight + self.headerHeight + 4)
   self:update()
 end, {
   colInfo = {

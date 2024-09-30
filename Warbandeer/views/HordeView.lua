@@ -77,8 +77,10 @@ local HordeView = Class(TableFrame, function(o)
     end)
   end
 end, {
+  _title = "Horde",
   cellWidth = cellWidth,
   cellHeight = cellHeight,
+  headerWidth = cellWidth,
   headerHeight = HeaderHeight,
   colNames = HORDE_RACES,
   rowNames = CLASS_NAMES,
