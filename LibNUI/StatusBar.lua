@@ -12,7 +12,7 @@ local StatusBar = Class(Frame, function(o)
   local fill = o.fill
   o:withTextureArtwork("fill", {color = fill.color})
   if fill.gradient then
-    o.fill.texture:SetGradient(unpack(fill.gradient))
+    o.fill.texture:SetGradient(ns.lua.unpack(fill.gradient))
   end
   if fill.blend then o.fill.texture:SetBlendMode("ADD") end
 end, {

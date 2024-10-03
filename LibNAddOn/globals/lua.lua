@@ -1,5 +1,5 @@
 local _, ns = ...
--- luacheck: globals unpack table CopyTable Mixin
+-- luacheck: globals unpack table CopyTable Mixin floor
 
 local table = table
 local Mixin, setmetatable = Mixin, setmetatable
@@ -93,6 +93,7 @@ ns.lua = {
   table = table,
   tinsert = table.insert,
   tremove = table.remove,
+  floor = floor,
 
   -- WoW lua extensions
   CopyTable = CopyTable,

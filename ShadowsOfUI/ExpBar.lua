@@ -1,14 +1,10 @@
 local _, ns = ...
 
 local ui = ns.ui
-local min = ns.lua.min
 local StatusBar = ui.StatusBar
-local TopLeft, TopRight, BottomLeft, BottomRight = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.BottomRight
-
+local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
+local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 local rgba = ns.wowui.rgba
-local GetXPExhaustion, GetRestState = ns.wow.GetXPExhaustion, ns.wow.GetRestState
-
--- default xp bar: https://github.com/Gethe/wow-ui-source/blob/c0f3b4f1794953ba72fa3bc5cd25a6f2cdd696a1/Interface/AddOns/Blizzard_ActionBar/Mainline/ExpBar.lua
 
 -- https://github.com/teelolws/EditModeExpanded
 
@@ -46,6 +42,7 @@ local function onLoad(self)
     color = {0, 64/255, 1, 0.5},
   })
   self.secondary.texture:SetHeight(self.frame:GetHeight())
+  self.secondary.texture:SetGradient("HORIZONTAL", RestedGradientStart, RestedGradientEnd)
 
   -- percent text
   self.textPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
@@ -70,7 +67,9 @@ local ExpBar = StatusBar:new{
     bottomLeft = {},
     bottomRight = {}
   },
-  events = {"PLAYER_ENTERING_WORLD", "PLAYER_XP_UPDATE", "PLAYER_LEVEL_UP", "UPDATE_EXHAUSTION", "PLAYER_UPDATE_RESTING"},
+  events = {
+    "PLAYER_ENTERING_WORLD", "PLAYER_XP_UPDATE", "PLAYER_LEVEL_UP", "UPDATE_EXHAUSTION", "PLAYER_UPDATE_RESTING"
+  },
   backdrop = {0, 0, 0, 0.3},
   fill = {
     color = {1, 1, 1},
@@ -105,30 +104,16 @@ function ExpBar:onLeave()
 end
 
 function ExpBar:update()
-  local xp, max = ns.GetPlayerLevelXP()
-  local w = self.frame:GetWidth()
-  local pcnt = (xp / max)
-  local s = w * pcnt
-  self.fill.texture:SetWidth(s)
-  self.textPercent:SetPoint(TopRight, self.frame, TopLeft, s - 3, -1)
-  self.textPercent:SetText(floor(pcnt * 100).."%")
+  local xp = ns.wow.Player.getXPPercent()
+  self.fill.texture:SetWidth(xp)
+  self.textPercent:SetPoint(TopRight, self.frame, TopLeft, xp - 3, -1)
+  self.textPercent:SetText(ns.lua.floor(xp * 100).."%")
 
-  local exhaustionThreshold = GetXPExhaustion()
-	local exhaustionStateID = GetRestState()
-  local rested = 1 == exhaustionStateID
-  local bonus = ""
-  if rested and exhaustionThreshold > xp then
-    bonus = exhaustionThreshold > max and "+" or ""
-    pcnt = (min(exhaustionThreshold, max) - xp) / max
-    s = w * pcnt
-    self.secondary.texture:SetWidth(s)
-  else
-    pcnt = 0
-    self.secondary.texture:SetWidth(0)
-  end
+  local rest = ns.wow.Player.getRestPercent()
+  self.secondary.texture:SetWidth(rest)
   self.secondary.texture:SetPoint(TopLeft, self.fill.texture:GetWidth(), 0)
   self.restPercent:SetPoint(TopLeft, self.frame, TopLeft, self.fill.texture:GetWidth() + 3, -1)
-  self.restPercent:SetText(floor(pcnt * 100)..bonus.."%")
+  self.restPercent:SetText(ns.lua.floor(rest * 100).."%")
 end
 
 function ExpBar:initNotches()
@@ -153,8 +138,7 @@ function ExpBar:PLAYER_ENTERING_WORLD(login, reload)
     ns.wowui.StatusTrackingBarManager:Hide()
   end
   -- if player at max level, hide bar
-  local level = ns.wow.UnitLevel("player")
-  if level == ns.wow.maxLevel then
+  if ns.wow.Player.isMaxLevel() then
     self:hide()
     return
   end

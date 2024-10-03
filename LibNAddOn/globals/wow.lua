@@ -60,8 +60,19 @@ ns.wow = {
 }
 
 ns.wow.Player = {}
-function ns.wow.Player.name() return UnitName("player") end
-function ns.wow.Player.level() return UnitLevel("player") end
+function ns.wow.Player.name() return ns.wow.UnitName("player") end
+function ns.wow.Player.level() return ns.wow.UnitLevel("player") end
+function ns.wow.Player.isMaxLevel() return ns.wow.UnitLevel("player") == ns.wow.maxLevel end
+function ns.wow.Player.xp() return ns.wow.UnitXP("player") end
+function ns.wow.Player.xpMax() return ns.wow.UnitXPMax("player") end
+function ns.wow.Player.getXPPercent() return ns.wow.Player.xp() / ns.wow.Player.xpMax() end
+function ns.wow.Player.isRested() return 1 == ns.wow.GetRestState() end
+function ns.wow.Player.getXPExhaustion() return ns.wow.GetXPExhaustion() end
+function ns.wow.Player.getRestPercent()
+  if not ns.wow.Player.isRested() then return 0 end
+  local max = ns.wow.Player.xpMax()
+  return ns.lua.min(ns.wow.Player.getXPExhaustion(), max) - ns.wow.Player.xp() / max
+end
 
 ns.wow.GreatVault = {}
 function ns.wow.GreatVault.getRewardOptions()
@@ -94,26 +105,3 @@ function ns.wow.GreatVault.getRewardOptions()
   end
   return rewards, counts, best, bestN
 end
-
--- type 1 dungeon
--- type 3 raid
--- type 6 delves / world events
-
--- activityTierID 9 is Tier 1 world event
-
--- C_WeeklyRewards.GetActivityEncounterInfo(3,1) -- raid box 1
--- -> { {uiOrder, bestDifficulty, instanceID, encounterID}, ... }
--- uiOrder 1-8 (seems to be in reverse order of this)
--- bestDifficulty 17 is LFR (for 584 gear) - 3 with best difficulty > 0 means 3 bosses down
--- EJ_GetInstanceInfo(instanceID) e.g. 1273
--- -> name, desc, bgImageID, btnImageID, loreImgID, btnImg2ID, dungeonMapID, journalLink, shouldDisplayDifficulty, mapID, bool
--- https://wowpedia.fandom.com/wiki/API_EJ_GetInstanceInfo
--- https://wowpedia.fandom.com/wiki/API_EJ_GetEncounterInfo
--- EJ_GetEncounterInfo(encounterID) e.g. 2607
--- -> name, description, journalEncounterID, rootSectionID, link, journalInstanceID, dungeonEncounterID, instanceID
-
--- LoadAddOn("Blizzard_WeeklyRewards"); WeeklyRewardsFrame:Show()
-
--- https://github.com/Gethe/wow-ui-source/blob/2e827a602452a4d90608d3aba54f2e037a00e36a/Interface/AddOns/Blizzard_WeeklyRewards/Blizzard_WeeklyRewards.lua
-
--- ilvl = C_Item.GetDetailedItemLevelInfo(C_WeeklyRewards.GetExampleRewardItemHyperlinks(activity.id))
