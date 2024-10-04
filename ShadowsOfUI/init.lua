@@ -39,4 +39,14 @@ function ns:settingChanged(var, name) --, setting
   ns.Print("setting changed", var, name)
 end
 
+function ns:onLoad()
+  local maxLvl = self.wow.Player.isMaxLevel()
+  if self.db.settings.xpBar and not maxLvl then
+    self.xpBar = ns.ExpBar:new{}
+  end
+  if self.db.settings.repBars and maxLvl then
+    self.repBars = ns.RepBarContainer:new{}
+  end
+end
+
 ns.ui = LibNUI

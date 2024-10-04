@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local ui = ns.ui
+local ui, Class = ns.ui, ns.lua.Class
 local Frame, StatusBar = ui.Frame, ui.StatusBar
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
@@ -27,85 +27,81 @@ local HallowfallEnd = rgba(251, 216, 178)
 local SeveredThreadsStart = rgba(169, 71, 59)
 local SeveredThreadsEnd = rgba(244, 124, 102)
 
-local Container = Frame:new{
+local RepBar = Class(StatusBar, function(self)
+end, {
+  level = 1,
+  fill = {
+    color = {1, 1, 1},
+    blend = "ADD",
+  },
+})
+
+local RepBarContainer = Class(Frame, function(self)
+  self.dornogal = RepBar:new{
+    factionId = DornogalID,
+    parent = self.frame,
+    fill = {
+      gradient = {"HORIZONTAL", DornogalStart, DornogalEnd},
+    },
+  }
+  self.ringingDeeps = RepBar:new{
+    factionId = RingingDeepsID,
+    parent = self.frame,
+    fill = {
+      gradient = {"HORIZONTAL", RingingDeepsStart, RingingDeepsEnd},
+    },
+  }
+  self.hallowFall = RepBar:new{
+    factionId = HallowfallID,
+    parent = self.frame,
+    fill = {
+      gradient = {"HORIZONTAL", HallowfallStart, HallowfallEnd},
+    },
+  }
+  self.severedThreads = RepBar:new{
+    factionId = SeveredThreadsID,
+    parent = self.frame,
+    fill = {
+      gradient = {"HORIZONTAL", SeveredThreadsStart, SeveredThreadsEnd},
+    },
+  }
+
+  -- darken top edge of bar
+  self:withTextureOverlay("edge", {
+    color = {1, 1, 1},
+    blendMode = "BLEND",
+    gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
+    clamp = {
+      {TopLeft},
+      {BottomRight, self.frame, TopRight, 0, -3}
+    },
+  })
+
+  -- fade into ui above
+  self:withTextureBackground("fade", {
+    color = {1, 1, 1},
+    blendMode = "BLEND",
+    gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
+    clamp = {
+      {TopLeft, 0, 3},
+      {BottomRight, self.frame, TopRight},
+    },
+  })
+end, {
   parent = ns.wowui.UIParent,
+  strata = "BACKGROUND",
   level = 2,
   position = {
     height = 7,
     bottomLeft = {},
     bottomRight = {}
   },
-  events = {"PLAYER_ENTERING_WORLD"},
   backdrop = {0, 0, 0, 0.3},
-  onLoad = function(self)
-    self:hide()
-    self.frame:SetFrameStrata("BACKGROUND")
-    self.dornogal = StatusBar:new{
-      parent = self.frame,
-      level = 1,
-      position = {topLeft = {}, bottomRight = {}},
-      fill = {
-        color = {1, 1, 1},
-        blend = "ADD",
-        gradient = {"HORIZONTAL", DornogalStart, DornogalEnd},
-      },
-    }
-    self.ringingDeeps = StatusBar:new{
-      parent = self.frame,
-      level = 1,
-      position = {topLeft = {}, bottomRight = {}},
-      fill = {
-        color = {1, 1, 1},
-        blend = "ADD",
-        gradient = {"HORIZONTAL", RingingDeepsStart, RingingDeepsEnd},
-      },
-    }
-    self.hallowFall = StatusBar:new{
-      parent = self.frame,
-      level = 1,
-      position = {topLeft = {}, bottomRight = {}},
-      fill = {
-        color = {1, 1, 1},
-        blend = "ADD",
-        gradient = {"HORIZONTAL", HallowfallStart, HallowfallEnd},
-      },
-    }
-    self.severedThreads = StatusBar:new{
-      parent = self.frame,
-      level = 1,
-      position = {topLeft = {}, bottomRight = {}},
-      fill = {
-        color = {1, 1, 1},
-        blend = "ADD",
-        gradient = {"HORIZONTAL", SeveredThreadsStart, SeveredThreadsEnd},
-      },
-    }
+  events = {"PLAYER_ENTERING_WORLD"},
+})
+ns.RepBarContainer = RepBarContainer
 
-    -- darken top edge of bar
-    self:withTextureOverlay("edge", {
-      color = {1, 1, 1},
-      blendMode = "BLEND",
-      gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
-      clamp = {
-        {TopLeft},
-        {BottomRight, self.frame, TopRight, 0, -3}
-      },
-    })
-
-    -- fade into ui above
-    self:withTextureBackground("fade", {
-      color = {1, 1, 1},
-      blendMode = "BLEND",
-      gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
-      clamp = {
-        {TopLeft, 0, 3},
-        {BottomRight, self.frame, TopRight},
-      },
-    })
-  end
-}
-
-function Container:reposition()
+function RepBarContainer:reposition()
   local quarterWide = self.frame:GetWidth() / 4
   self.dornogal:topLeft()
   self.dornogal:bottomRight(self.frame, BottomLeft, quarterWide, 0)
@@ -124,9 +120,8 @@ end
 
 -- name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep,
 -- isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(2)
-function Container:PLAYER_ENTERING_WORLD(login, reload)
-  if (login or reload) and ns.wow.UnitLevel("player") == ns.wow.maxLevel then
-    self:show()
+function RepBarContainer:PLAYER_ENTERING_WORLD(login, reload)
+  if (login or reload) then
     self:reposition()
     self.dornogal.fill.texture:SetWidth(factionFill(DornogalID) * self.dornogal.frame:GetWidth())
     self.ringingDeeps.fill.texture:SetWidth(factionFill(RingingDeepsID) * self.ringingDeeps.frame:GetWidth())

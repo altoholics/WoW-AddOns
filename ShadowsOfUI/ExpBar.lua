@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local ui = ns.ui
+local ui, Class = ns.ui, ns.lua.Class
 local StatusBar = ui.StatusBar
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
@@ -14,7 +14,7 @@ local UnrestedGradientEnd = rgba(154, 8, 252, 0.5)
 local RestedGradientStart = rgba(0, 32, 128, 0.5)
 local RestedGradientEnd = rgba(0, 64, 255, 0.5)
 
-local function onLoad(self)
+local ExpBar = Class(StatusBar, function(self)
   -- darken top edge of bar
   self:withTextureOverlay("edge", {
     color = {1, 1, 1},
@@ -58,9 +58,7 @@ local function onLoad(self)
   self.frame:SetMouseMotionEnabled(true)
   self.frame:SetScript("OnEnter", function() self:onEnter() end)
   self.frame:SetScript("OnLeave", function() self:onLeave() end)
-end
-
-local ExpBar = StatusBar:new{
+end, {
   parent = ns.wowui.UIParent,
   position = {
     height = 7,
@@ -76,8 +74,8 @@ local ExpBar = StatusBar:new{
     blend = "ADD",
     gradient = {"HORIZONTAL", UnrestedGradientStart, UnrestedGradientEnd},
   },
-  onLoad = onLoad,
-}
+})
+ns.ExpBar = ExpBar
 
 function ExpBar:onUpdate(elapsed)
   if self.fadeTimer > 0 then
