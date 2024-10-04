@@ -30,7 +30,16 @@ LibNAddOn{
           label = "XP Bar enabled",
           tooltip = "Enable the xp bar at the bottom of the screen",
         },
-      }
+        {
+          name = "RepBarEnabled",
+          typ = "checkbox",
+          default = true,
+          table = function(db) return db.settings.repBars end,
+          key = "enabled",
+          label = "Rep bars enabled",
+          tooltip = "Enable the rep bars at the bottmo of the screen",
+        },
+      },
     },
   },
 }
