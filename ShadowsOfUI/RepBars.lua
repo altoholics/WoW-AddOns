@@ -3,7 +3,7 @@ local _, ns = ...
 local ui, Class = ns.ui, ns.lua.Class
 local Frame, StatusBar = ui.Frame, ui.StatusBar
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
-local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
+local BottomRight = ui.edge.BottomRight
 
 local rgba = ns.wowui.rgba
 
@@ -30,16 +30,28 @@ local SeveredThreadsEnd = rgba(244, 124, 102)
 local RepBar = Class(StatusBar, function(self)
 end, {
   level = 1,
+  position = {
+    height = 7,
+  },
   fill = {
     color = {1, 1, 1},
     blend = "ADD",
   },
 })
 
+function RepBar:update()
+  local info = ns.wow.GetMajorFactionRenownInfo(self.factionID)
+  local p = info.renownReputationEarned / info.renownLevelThreshold
+  self.fill.texture:SetWidth(p * self:width())
+end
+
 local RepBarContainer = Class(Frame, function(self)
   self.dornogal = RepBar:new{
     factionId = DornogalID,
     parent = self.frame,
+    position = {
+      topLeft = {},
+    },
     fill = {
       gradient = {"HORIZONTAL", DornogalStart, DornogalEnd},
     },
@@ -47,6 +59,9 @@ local RepBarContainer = Class(Frame, function(self)
   self.ringingDeeps = RepBar:new{
     factionId = RingingDeepsID,
     parent = self.frame,
+    position = {
+      topLeft = {self.dornogal.frame, TopRight},
+    },
     fill = {
       gradient = {"HORIZONTAL", RingingDeepsStart, RingingDeepsEnd},
     },
@@ -54,6 +69,9 @@ local RepBarContainer = Class(Frame, function(self)
   self.hallowFall = RepBar:new{
     factionId = HallowfallID,
     parent = self.frame,
+    position = {
+      topLeft = {self.ringingDeeps.frame, TopRight},
+    },
     fill = {
       gradient = {"HORIZONTAL", HallowfallStart, HallowfallEnd},
     },
@@ -61,6 +79,9 @@ local RepBarContainer = Class(Frame, function(self)
   self.severedThreads = RepBar:new{
     factionId = SeveredThreadsID,
     parent = self.frame,
+    position = {
+      topLeft = {self.hallowFall.frame, TopRight},
+    },
     fill = {
       gradient = {"HORIZONTAL", SeveredThreadsStart, SeveredThreadsEnd},
     },
@@ -103,29 +124,18 @@ ns.RepBarContainer = RepBarContainer
 
 function RepBarContainer:reposition()
   local quarterWide = self.frame:GetWidth() / 4
-  self.dornogal:topLeft()
-  self.dornogal:bottomRight(self.frame, BottomLeft, quarterWide, 0)
-  self.ringingDeeps:topLeft(quarterWide, 0)
-  self.ringingDeeps:bottomRight(self.frame, BottomLeft, quarterWide * 2, 0)
-  self.hallowFall:topLeft(quarterWide * 2, 0)
-  self.hallowFall:bottomRight(self.frame, BottomLeft, quarterWide * 3, 0)
-  self.severedThreads:topLeft(quarterWide * 3, 0)
-  self.severedThreads:bottomRight()
+  self.dornogal:width(quarterWide)
+  self.ringingDeeps:width(quarterWide)
+  self.hallowFall:width(quarterWide)
+  self.severedThreads:width(quarterWide)
 end
 
-local function factionFill(factionID)
-  local info = ns.wow.GetMajorFactionRenownInfo(factionID)
-  return info.renownReputationEarned / info.renownLevelThreshold
-end
-
--- name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep,
--- isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(2)
 function RepBarContainer:PLAYER_ENTERING_WORLD(login, reload)
   if (login or reload) then
     self:reposition()
-    self.dornogal.fill.texture:SetWidth(factionFill(DornogalID) * self.dornogal.frame:GetWidth())
-    self.ringingDeeps.fill.texture:SetWidth(factionFill(RingingDeepsID) * self.ringingDeeps.frame:GetWidth())
-    self.hallowFall.fill.texture:SetWidth(factionFill(HallowfallID) * self.hallowFall.frame:GetWidth())
-    self.severedThreads.fill.texture:SetWidth(factionFill(SeveredThreadsID) * self.severedThreads.frame:GetWidth())
+    self.dornogal.update()
+    self.ringingDeeps.update()
+    self.hallowFall.update()
+    self.severedThreads.update()
   end
 end
