@@ -3,8 +3,8 @@ local ui = ns.ui
 local tinsert = ns.lua.tinsert
 local Class, Frame, BgFrame = ns.lua.Class, ui.Frame, ui.BgFrame
 local Center, Middle, Left = ui.justify.Center, ui.justify.Middle, ui.justify.Left
-local TopLeft, TopRight, BottomLeft, Right = ui.edge.TopLeft, ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.Right
-local Bottom = ui.edge.Bottom
+local TopRight, BottomLeft, Right = ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.Right
+local Top, Bottom = ui.edge.Top, ui.edge.Bottom
 
 -- Creates an empty frame, but lays out its children in a tabular manner.
 -- ops:
@@ -113,6 +113,7 @@ local TableFrame = Class(Frame, function(self)
 
   self:width(width)
   self:height(height)
+  if self.data then self:update() end
 end, {
   cellWidth = 100,
   cellHeight = 20,
@@ -172,34 +173,39 @@ function TableFrame:addRow(info)
   return self
 end
 
+local Cell = Class(Frame, function(self)
+  local t = self.data
+  if type(self.data) == "table" then
+    t = self.data.text
+    if self.data.onClick then self.cell.frame:SetScript("OnMouseUp", function() self.data.onClick(self) end) end
+    if self.data.onEnter then self.cell.frame:SetScript("OnEnter", function() self.data.onEnter(self) end) end
+    if self.data.onLeave then self.cell.frame:SetScript("OnLeave", function() self.data.onLeave(self) end) end
+  end
+  self:withLabel({
+    text = t,
+    position = { fill = true },
+    justifyH = Left,
+  })
+end, {
+  level = 3,
+})
+
 function TableFrame:update()
   for rowN,row in pairs(self.data) do
     if not self.rows[rowN] then self:addRow{} end
     for colN,data in pairs(row) do
       if not self.cols[colN] then self:addCol{} end
       if data and not self.cells[rowN][colN] then
-        local cell = Frame:new{
+        self.cells[rowN][colN] = Cell:new{
           parent = self,
-          level = 3,
           position = {
-            topLeft = {self.cols[colN].frame, TopLeft, 0, (rowN-1) * -self.cellHeight - self.headerHeight},
-            width = self.colInfo[colN].width - 6,
-            height = self.cellHeight,
+            top = {self.rows[rowN].frame, Top},
+            bottom = {self.rows[rowN].frame, Bottom},
+            left = {self.cols[colN].frame, Left},
+            right = {self.cols[colN].frame, Right},
           },
+          data = data,
         }
-        local t = data
-        if type(data) == "table" then
-          t = data.text
-          if data.onClick then cell.frame:SetScript("OnMouseUp", function() data.onClick(cell) end) end
-          if data.onEnter then cell.frame:SetScript("OnEnter", function() data.onEnter(cell) end) end
-          if data.onLeave then cell.frame:SetScript("OnLeave", function() data.onLeave(cell) end) end
-        end
-        cell:withLabel({
-          text = t,
-          position = { fill = true },
-          justifyH = Left,
-        })
-        self.cells[rowN][colN] = cell
       end
     end
   end
