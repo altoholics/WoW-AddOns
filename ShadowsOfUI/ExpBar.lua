@@ -38,11 +38,9 @@ local ExpBar = Class(StatusBar, function(self)
   })
 
   -- secondary bar to show rested amount
-  self:withTextureArtwork("secondary", {
-    color = {0, 64/255, 1, 0.5},
-  })
+  self:withTextureArtwork("secondary", { color = {0, 0.25, 1, 0.5} })
   self.secondary.texture:SetHeight(self.frame:GetHeight())
-  self.secondary.texture:SetGradient("HORIZONTAL", RestedGradientStart, RestedGradientEnd)
+  -- self.secondary.texture:SetGradient("HORIZONTAL", RestedGradientStart, RestedGradientEnd)
 
   -- percent text
   self.textPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
@@ -103,12 +101,13 @@ end
 
 function ExpBar:update()
   local xp = ns.wow.Player.getXPPercent()
-  self.fill.texture:SetWidth(xp)
-  self.textPercent:SetPoint(TopRight, self.frame, TopLeft, xp - 3, -1)
+  local rest = ns.wow.Player.getRestPercent()
+
+  self.fill.texture:SetWidth(self:width() * xp)
+  self.textPercent:SetPoint(TopRight, self.frame, TopLeft, self.fill.texture:GetWidth() - 3, -1)
   self.textPercent:SetText(ns.lua.floor(xp * 100).."%")
 
-  local rest = ns.wow.Player.getRestPercent()
-  self.secondary.texture:SetWidth(rest)
+  self.secondary.texture:SetWidth(self:width() * rest)
   self.secondary.texture:SetPoint(TopLeft, self.fill.texture:GetWidth(), 0)
   self.restPercent:SetPoint(TopLeft, self.frame, TopLeft, self.fill.texture:GetWidth() + 3, -1)
   self.restPercent:SetText(ns.lua.floor(rest * 100).."%")

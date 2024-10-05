@@ -71,7 +71,7 @@ function ns.wow.Player.getXPExhaustion() return ns.wow.GetXPExhaustion() end
 function ns.wow.Player.getRestPercent()
   if not ns.wow.Player.isRested() then return 0 end
   local max = ns.wow.Player.xpMax()
-  return ns.lua.min(ns.wow.Player.getXPExhaustion(), max) - ns.wow.Player.xp() / max
+  return (ns.lua.min(ns.wow.Player.getXPExhaustion(), max) - ns.wow.Player.xp()) / max
 end
 
 ns.wow.GreatVault = {}

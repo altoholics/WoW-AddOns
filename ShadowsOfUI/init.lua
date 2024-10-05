@@ -44,16 +44,23 @@ LibNAddOn{
   },
 }
 
-function ns:settingChanged(var, name) --, setting
-  ns.Print("setting changed", var, name)
+function ns:settingChanged(var, value, name) --, setting
+  if "XpBarEnabled" == name then
+    if value and self.xpBar then
+      self.xpBar:hide()
+    else
+      self.xpBar = self.ExpBar:new{}
+      self.xpBar:PLAYER_ENTERING_WORLD(false, true)
+    end
+  end
 end
 
 function ns:onLoad()
   local maxLvl = self.wow.Player.isMaxLevel()
-  if self.db.settings.xpBar and not maxLvl then
+  if self.db.settings.xpBar.enabled and not maxLvl then
     self.xpBar = ns.ExpBar:new{}
   end
-  if self.db.settings.repBars and maxLvl then
+  if self.db.settings.repBars.enabled and maxLvl then
     self.repBars = ns.RepBarContainer:new{}
   end
 end

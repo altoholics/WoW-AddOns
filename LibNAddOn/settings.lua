@@ -47,7 +47,7 @@ function ns.registerSettings(addOn, addOnName, features)
     local db = addOn.db
     local cb = function(setting, value)
       if addOn.settingChanged then
-        addOn:settingChanged(setting.variableKey, value, setting)
+        addOn:settingChanged(setting.variableKey, value, setting:GetVariable(), setting)
       end
     end
     for _,cat in ipairs(features) do
