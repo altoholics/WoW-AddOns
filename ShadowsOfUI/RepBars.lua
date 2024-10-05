@@ -28,6 +28,16 @@ local SeveredThreadsStart = rgba(169, 71, 59)
 local SeveredThreadsEnd = rgba(244, 124, 102)
 
 local RepBar = Class(StatusBar, function(self)
+  self:withLabel({
+    font = "SystemFont_Tiny2",
+    color = {1, 1, 1, 1},
+    position = {
+      center = {},
+      height = self:height() - 2,
+    },
+  })
+  self.label.label:SetShadowColor(0, 0, 0, 0.8)
+  self.label.label:SetShadowOffset(1, -1)
 end, {
   level = 1,
   position = {
@@ -43,6 +53,7 @@ function RepBar:update()
   local info = ns.wow.GetMajorFactionRenownInfo(self.factionId)
   local p = info.renownReputationEarned / info.renownLevelThreshold
   self.fill.texture:SetWidth(p * self:width())
+  self.label:Text(ns.lua.floor(p * 100) .. "%")
 end
 
 local RepBarContainer = Class(Frame, function(self)
