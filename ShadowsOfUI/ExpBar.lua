@@ -130,15 +130,6 @@ function ExpBar:initNotches()
 end
 
 function ExpBar:PLAYER_ENTERING_WORLD(login, reload)
-  -- hide the default blizzard frame
-  if login or reload then
-    ns.wowui.StatusTrackingBarManager:Hide()
-  end
-  -- if player at max level, hide bar
-  if ns.wow.Player.isMaxLevel() then
-    self:hide()
-    return
-  end
   -- register for other events
   if login or reload then
     self:initNotches()

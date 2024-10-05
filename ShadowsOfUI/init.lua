@@ -7,9 +7,11 @@ LibNAddOn{
   db = {
     name = "ShadowsOfUIDB",
     defaults = {
+      version = 1,
       settings = {
         xpBar = {
           enabled = true,
+          hideDefault = true,
         },
         repBars = {
           enabled = true,
@@ -39,6 +41,15 @@ LibNAddOn{
           label = "Rep bars enabled",
           tooltip = "Enable the rep bars at the bottmo of the screen",
         },
+        {
+          name = "HideDefaultXPBar",
+          typ = "checkbox",
+          default = true,
+          table = function(db) return db.settings.xpBar end,
+          key = "hideDefault",
+          label = "Hide default XP bar",
+          tooltip = "Hide default Blizzard XP bar",
+        },
       },
     },
   },
@@ -53,6 +64,9 @@ function ns:settingChanged(var, value, name) --, setting
       self.xpBar:PLAYER_ENTERING_WORLD(false, true)
     end
   end
+  if "HideDefaultXPBar" == name then
+    ns.wowui.StatusTrackingBarManager:SetShown(not value)
+  end
 end
 
 function ns:onLoad()
@@ -62,6 +76,9 @@ function ns:onLoad()
   end
   if self.db.settings.repBars.enabled and maxLvl then
     self.repBars = ns.RepBarContainer:new{}
+  end
+  if self.db.settings.xpBar.hideDefault then
+    ns.wowui.StatusTrackingBarManager:Hide()
   end
 end
 
