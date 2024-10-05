@@ -40,7 +40,7 @@ end, {
 })
 
 function RepBar:update()
-  local info = ns.wow.GetMajorFactionRenownInfo(self.factionID)
+  local info = ns.wow.GetMajorFactionRenownInfo(self.factionId)
   local p = info.renownReputationEarned / info.renownLevelThreshold
   self.fill.texture:SetWidth(p * self:width())
 end
@@ -133,9 +133,9 @@ end
 function RepBarContainer:PLAYER_ENTERING_WORLD(login, reload)
   if (login or reload) then
     self:reposition()
-    self.dornogal.update()
-    self.ringingDeeps.update()
-    self.hallowFall.update()
-    self.severedThreads.update()
+    self.dornogal:update()
+    self.ringingDeeps:update()
+    self.hallowFall:update()
+    self.severedThreads:update()
   end
 end
