@@ -2,34 +2,12 @@ local _, ns = ...
 local API = ns.api
 
 local tinsert = ns.lua.tinsert
-local UnitName, UnitLevel, UnitClassBase, UnitRace = ns.wow.UnitName, ns.wow.UnitLevel, ns.wow.UnitClassBase, ns.wow.UnitRace
-local GetClassInfo, GetProfessions, GetProfessionInfo = ns.wow.GetClassInfo, ns.wow.GetProfessions, ns.wow.GetProfessionInfo
+local UnitLevel, UnitRace = ns.wow.UnitLevel, ns.wow.UnitRace
 local GetAverageItemLevel = ns.wow.GetAverageItemLevel
 
-local function getProfessionInfo(profID)
-  local name, icon, skillLvl, max, abils, offset, skillID, skillMod, specIdx, specOffset = GetProfessionInfo(profID)
-  return {
-    id = profID,
-    name = name,
-    icon = icon,
-    skillLevel = skillLvl,
-    maxSkill = max,
-    skillID = skillID,
-    skillMod = skillMod,
-    numAbilities = abils,
-    spellOffset = offset,
-    specializationIndex = specIdx,
-    specializationOffset = specOffset,
-  }
-end
-
 function ns:onLogin()
-  local name = UnitName("player")
-  local level = UnitLevel("player")
-  local _, classId = UnitClassBase("player")
+  local name = ns.wow.Player.name()
   local _, raceFile, raceId = UnitRace("player")
-  local _, ilvl = GetAverageItemLevel()
-  local className = GetClassInfo(classId)
   local raceIndex, isAlliance = ns.NormalizeRaceId(raceId)
 
   local data = self.db.characters
@@ -41,45 +19,23 @@ function ns:onLogin()
 
   self.currentPlayer = name
   c.name = name
-  c.classId = classId
-  c.className = className
-  c.level = level
+  c.classId = ns.wow.Player.classId()
+  c.className = ns.wow.Player.className()
+  c.level = ns.wow.Player.level()
   c.race = raceFile
   c.raceId = raceId
   c.raceIdx = raceIndex
   c.isAlliance = isAlliance
-  c.ilvl = math.floor(ilvl)
+  c.ilvl = ns.wow.Player.ilvl()
   c.realm = ns.wow.RealmName
 
-  local rewards, counts, best, bestN = ns.wow.GreatVault.getRewardOptions()
-  c.greatVault = {
-    rewards = rewards,
-    counts = counts,
-    best = best,
-    bestN = bestN,
-  }
+  c.greatVault = ns.wow.Player:GetRewardOptions()
 
-  local prof1, prof2, _, fishingIdx, cookingIdx = GetProfessions() -- arch
-  c.prof1 = prof1 and getProfessionInfo(prof1)
-  c.prof2 = prof2 and getProfessionInfo(prof2)
-  if fishingIdx then
-    local _, _, skill, max, _, _, _, skillMod, _, v = GetProfessionInfo(fishingIdx)
-    c.fishing = c.fishing or {}
-    c.fishing.skillLevel = skill
-    c.fishing.maxSkill = max
-    c.fishing.skillMod = skillMod
-    c.fishing.version = v
-    c.fishing.isKhazAlgar = "Khaz Algar Fishing" == v
-  end
-  if cookingIdx then
-    local _, _, skill, max, _, _, _, skillMod, _, v = GetProfessionInfo(cookingIdx)
-    c.cooking = c.cooking or {}
-    c.cooking.skillLevel = skill
-    c.cooking.maxSkill = max
-    c.cooking.skillMod = skillMod
-    c.cooking.version = v
-    c.cooking.isKhazAlgar = "Khaz Algar Cooking" == v
-  end
+  local professions = ns.wow.Player:GetProfessions()
+  c.prof1 = professions.prof1:GetInfo()
+  c.prof2 = professions.prof2:GetInfo()
+  c.fishing = professions.fishing:GetInfo()
+  c.cooking = professions.cooking:GetInfo()
 end
 
 function ns:PLAYER_LEVEL_UP()
@@ -94,6 +50,16 @@ function ns:PLAYER_EQUIPMENT_CHANGED()
   data.ilvl = math.floor(ilvl)
 end
 ns:registerEvent("PLAYER_EQUIPMENT_CHANGED")
+
+function ns:WEEKLY_REWARDS_UPDATE(...)
+  ns.Print("WEEKLY_REWARDS_UPDATE", ...)
+end
+ns:registerEvent("WEEKLY_REWARDS_UPDATE")
+
+function ns:WEEKLY_REWARDS_ITEM_CHANGED(...)
+  ns.Print("WEEKLY_REWARDS_ITEM_CHANGED", ...)
+end
+ns:registerEvent("WEEKLY_REWARDS_ITEM_CHANGED")
 
 function API:GetCurrentCharacter() return ns.currentPlayer end
 
