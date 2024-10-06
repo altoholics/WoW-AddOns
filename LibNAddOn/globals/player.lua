@@ -10,7 +10,7 @@ local wow = ns.wow
 local Player = {
   GetAverageItemLevel = function() local _, ilvl = wow.GetAverageItemLevel(); math.floor(ilvl) end,
   GetClassId = function() local _, classId = UnitClassBase("player"); return classId end,
-  GetClassName = function(self) return wow.GetClassInfo(self:classId()) end,
+  GetClassName = function(self) return wow.GetClassInfo(self:GetClassId()) end,
   GetLevel = function() return wow.UnitLevel("player") end,
   GetName = function() return wow.UnitName("player") end,
   GetMaxXP = function() return UnitXPMax("player") end,
@@ -22,7 +22,7 @@ local Player = {
 }
 ns.wow.Player = Player
 
-function Player:getRestPercent()
+function Player:GetRestPercent()
   if not self:isRested() then return 0 end
   local max = self:GetMaxXP()
   return (min(self:GetXPExhaustion(), max) - self:GetXP()) / max
