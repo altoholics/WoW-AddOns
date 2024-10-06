@@ -13,6 +13,10 @@ local function formatBestVaultRewardOption(o)
   else
     t = o.best
   end
+  local lines = {}
+  for i,n in pairs(o.counts) do
+    tinsert(lines, i.." x"..n)
+  end
   return {
     text = t,
     onClick = function()
@@ -21,20 +25,16 @@ local function formatBestVaultRewardOption(o)
     end,
     onEnter = function(self)
       self.label:Color(1, 1, 1, 0.8)
-      if #o.counts > 1 then
-        GameTooltip:SetOwner(self.frame, "ANCHOR_RIGHT")
+      if #lines > 1 then
+        GameTooltip:SetOwner(self.frame, "ANCHOR_BOTTOMRIGHT", -10, 10)
         GameTooltip:ClearLines()
-        local lines = {}
-        for i,n in pairs(o.counts) do
-          tinsert(lines, 1, i.." x"..n)
-        end
         for _,l in ipairs(lines) do GameTooltip:AddLine(l, 1, 1, 1) end
         GameTooltip:Show()
       end
     end,
     onLeave = function(self)
       self.label:Color(1, 1, 1, 1)
-      if #o.counts > 1 then
+      if #lines > 1 then
         GameTooltip:Hide()
       end
     end,
