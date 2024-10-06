@@ -45,9 +45,8 @@ end
 ns:registerEvent("PLAYER_LEVEL_UP")
 
 function ns:PLAYER_EQUIPMENT_CHANGED()
-  local _, ilvl = Player:GetAverageItemLevel()
   local data = self.db.characters[self.currentPlayer]
-  data.ilvl = math.floor(ilvl)
+  data.ilvl = Player:GetAverageItemLevel()
 end
 ns:registerEvent("PLAYER_EQUIPMENT_CHANGED")
 
