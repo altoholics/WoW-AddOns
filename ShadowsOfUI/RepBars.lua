@@ -50,7 +50,7 @@ end, {
 })
 
 function RepBar:update()
-  local info = ns.wow.GetMajorFactionRenownInfo(self.factionId)
+  local info = ns.wow.Factions.GetMajorFactionRenownInfo(self.factionId)
   local p = info.renownReputationEarned / info.renownLevelThreshold
   self.fill.texture:SetWidth(p * self:width())
   self.label:Text(ns.lua.floor(p * 100) .. "%")

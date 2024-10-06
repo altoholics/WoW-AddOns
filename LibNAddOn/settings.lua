@@ -1,5 +1,6 @@
 local _, ns = ...
--- luacheck: globals MinimalSliderWithSteppersMixin
+-- luacheck: globals MinimalSliderWithSteppersMixin ShowOptionsCategory
+local ShowOptionsCategory = ShowOptionsCategory
 
 local Settings = ns.wowui.Settings
 
@@ -61,4 +62,7 @@ function ns.registerSettings(addOn, addOnName, features)
       Settings.RegisterAddOnCategory(category)
     end
   end, 2) -- run after db, but before addOn.onLoad
+  function addOn:OpenSettings()
+    ShowOptionsCategory(addOnName)
+  end
 end

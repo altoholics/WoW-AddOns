@@ -1,14 +1,11 @@
 local _, ns = ...
--- luacheck: globals SlashCmdList InterfaceOptionsFrame_OpenToCategory GetAverageItemLevel C_ClassColor GetClassInfo
--- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetProfessions GetProfessionInfo GetRealmName
--- luacheck: globals GetServerTime C_DateAndTime UnitClassBase UnitLevel UnitName UnitRace C_AddOns UnitXP UnitXPMax
--- luacheck: globals GetXPExhaustion GetRestState UnitExists UnitAffectingCombat GetFactionInfoByID C_MajorFactions
+-- luacheck: globals InterfaceOptionsFrame_OpenToCategory GetAverageItemLevel C_ClassColor GetClassInfo
+-- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetRealmName
+-- luacheck: globals GetServerTime C_DateAndTime UnitLevel UnitName UnitRace C_AddOns
+-- luacheck: globals UnitExists UnitAffectingCombat
 -- luacheck: globals C_WeeklyRewards C_Item LoadAddOn
 
 local wow = {
-  SlashCmdList = SlashCmdList,
-  ShowOptionsCategory = InterfaceOptionsFrame_OpenToCategory,
-
   -- WoW API
   -- Bags / Inventory
   GetAverageItemLevel = GetAverageItemLevel,
@@ -23,10 +20,6 @@ local wow = {
 
   -- Items
   GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo,
-
-  -- Professions
-  GetProfessions = GetProfessions,
-  GetProfessionInfo = GetProfessionInfo,
 
   -- Realms
   RealmName = GetRealmName(),
@@ -50,7 +43,5 @@ local wow = {
   IsAddOnLoaded = C_AddOns.IsAddOnLoaded,
   UnitExists = UnitExists,
   UnitAffectingCombat = UnitAffectingCombat,
-  GetFactionInfoByID = GetFactionInfoByID,
-  GetMajorFactionRenownInfo = C_MajorFactions.GetMajorFactionRenownInfo,
 }
 ns.wow = wow
