@@ -32,9 +32,6 @@ local function MergeTable(destination, source)
   return destination
 end
 
--- return a function that transforms a table by selecting the provided key
-local function Select(k) return function(t) return t[k] end end
-
 -- return a new table by transforming each value by the given function
 local function Map(t, f)
   local r = {}
@@ -49,10 +46,6 @@ local function ToMap(t, f)
   local r, x = {}, #t
   for i=1,x do r[t[i]] = f and f(t[i]) or t[i] end
   return r
-end
-
-local function min(a, b)
-  return a < b and a or b
 end
 
 local function Class(parent, fn, defaults)
@@ -101,18 +94,18 @@ ns.lua = {
   -- Interface/AddOns/Blizzard_SharedXMLBase/TableUtil.lua
 
   -- lua extensions
-  min = min, -- todo: move to `math`
+  min = function(a,b) return a < b and a or b end, -- todo: move to `math`
+  max = function(a,b) return a > b and a or b end,
 
   CopyTables = CopyTables,
   Generate = Generate,
   MergeTable = MergeTable,
-  Select = Select,
+
+  -- return a function that transforms a table by selecting the provided key
+  Select = function(k) return function(t) return t[k] end end,
+
   Map = Map,
   ToMap = ToMap,
 
   Class = Class,
 }
-
-function ns.lua.max(a, b)
-  return a > b and a or b
-end

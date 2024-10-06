@@ -1,5 +1,6 @@
 local _, ns = ...
 
+local Player = ns.wow.Player
 local ui, Class = ns.ui, ns.lua.Class
 local StatusBar = ui.StatusBar
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
@@ -100,8 +101,8 @@ function ExpBar:onLeave()
 end
 
 function ExpBar:update()
-  local xp = ns.wow.Player.getXPPercent()
-  local rest = ns.wow.Player.getRestPercent()
+  local xp = Player:GetXPPercent()
+  local rest = Player:GetRestPercent()
 
   self.fill.texture:SetWidth(self:width() * xp)
   self.textPercent:SetPoint(TopRight, self.frame, TopLeft, self.fill.texture:GetWidth() - 3, -1)

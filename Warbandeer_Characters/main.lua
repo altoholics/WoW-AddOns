@@ -2,11 +2,12 @@ local _, ns = ...
 local API = ns.api
 
 local tinsert = ns.lua.tinsert
+local Player = ns.wow.Player
 local UnitLevel, UnitRace = ns.wow.UnitLevel, ns.wow.UnitRace
 local GetAverageItemLevel = ns.wow.GetAverageItemLevel
 
 function ns:onLogin()
-  local name = ns.wow.Player.name()
+  local name = Player:GetName()
   local _, raceFile, raceId = UnitRace("player")
   local raceIndex, isAlliance = ns.NormalizeRaceId(raceId)
 
@@ -19,19 +20,19 @@ function ns:onLogin()
 
   self.currentPlayer = name
   c.name = name
-  c.classId = ns.wow.Player.classId()
-  c.className = ns.wow.Player.className()
-  c.level = ns.wow.Player.level()
+  c.classId = Player:GetClassId()
+  c.className = Player:GetClassName()
+  c.level = Player:GetLevel()
   c.race = raceFile
   c.raceId = raceId
   c.raceIdx = raceIndex
   c.isAlliance = isAlliance
-  c.ilvl = ns.wow.Player.ilvl()
+  c.ilvl = Player.GetAverageItemLevel()
   c.realm = ns.wow.RealmName
 
-  c.greatVault = ns.wow.Player:GetRewardOptions()
+  c.greatVault = Player:GetRewardOptions()
 
-  local professions = ns.wow.Player:GetProfessions()
+  local professions = Player:GetProfessions()
   c.prof1 = professions.prof1:GetInfo()
   c.prof2 = professions.prof2:GetInfo()
   c.fishing = professions.fishing:GetInfo()

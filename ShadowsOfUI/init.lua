@@ -70,7 +70,7 @@ function ns:settingChanged(var, value, name) --, setting
 end
 
 function ns:onLoad()
-  local maxLvl = self.wow.Player.isMaxLevel()
+  local maxLvl = self.wow.Player:isMaxLevel()
   if self.db.settings.xpBar.enabled and not maxLvl then
     self.xpBar = ns.ExpBar:new{}
   end
