@@ -177,9 +177,9 @@ local Cell = Class(Frame, function(self)
   local t = self.data
   if type(self.data) == "table" then
     t = self.data.text
-    if self.data.onClick then self.cell.frame:SetScript("OnMouseUp", function() self.data.onClick(self) end) end
-    if self.data.onEnter then self.cell.frame:SetScript("OnEnter", function() self.data.onEnter(self) end) end
-    if self.data.onLeave then self.cell.frame:SetScript("OnLeave", function() self.data.onLeave(self) end) end
+    if self.data.onClick then self.frame:SetScript("OnMouseUp", function() self.data.onClick(self) end) end
+    if self.data.onEnter then self.frame:SetScript("OnEnter", function() self.data.onEnter(self) end) end
+    if self.data.onLeave then self.frame:SetScript("OnLeave", function() self.data.onLeave(self) end) end
   end
   self:withLabel({
     text = t,
