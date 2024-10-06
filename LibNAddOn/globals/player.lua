@@ -1,14 +1,15 @@
 local _, ns = ...
 -- luacheck: globals UnitXP UnitXPMax GetXPExhaustion GetRestState UnitClassBase GetProfessions GetProfessionInfo
+-- luacheck: globals GetAverageItemLevel
 
 local Mixin, min = ns.lua.Mixin, ns.lua.min
 local UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
-local UnitClassBase = UnitClassBase
+local UnitClassBase, GetAverageItemLevel = UnitClassBase, GetAverageItemLevel
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
 local wow = ns.wow
 
 local Player = {
-  GetAverageItemLevel = function() local _, ilvl = wow.GetAverageItemLevel(); math.floor(ilvl) end,
+  GetAverageItemLevel = function() local _, ilvl = GetAverageItemLevel(); return math.floor(ilvl) end,
   GetClassId = function() local _, classId = UnitClassBase("player"); return classId end,
   GetClassName = function(self) return wow.GetClassInfo(self:GetClassId()) end,
   GetLevel = function() return wow.UnitLevel("player") end,

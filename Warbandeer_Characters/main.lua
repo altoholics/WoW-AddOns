@@ -4,7 +4,6 @@ local API = ns.api
 local tinsert = ns.lua.tinsert
 local Player = ns.wow.Player
 local UnitLevel, UnitRace = ns.wow.UnitLevel, ns.wow.UnitRace
-local GetAverageItemLevel = ns.wow.GetAverageItemLevel
 
 function ns:onLogin()
   local name = Player:GetName()
@@ -27,7 +26,7 @@ function ns:onLogin()
   c.raceId = raceId
   c.raceIdx = raceIndex
   c.isAlliance = isAlliance
-  c.ilvl = Player.GetAverageItemLevel()
+  c.ilvl = Player:GetAverageItemLevel()
   c.realm = ns.wow.RealmName
 
   c.greatVault = Player:GetRewardOptions()
@@ -46,7 +45,7 @@ end
 ns:registerEvent("PLAYER_LEVEL_UP")
 
 function ns:PLAYER_EQUIPMENT_CHANGED()
-  local _, ilvl = GetAverageItemLevel()
+  local _, ilvl = Player:GetAverageItemLevel()
   local data = self.db.characters[self.currentPlayer]
   data.ilvl = math.floor(ilvl)
 end
