@@ -16,6 +16,10 @@ LibNAddOn{
         repBars = {
           enabled = true,
         },
+        blizz = {
+          hideMicroMenu = true,
+          hideBags = true,
+        },
       },
     },
   },
@@ -50,10 +54,40 @@ LibNAddOn{
           label = "Hide default XP bar",
           tooltip = "Hide default Blizzard XP bar",
         },
+        {
+          name = "HideMicroMenu",
+          typ = "checkbox",
+          default = true,
+          table = function(db) return db.settings.blizz end,
+          key = "hideMicroMenu",
+          label = "Hide micro menu buttons",
+          tooltip = "Hide micro menu buttons",
+        },
+        {
+          name = "HideBags",
+          typ = "checkbox",
+          default = true,
+          table = function(db) return db.settings.blizz end,
+          key = "hideBags",
+          label = "Hide bag buttons",
+          tooltip = "Hide bar buttons",
+        },
       },
     },
   },
 }
+
+function ns:MigrateDB()
+  local db = self.db
+  if not db.version then
+    db.settings.xpBar.hideDefault = true
+    db.settings.blizz = {
+      hideMicroMenu = true,
+      hideBags = true,
+    }
+    db.version = 1
+  end
+end
 
 function ns:settingChanged(var, value, name) --, setting
   if "XpBarEnabled" == name then
@@ -67,6 +101,12 @@ function ns:settingChanged(var, value, name) --, setting
   if "HideDefaultXPBar" == name then
     ns.wowui.StatusTrackingBarManager:SetShown(not value)
   end
+  if "HideMicroMenu" == name then
+    ns.wowui.MicroMenuContainer:SetShown(not value)
+  end
+  if "HideBags" == name then
+    ns.wowui.BagsBar:SetShown(not value)
+  end
 end
 
 function ns:onLoad()
@@ -79,6 +119,12 @@ function ns:onLoad()
   end
   if self.db.settings.xpBar.hideDefault then
     ns.wowui.StatusTrackingBarManager:Hide()
+  end
+  if self.db.settings.blizz.hideMicroMenu then
+    ns.wowui.MicroMenuContainer:Hide()
+  end
+  if self.db.settings.blizz.hideBags then
+    ns.wowui.BagsBar:Hide()
   end
 end
 
