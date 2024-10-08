@@ -2,19 +2,21 @@ local _, ns = ...
 local ui = ns.ui
 
 local Class, Frame, TableFrame = ns.lua.Class, ui.Frame, ui.TableFrame
+local HORDE_RACES, CLASSES = ns.HORDE_RACES, ns.CLASSES
 
-local HORDE_RACES, CLASS_NAMES, CLASSES = ns.HORDE_RACES, ns.CLASS_NAMES, ns.CLASSES
+local rowInfo = {}
+for i=1,#CLASSES do
+  rowInfo[i] = {
+    name = CLASSES[i].name,
+    backdrop = {color = {CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2}},
+  }
+end
 
 local cellWidth = 85
 local cellHeight = 24
 local HeaderHeight = cellHeight * 1.5
 
 local HordeView = Class(TableFrame, function(o)
-  -- color the backgrounds of the rows by class color
-  for i=1,ns.wow.NUM_CLASSES do
-    o:row(i):backdropColor(CLASSES[i].color.r, CLASSES[i].color.g, CLASSES[i].color.b, 0.2)
-  end
-
   local toons = ns.api.GetHordeCharacters()
   for _,data in pairs(toons) do
     local row = data.classId
@@ -83,7 +85,7 @@ end, {
   headerWidth = cellWidth,
   headerHeight = HeaderHeight,
   colNames = HORDE_RACES,
-  rowNames = CLASS_NAMES,
+  rowInfo = rowInfo,
   position = {
     topLeft = {},
     bottomRight = {},

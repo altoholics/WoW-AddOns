@@ -46,14 +46,17 @@ end, {
 
 -- making a table: https://www.wowinterface.com/forums/showthread.php?t=58670
 local TableFrame = Class(Frame, function(self)
-  self.numCols = self.numCols or (self.colNames and #self.colNames) or 0
-  self.numRows = self.numRows or (self.rowNames and #self.rowNames) or 0
-
   if not self.colNames and self.colInfo then
     self.colNames = {}
     for _,i in ipairs(self.colInfo) do tinsert(self.colNames, i.name) end
   end
+  if not self.rowNames and self.rowInfo then
+    self.rowNames = {}
+    for _,i in ipairs(self.rowInfo) do tinsert(self.rowNames, i.name) end
+  end
 
+  self.numCols = self.numCols or (self.colNames and #self.colNames) or 0
+  self.numRows = self.numRows or (self.rowNames and #self.rowNames) or 0
   self.headerHeight = self.headerHeight or self.cellHeight
   self.offsetX = self.rowNames ~= nil and self.headerWidth or 0
   self.offsetY = self.colNames ~= nil and self.headerHeight or 0
@@ -174,15 +177,14 @@ function TableFrame:addRow(info)
 end
 
 local Cell = Class(Frame, function(self)
-  local t = self.data
-  if type(self.data) == "table" then
-    t = self.data.text
-    if self.data.onClick then self.frame:SetScript("OnMouseUp", function() self.data.onClick(self) end) end
-    if self.data.onEnter then self.frame:SetScript("OnEnter", function() self.data.onEnter(self) end) end
-    if self.data.onLeave then self.frame:SetScript("OnLeave", function() self.data.onLeave(self) end) end
-  end
+  local data = type(self.data) == "table" and self.data or {text = self.data}
+  if data.onClick then self.frame:SetScript("OnMouseUp", function() data.onClick(self) end) end
+  if data.onEnter then self.frame:SetScript("OnEnter", function() data.onEnter(self) end) end
+  if data.onLeave then self.frame:SetScript("OnLeave", function() data.onLeave(self) end) end
   self:withLabel({
-    text = t,
+    text = data.text,
+    color = data.color,
+    template = data.font,
     position = { fill = true },
     justifyH = Left,
   })
