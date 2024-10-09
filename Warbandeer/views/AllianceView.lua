@@ -31,6 +31,7 @@ local AllianceView = Class(TableFrame, function(self)
     self.data[data.classId][data.raceIdx] = {
       text = data.name,
       font = ui.fonts.GameFontHighlightSmall,
+      justifyH = ui.justify.Center,
       color = data.level ~= ns.wow.maxLevel and {0.7, 0.7, 0.7, 1},
       onEnter = function(cell)
         GameTooltip:SetOwner(cell.frame, "ANCHOR_BOTTOMRIGHT", -10, 10)

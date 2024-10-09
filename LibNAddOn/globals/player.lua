@@ -2,7 +2,7 @@ local _, ns = ...
 -- luacheck: globals UnitXP UnitXPMax GetXPExhaustion GetRestState UnitClassBase GetProfessions GetProfessionInfo
 -- luacheck: globals GetAverageItemLevel
 
-local Mixin, min = ns.lua.Mixin, ns.lua.min
+local Mixin, min, max = ns.lua.Mixin, ns.lua.min, ns.lua.max
 local UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
 local UnitClassBase, GetAverageItemLevel = UnitClassBase, GetAverageItemLevel
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
@@ -25,8 +25,8 @@ ns.wow.Player = Player
 
 function Player:GetRestPercent()
   if not self:isRested() then return 0 end
-  local max = self:GetMaxXP()
-  return (min(self:GetXPExhaustion(), max) - self:GetXP()) / max
+  local maxXP = self:GetMaxXP()
+  return max(0, (min(self:GetXPExhaustion(), maxXP) - self:GetXP()) / maxXP)
 end
 
 local Profession = {}

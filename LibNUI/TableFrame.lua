@@ -186,7 +186,7 @@ local Cell = Class(Frame, function(self)
     color = data.color,
     template = data.font,
     position = { fill = true },
-    justifyH = Left,
+    justifyH = data.justifyH or Left,
   })
 end, {
   level = 3,
