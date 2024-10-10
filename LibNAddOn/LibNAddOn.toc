@@ -8,6 +8,7 @@ globals/lua.lua
 globals/wow.lua
 globals/player.lua
 globals/factions.lua
+globals/items.lua
 globals/ui.lua
 globals.lua
 

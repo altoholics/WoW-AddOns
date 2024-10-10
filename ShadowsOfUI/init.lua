@@ -7,7 +7,7 @@ LibNAddOn{
   db = {
     name = "ShadowsOfUIDB",
     defaults = {
-      version = 2,
+      version = 3,
       settings = {
         xpBar = {
           enabled = true,
@@ -21,6 +21,9 @@ LibNAddOn{
           hideBags = true,
         },
         actionBars = {
+          enabled = false,
+        },
+        hud = {
           enabled = false,
         },
       },
@@ -78,11 +81,20 @@ LibNAddOn{
         {
           name = "ActionBarsEnabled",
           typ = "checkbox",
-          default = true,
+          default = false,
           table = function(db) return db.settings.actionBars end,
           key = "enabled",
           label = "Use replacement action bars",
-          tooltip = "Enable the replacement action bars at",
+          tooltip = "Enable the replacement action bars",
+        },
+        {
+          name = "HUDEnabled",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.hud end,
+          key = "enabled",
+          label = "Use HUD",
+          tooltip = "Enable the HUD",
         },
       },
     },
@@ -105,6 +117,10 @@ function ns:MigrateDB()
     }
     db.version = 2
   end
+  if 2 == db.version then
+    db.settings.hud = { enabled = false }
+    db.version = 3
+  end
 end
 
 function ns:settingChanged(var, value, name) --, setting
@@ -124,6 +140,13 @@ function ns:settingChanged(var, value, name) --, setting
   end
   if "HideBags" == name then
     ns.wowui.BagsBar:SetShown(not value)
+  end
+  if "HUDEnabled" == name then
+    if value and self.hud then
+      self.hud:hide()
+    else
+      self.hud = ns.HUD:new{}
+    end
   end
 end
 
@@ -146,6 +169,9 @@ function ns:onLoad()
   end
   if self.db.settings.actionBars.enabled then
     ns.ActionBars:new{}
+  end
+  if self.db.settings.hud.enabled then
+    ns.HUD:new{}
   end
 end
 

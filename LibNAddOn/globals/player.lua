@@ -1,11 +1,14 @@
 local _, ns = ...
 -- luacheck: globals UnitXP UnitXPMax GetXPExhaustion GetRestState UnitClassBase GetProfessions GetProfessionInfo
--- luacheck: globals GetAverageItemLevel PlayerHasToy UseToy IsSpellKnown C_MountJournal CastSpell
+-- luacheck: globals GetAverageItemLevel PlayerHasToy UseToy IsSpellKnown C_MountJournal CastSpell UnitExists
+-- luacheck: globals UnitHealth UnitHealthMax InCombatLockdown IsResting
 
 local Mixin, min, max = ns.lua.Mixin, ns.lua.min, ns.lua.max
 local UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
 local UnitClassBase, GetAverageItemLevel = UnitClassBase, GetAverageItemLevel
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
+local UnitHealth, UnitHealthMax, UnitExists = UnitHealth, UnitHealthMax, UnitExists
+local InCombatLockdown, IsResting = InCombatLockdown, IsResting
 local wow = ns.wow
 
 local Player = {
@@ -13,6 +16,7 @@ local Player = {
   GetAverageItemLevel = function() local _, ilvl = GetAverageItemLevel(); return math.floor(ilvl) end,
   GetClassId = function() local _, classId = UnitClassBase("player"); return classId end,
   GetClassName = function(self) return wow.GetClassInfo(self:GetClassId()) end,
+  GetHealthValues = function() return UnitHealth("player"), UnitHealthMax("player") end,
   GetLevel = function() return wow.UnitLevel("player") end,
   GetMaxXP = function() return UnitXPMax("player") end,
   GetMountIcon = function(id)
@@ -23,9 +27,12 @@ local Player = {
   GetXP = function() return UnitXP("player") end,
   GetXPExhaustion = function() return GetXPExhaustion() end,
   GetXPPercent = function(self) return self:GetXP() / self:GetMaxXP() end,
+  HasTarget = function() return UnitExists("target") end,
   HasToy = PlayerHasToy,
+  InCombat = InCombatLockdown,
   isMaxLevel = function(self) return self:GetLevel() == wow.maxLevel end,
   isRested = function() return 1 == GetRestState() end,
+  IsResting = IsResting,
   IsMountUsable = function(id)
     local _, _, _, _, usable = C_MountJournal.GetMountInfoByID(id)
     return usable

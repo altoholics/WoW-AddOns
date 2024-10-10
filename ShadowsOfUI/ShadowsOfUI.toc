@@ -10,4 +10,8 @@ init.lua
 
 ExpBar.lua
 RepBars.lua
+
+bars/UtilityBar.lua
 ActionBars.lua
+
+HUD.lua

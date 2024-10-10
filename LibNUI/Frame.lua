@@ -65,9 +65,15 @@ local Frame = Class(nil, function(o)
   if o.dragTarget then o:setDragTarget(o.dragTarget.frame or o.dragTarget) end
 
   if o.events then
-    o.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
+    if not o._listening then o:listenForEvents() end
     for _,e in pairs(o.events) do
       o.frame:RegisterEvent(e)
+    end
+  end
+  if o.unitEvents then
+    if not o._listening then o:listenForEvents() end
+    for e,u in pairs(o.unitEvents) do
+      o.frame:RegisterUnitEvent(e, unpack(u))
     end
   end
 end)
@@ -79,7 +85,7 @@ function Frame:OnEvent(event, ...)
   end
 end
 
-function Frame:center() self.frame:SetPoint(ui.edge.Center); return self end
+function Frame:center(...) self.frame:SetPoint(ui.edge.Center, ...); return self end
 function Frame:top(...) self.frame:SetPoint(ui.edge.Top, ...); return self end
 function Frame:topLeft(...) self.frame:SetPoint(ui.edge.TopLeft, ...); return self end
 function Frame:topRight(...) self.frame:SetPoint(ui.edge.TopRight, ...); return self end
@@ -103,6 +109,7 @@ function Frame:toggle()
   self.frame:SetShown(not self.frame:IsVisible())
 end
 function Frame:listenForEvents()
+  self._listening = true
   local o = self
   self.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
 end
