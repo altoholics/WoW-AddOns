@@ -7,7 +7,7 @@ LibNAddOn{
   db = {
     name = "ShadowsOfUIDB",
     defaults = {
-      version = 1,
+      version = 2,
       settings = {
         xpBar = {
           enabled = true,
@@ -19,6 +19,9 @@ LibNAddOn{
         blizz = {
           hideMicroMenu = true,
           hideBags = true,
+        },
+        actionBars = {
+          enabled = false,
         },
       },
     },
@@ -43,7 +46,7 @@ LibNAddOn{
           table = function(db) return db.settings.repBars end,
           key = "enabled",
           label = "Rep bars enabled",
-          tooltip = "Enable the rep bars at the bottmo of the screen",
+          tooltip = "Enable the rep bars at the bottom of the screen",
         },
         {
           name = "HideDefaultXPBar",
@@ -72,6 +75,15 @@ LibNAddOn{
           label = "Hide bag buttons",
           tooltip = "Hide bar buttons",
         },
+        {
+          name = "ActionBarsEnabled",
+          typ = "checkbox",
+          default = true,
+          table = function(db) return db.settings.actionBars end,
+          key = "enabled",
+          label = "Use replacement action bars",
+          tooltip = "Enable the replacement action bars at",
+        },
       },
     },
   },
@@ -86,6 +98,12 @@ function ns:MigrateDB()
       hideBags = true,
     }
     db.version = 1
+  end
+  if 1 == db.version then
+    db.settings.actionBars = {
+      enabled = false,
+    }
+    db.version = 2
   end
 end
 
@@ -126,6 +144,15 @@ function ns:onLoad()
   if self.db.settings.blizz.hideBags then
     ns.wowui.BagsBar:Hide()
   end
+  if self.db.settings.actionBars.enabled then
+    ns.ActionBars:new{}
+  end
 end
 
 ns.ui = LibNUI
+
+-- Disable the reagent bag tutorial
+-- /run HelpTip:HideAllSystem("TutorialReagentBag")
+-- C_CVar.SetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
+-- C_CVar.SetCVar("professionToolSlotsExampleShown", 1)
+-- C_CVar.SetCVar("professionAccessorySlotsExampleShown", 1)

@@ -14,7 +14,10 @@ local Label = Class(nil, function(o)
   o.label = l
   o.name = nil
   o.layer = nil
+  -- https://www.townlong-yak.com/framexml/live/Blizzard_FontStyles_Shared/SharedFontStyles.xml
+  -- https://www.townlong-yak.com/framexml/live/Blizzard_FontStyles_Frame/FontStyles.xml
   o.font = nil
+  if o.fontObj then l:SetFontObject(o.fontObj) end
   if o.text then
     l:SetText(o.text)
   end

@@ -2,8 +2,8 @@ local _, ns = ...
 -- luacheck: globals InterfaceOptionsFrame_OpenToCategory GetAverageItemLevel C_ClassColor GetClassInfo
 -- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetRealmName
 -- luacheck: globals GetServerTime C_DateAndTime UnitLevel UnitName UnitRace C_AddOns
--- luacheck: globals UnitExists UnitAffectingCombat
--- luacheck: globals C_WeeklyRewards C_Item LoadAddOn
+-- luacheck: globals UnitExists UnitAffectingCombat GetSpellInfo
+-- luacheck: globals C_WeeklyRewards C_Item LoadAddOn C_Spell
 
 local wow = {
   -- WoW API
@@ -23,6 +23,12 @@ local wow = {
 
   -- Realms
   RealmName = GetRealmName(),
+
+  -- Spells
+  GetSpellName = function(id)
+    return C_Spell.GetSpellInfo(id).name
+  end,
+  GetSpellTexture = C_Spell.GetSpellTexture,
 
   -- System / Date & Time
   GetServerTime = GetServerTime,

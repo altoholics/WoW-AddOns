@@ -20,6 +20,8 @@ BgFrame.lua
 Dialog.lua
 StatusBar.lua
 PortraitFrame.lua
+Button.lua
+SecureButton.lua
 
 # "Clean UI" classes
 CleanFrame.lua

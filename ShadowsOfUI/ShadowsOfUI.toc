@@ -7,7 +7,7 @@
 ## SavedVariables: ShadowsOfUIDB
 
 init.lua
-globals.lua
 
 ExpBar.lua
 RepBars.lua
+ActionBars.lua

@@ -1,7 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 
-local CreateFrame, ShowUIPanel, HideUIPanel = ns.wowui.CreateFrame, ns.wowui.ShowUIPanel, ns.wowui.HideUIPanel
+local CreateFrame = ns.wowui.CreateFrame
 local UISpecialFrames = ns.wowui.UISpecialFrames
 local _G, tinsert = _G, table.insert
 

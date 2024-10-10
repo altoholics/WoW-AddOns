@@ -1,6 +1,6 @@
 local _, ns = ...
 -- luacheck: globals UnitXP UnitXPMax GetXPExhaustion GetRestState UnitClassBase GetProfessions GetProfessionInfo
--- luacheck: globals GetAverageItemLevel
+-- luacheck: globals GetAverageItemLevel PlayerHasToy UseToy IsSpellKnown C_MountJournal CastSpell
 
 local Mixin, min, max = ns.lua.Mixin, ns.lua.min, ns.lua.max
 local UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
@@ -9,17 +9,30 @@ local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
 local wow = ns.wow
 
 local Player = {
+  Cast = CastSpell,
   GetAverageItemLevel = function() local _, ilvl = GetAverageItemLevel(); return math.floor(ilvl) end,
   GetClassId = function() local _, classId = UnitClassBase("player"); return classId end,
   GetClassName = function(self) return wow.GetClassInfo(self:GetClassId()) end,
   GetLevel = function() return wow.UnitLevel("player") end,
-  GetName = function() return wow.UnitName("player") end,
   GetMaxXP = function() return UnitXPMax("player") end,
+  GetMountIcon = function(id)
+    local _, _, icon = C_MountJournal.GetMountInfoByID(id)
+    return icon
+  end,
+  GetName = function() return wow.UnitName("player") end,
   GetXP = function() return UnitXP("player") end,
   GetXPExhaustion = function() return GetXPExhaustion() end,
   GetXPPercent = function(self) return self:GetXP() / self:GetMaxXP() end,
+  HasToy = PlayerHasToy,
   isMaxLevel = function(self) return self:GetLevel() == wow.maxLevel end,
   isRested = function() return 1 == GetRestState() end,
+  IsMountUsable = function(id)
+    local _, _, _, _, usable = C_MountJournal.GetMountInfoByID(id)
+    return usable
+  end,
+  IsSpellKnown = IsSpellKnown,
+  Mount = C_MountJournal.SummonByID,
+  UseToy = UseToy,
 }
 ns.wow.Player = Player
 
