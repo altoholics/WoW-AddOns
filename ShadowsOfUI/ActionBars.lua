@@ -1,10 +1,11 @@
 local _, ns = ...
 local ui, Player = ns.ui, ns.wow.Player
-local Class, tinsert = ns.lua.Class, ns.lua.tinsert
+local Class, tinsert, Fill = ns.lua.Class, ns.lua.tinsert, ns.lua.Fill
 local Frame, Button, SecureButton = ui.Frame, ui.Button, ui.SecureButton
 local GetSpellName, GetSpellTexture = ns.wow.GetSpellName, ns.wow.GetSpellTexture
-local HasToy, UseToy, IsSpellKnown = Player.HasToy, Player.UseToy, Player.IsSpellKnown
-local IsMountUsable, GetMountIcon, Mount = Player.IsMountUsable, Player.GetMountIcon, Player.Mount
+local HasToy, IsSpellKnown = Player.HasToy, Player.IsSpellKnown
+local IsMountCollected, GetMountIcon = Player.IsMountCollected, Player.GetMountIcon
+local Bottom = ui.edge.Bottom
 
 -- for showing "clock-like" sweep and leading-edge effects
 -- https://wowpedia.fandom.com/wiki/UIOBJECT_Cooldown
@@ -32,149 +33,169 @@ local UtilityBar = Class(Frame, function(self)
   -- 1236	200630	WoW Icon update	Ohn'ir Windsage's Hearthstone		10.0.0
   -- 1293	140192	Legion	Dalaran Hearthstone	Quest	10.1.5
   -- 1294	110560	Warlords of Draenor	Garrison Hearthstone	Quest	10.1.5
-  if HasToy(172179) then
-    -- button 1: hearthstone
-    self.hearth = SecureButton:new{
-      parent = self,
-      position = {
-        top = {self.frame, ui.edge.Top},
-        width = 24,
-        height = 24,
-      },
-      normal = {
-        texture = GetItemIcon(172179),
-        coords = {0.07, 0.93, 0.07, 0.93},
-      },
-      actions = {
-        {
-          type = "toy",
-          toy = 172179,
-        },
-      },
-    }
-    tinsert(self.buttons, self.hearth)
-  end
-  if HasToy(140192) then
-    -- button 2: Dalaran Hearthstone
-    self.dalaran = SecureButton:new{
-      parent = self,
-      position = {
-        top = {self.buttons[#self.buttons].frame or self.frame, ui.edge.Bottom, 0, -2},
-        width = 24,
-        height = 24,
-      },
-      normal = {
-        texture = GetItemIcon(140192),
-        coords = {0.07, 0.93, 0.07, 0.93},
-      },
-      actions = {
-        {
-          type = "toy",
-          toy = 140192,
-        },
-      },
-    }
-    tinsert(self.buttons, self.dalaran)
-  end
-  if HasToy(110560) then
-    -- button 3: Garrison Hearthstone
-    self.garrison = SecureButton:new{
-      parent = self,
-      position = {
-        top = {self.buttons[#self.buttons].frame or self.frame, ui.edge.Bottom, 0, -2},
-        width = 24,
-        height = 24,
-      },
-      normal = {
-        texture = GetItemIcon(110560),
-        coords = {0.07, 0.93, 0.07, 0.93},
-      },
-      actions = {
-        {
-          type = "toy",
-          toy = 110560,
-        },
-      },
-    }
-    tinsert(self.buttons, self.garrison)
-  end
+  self.hearth = self:addToyButton(172179) -- button 1: hearthstone
+  self.dalaran = self:addToyButton(140192) -- button 2: Dalaran Hearthstone
+  self.garrison = self:addToyButton(110560) -- button 3: Garrison Hearthstone
 
   -- mounts
-  if IsSpellKnown(436854) then
-    self.flightStyle = SecureButton:new{
-      parent = self,
-      position = {
-        top = {self.buttons[#self.buttons].frame or self.frame, ui.edge.Bottom, 0, -2},
-        width = 24,
-        height = 24,
-      },
-      normal = {
-        texture = GetSpellTexture(436854),
-        coords = {0.07, 0.93, 0.07, 0.93},
-      },
-      actions = {
-        {
-          type = "spell",
-          spell = GetSpellName(436854),
-        },
-      },
-    }
-    tinsert(self.buttons, self.flightStyle)
-  end
+  self.flightStyle = self:addSpellButton(436854) -- switch flight style
   -- https://wowpedia.fandom.com/wiki/MountID
-  if IsMountUsable(1799) then -- Eve's Ghastly Rider
-    self.mount = SecureButton:new{
-      parent = self,
-      name = "$parentMount",
-      position = {
-        top = {self.buttons[#self.buttons].frame or self.frame, ui.edge.Bottom, 0, -2},
-        width = 24,
-        height = 24,
-      },
-      normal = {
-        texture = GetMountIcon(1799),
-        coords = {0.07, 0.93, 0.07, 0.93},
-      },
-      actions = {
-        {
-          type = "spell",
-          spell = GetSpellName(419345),
-        },
-      },
-      bindLeftClick = "CTRL-R",
-    }
-    tinsert(self.buttons, self.mount)
-  end
-  if IsMountUsable(2237) then -- Grizzly Hills Packmaster
-    self.shopMount = SecureButton:new{
-      parent = self,
-      position = {
-        top = {self.buttons[#self.buttons].frame or self.frame, ui.edge.Bottom, 0, -2},
-        width = 24,
-        height = 24,
-      },
-      normal = {
-        texture = GetMountIcon(2237),
-        coords = {0.07, 0.93, 0.07, 0.93},
-      },
-      actions = {
-        {
-          type = "spell",
-          spell = GetSpellName(457485),
-        },
-      },
-    }
-    tinsert(self.buttons, self.shopMount)
+  self.mount = self:addMountButton(1799, 419345, "$parentMount", "CTRL-R") -- Eve's Ghastly Rider
+  self.shopMount = self:addMountButton(2237, 457485) -- Grizzly Hills Packmaster
+  self.waterMount = self:addMountButton(855, 228919) -- darkwater skate
+  self.bank = self:addSpellButton(83958) -- guild perk: mobile banking
+  self.warband = self:addSpellButton(460905) -- warband bank distance inhibitor (460925, 465226)
+
+  -- professions
+  self.skinning = self:addSpellButton(194174)
+  self.enchanting = self:addSpellButton(264455)
+  self.disenchant = self:addOffsetSpellButton(13262, nil, self.enchanting)
+  self.fishing = self:addSpellButton(271990)
+  self.fish = self:addOffsetSpellButton(131474, nil, self.fishing)
+  self.raft = self:addOffsetToyButton(85500, self.fish, -self.spacing)
+  self.cooking = self:addSpellButton(158765)
+  self.fire = self:addOffsetSpellButton(818, nil, self.cooking)
+
+  self:height(#self.buttons * self.iconSize + (#self.buttons-1) * self.spacing)
+  if self.raft then
+    self:width(self.iconSize + 2*self.smallSize)
   end
 
-  self:height(#self.buttons * 24 + (#self.buttons-1) * 2)
+  self.frame:SetAlpha(0.5)
+  self.frame:SetScript("OnEnter", function(f) f:SetAlpha(1) end)
+  self.frame:SetScript("OnLeave", function(f) if not f:IsMouseOver() then f:SetAlpha(0.5) end end)
 end, {
+  spacing = 2,
+  iconSize = 20,
+  smallSize = 14,
   name = "ShadowsOfUIBars",
   position = {
     right = {},
     width = 24,
   },
 })
+
+function UtilityBar:addButton(ops)
+  local btn = Button:new(Fill(ops, {
+    parent = self,
+    position = {
+      topRight = #self.buttons == 0 and {} or nil,
+      top = #self.buttons > 0 and {self.buttons[#self.buttons].frame, Bottom, 0, -self.spacing} or nil,
+      width = self.iconSize,
+      height = self.iconSize,
+    },
+    normal = {
+      coords = {0.07, 0.93, 0.07, 0.93},
+    },
+  }))
+  tinsert(self.buttons, btn)
+  return btn
+end
+
+function UtilityBar:addSecureButton(ops)
+  local btn = SecureButton:new(Fill(ops, {
+    parent = self,
+    position = {
+      topRight = #self.buttons == 0 and {} or nil,
+      top = #self.buttons > 0 and {self.buttons[#self.buttons].frame, Bottom, 0, -self.spacing} or nil,
+      width = self.iconSize,
+      height = self.iconSize,
+    },
+    normal = {
+      coords = {0.07, 0.93, 0.07, 0.93},
+    },
+  }))
+  if not ops.offset then tinsert(self.buttons, btn) end
+  return btn
+end
+
+function UtilityBar:addToyButton(id)
+  return HasToy(id) and self:addSecureButton{
+    normal = {
+      texture = GetItemIcon(id),
+    },
+    actions = {
+      {
+        type = "toy",
+        toy = id,
+      },
+    },
+  }
+end
+
+function UtilityBar:addOffsetToyButton(id, target, x, y)
+  return HasToy(id) and self:addSecureButton{
+    offset = true,
+    level = target.frame:GetFrameLevel() + 1,
+    position = {
+      top = false,
+      right = {target.frame, ui.edge.Left, x or 2 * self.spacing, y or 0},
+      width = self.smallSize,
+      height = self.smallSize,
+    },
+    normal = {
+      texture = GetItemIcon(id),
+    },
+    actions = {
+      {
+        type = "toy",
+        toy = id,
+      },
+    },
+  }
+end
+
+function UtilityBar:addSpellButton(id, icon)
+  return IsSpellKnown(id) and self:addSecureButton{
+    normal = {
+      texture = icon or GetSpellTexture(id),
+    },
+    actions = {
+      {
+        type = "spell",
+        spell = GetSpellName(id),
+      },
+    },
+  }
+end
+
+function UtilityBar:addOffsetSpellButton(id, icon, target, x, y)
+  return IsSpellKnown(id) and self:addSecureButton{
+    offset = true,
+    level = target.frame:GetFrameLevel() + 1,
+    position = {
+      top = false,
+      right = {target.frame, ui.edge.Left, x or 2 * self.spacing, y or 0},
+      width = self.smallSize,
+      height = self.smallSize,
+    },
+    normal = {
+      texture = icon or GetSpellTexture(id),
+    },
+    actions = {
+      {
+        type = "spell",
+        spell = GetSpellName(id),
+      },
+    },
+  }
+end
+
+function UtilityBar:addMountButton(id, spell, name, bind)
+  return IsMountCollected(id) and self:addSecureButton{
+    name = name,
+    normal = {
+      texture = GetMountIcon(id),
+    },
+    actions = {
+      {
+        type = "spell",
+        spell = GetSpellName(spell),
+      },
+    },
+    bindLeftClick = bind,
+  }
+end
 
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_ActionBar/Mainline/ActionButton.lua
 

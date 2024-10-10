@@ -27,7 +27,39 @@ end
 
 local function MergeTable(destination, source)
   for k, v in pairs(source) do
-    destination[k] = v;
+    destination[k] = v
+  end
+  return destination
+end
+
+local function Merge(destination, ...)
+  for i=1,select("#", ...) do
+    local t = select(i, ...)
+    if t then
+      for k, v in pairs(t) do
+        if type(destination[k]) == "table" and type(v) == "table" then
+          Merge(destination[k], v)
+        else
+          destination[k] = v
+        end
+      end
+    end
+  end
+  return destination
+end
+
+local function Fill(destination, ...)
+  for i=1,select("#", ...) do
+    local t = select(i, ...)
+    if t then
+      for k, v in pairs(t) do
+        if destination[k] == nil then
+          destination[k] = v
+        elseif type(destination[k]) == "table" and type(v) == "table" then
+          Fill(destination[k], v)
+        end
+      end
+    end
   end
   return destination
 end
@@ -55,17 +87,7 @@ local function Class(parent, fn, defaults)
   function c:new(o)
     local onLoad = o.onLoad
     o.onLoad = nil
-    if defaults then
-      for k,v in pairs(defaults) do
-        if not o[k] then
-          o[k] = v
-        elseif type(o[k]) == "table" and type(v) == "table" then
-          for j,w in pairs(v) do
-            if not o[k][j] then o[k][j] = w end
-          end
-        end
-      end
-    end
+    if defaults then Fill(o, defaults) end
     o = parent and parent:new(o) or o
     Mixin(o, parent or {}, c)
     setmetatable(o, self)
@@ -100,6 +122,8 @@ ns.lua = {
   CopyTables = CopyTables,
   Generate = Generate,
   MergeTable = MergeTable,
+  Merge = Merge,
+  Fill = Fill,
 
   -- return a function that transforms a table by selecting the provided key
   Select = function(k) return function(t) return t[k] end end,

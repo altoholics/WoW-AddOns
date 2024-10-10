@@ -30,6 +30,10 @@ local Player = {
     local _, _, _, _, usable = C_MountJournal.GetMountInfoByID(id)
     return usable
   end,
+  IsMountCollected = function(id)
+    local _, _, _, _, _, _, _, _, _, _, collected = C_MountJournal.GetMountInfoByID(id)
+    return collected
+  end,
   IsSpellKnown = IsSpellKnown,
   Mount = C_MountJournal.SummonByID,
   UseToy = UseToy,
@@ -45,7 +49,7 @@ end
 local Profession = {}
 function Profession:GetInfo()
   if not self.id then return nil end
-  local name, icon, skillLvl, max, abils, offset, skillID, skillMod, specIdx, specOffset = GetProfessionInfo(self.id)
+  local name, icon, skillLvl, max, abils, offset, skillID, skillMod, specIdx, specOffset, v = GetProfessionInfo(self.id)
   return {
     id = self.id,
     name = name,
@@ -58,7 +62,7 @@ function Profession:GetInfo()
     spellOffset = offset,
     specializationIndex = specIdx,
     specializationOffset = specOffset,
-    cisKhazAlgar = "Khaz Algar Fishing" == specOffset or "Khaz Algar Cooking" == specOffset
+    isKhazAlgar = "Khaz Algar Fishing" == v or "Khaz Algar Cooking" == v
   }
 end
 

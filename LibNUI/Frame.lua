@@ -39,7 +39,7 @@ local Frame = Class(nil, function(o)
       if o[p] then
         if type(args) == "table" then
           o[p](o, unpack(args))
-        else
+        elseif args then
           o[p](o, args)
         end
       end
