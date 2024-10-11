@@ -90,6 +90,11 @@ local PowerBar = Class(StatusBar, function(self)
     },
   })
 
+  if self.classId == 11 then -- druid
+    self:registerEvent("UPDATE_SHAPESHIFT_FORM")
+    self:UPDATE_SHAPESHIFT_FORM()
+  end
+
   self:UNIT_POWER_FREQUENT()
 end, {
   backdrop = {color={0, 0, 0, 0.2}},
@@ -112,6 +117,16 @@ function PowerBar:UNIT_POWER_FREQUENT(_, powerType, ...)
     local power, x = Player:GetPowerValues()
     self.frame:SetMinMaxValues(0, x)
     self.frame:SetValue(power)
+  end
+end
+
+function PowerBar:UPDATE_SHAPESHIFT_FORM()
+  local _, powerKey, altR, altG, altB = Player:GetPowerType()
+  local color = ns.Colors.PowerBarColor[powerKey]
+  if color then
+    self:Color({color.r, color.g, color.b})
+  elseif altR then
+    self:Color({altR, altG, altB})
   end
 end
 
@@ -241,10 +256,11 @@ function ResourceBar:UPDATE_SHAPESHIFT_FORM()
 end
 
 local HUD = Class(Frame, function(self)
-  self.health = HealthBar:new{parent = self}
-  self.power = PowerBar:new{parent = self}
-
   local classId = Player:GetClassId()
+
+  self.health = HealthBar:new{parent = self}
+  self.power = PowerBar:new{parent = self, classId = classId}
+
   local resourceIdx = PowerByClass[classId]
   if resourceIdx then
     self.resource = ResourceBar:new{
