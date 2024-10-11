@@ -113,7 +113,7 @@ end, {
 -- https://wowpedia.fandom.com/wiki/API_UnitPowerType
 function PowerBar:UNIT_POWER_FREQUENT(_, powerType, ...)
   if powerType == "MANA" or powerType == "RAGE" or powerType == "FOCUS" or powerType == "ENERGY" or powerType == "CHI"
-  or powerType == "INSANITY" or powerType == "FURY" or powerType == "PAIN" then
+  or powerType == "INSANITY" or powerType == "FURY" or powerType == "PAIN" or powerType == "RUNIC_POWER" then
     local power, x = Player:GetPowerValues()
     self.frame:SetMinMaxValues(0, x)
     self.frame:SetValue(power)
@@ -224,16 +224,19 @@ local ResourceBar = Class(StatusBar, function(self)
   if self.classId == 11 then -- druid
     self:registerEvent("UPDATE_SHAPESHIFT_FORM")
     self:UPDATE_SHAPESHIFT_FORM()
+  elseif self.classId == 6 then -- DK
+    self:registerEvent("RUNE_POWER_UPDATE")
+    self:RUNE_POWER_UPDATE()
   end
 
   local p = Player:GetPower(self.resourceIdx)
-  self.frame:SetValue(Player:GetPower(self.resourceIdx) / self.countMax)
+  self.frame:SetValue(p / self.countMax)
 end, {
   min = 0,
   max = 1,
   backdrop = {color={0, 0, 0, 0.2}},
   position = {
-    center = {0, -92},
+    center = {0, -90},
     width = 200,
     height = 14,
   },
@@ -243,10 +246,14 @@ end, {
 })
 
 function ResourceBar:UNIT_POWER_FREQUENT(_, powerType)
-  if powerType == "SOUL_SHARDS" or powerType == "HOLY_POWER" or powerType == "ARCANE_CHARGES"
-  or powerType == "RUNES" or powerType == "COMBO_POINTS" then
+  if powerType == "SOUL_SHARDS" or powerType == "HOLY_POWER"
+  or powerType == "ARCANE_CHARGES" or powerType == "COMBO_POINTS" then
     self.frame:SetValue(Player:GetPower(self.resourceIdx) / self.countMax)
   end
+end
+
+function ResourceBar:RUNE_POWER_UPDATE()
+  self.frame:SetValue(Player:GetPower(self.resourceIdx) / self.countMax)
 end
 
 function ResourceBar:UPDATE_SHAPESHIFT_FORM()

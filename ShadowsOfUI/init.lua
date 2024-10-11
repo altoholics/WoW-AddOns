@@ -163,6 +163,9 @@ function ns:settingChanged(var, value, name) --, setting
   end
 end
 
+local Hider = ns.wowui.CreateFrame("Frame")
+Hider:Hide()
+
 function ns:onLoad()
   if self.db.settings.xpBar.hideDefault then
     ns.wowui.StatusTrackingBarManager:Hide()
@@ -175,6 +178,7 @@ function ns:onLoad()
   end
   if self.db.settings.blizz.hidePlayerFrame then
     ns.wowui.PlayerFrame:Hide()
+    ns.wowui.PlayerFrame:SetParent(Hider)
   end
 
   local maxLvl = self.wow.Player:isMaxLevel()
