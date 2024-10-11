@@ -54,7 +54,7 @@ end, {
 })
 
 function HealthBar:UNIT_HEALTH()
-  local hp, max, pcnt = Player.GetHealthValues()
+  local hp, max, pcnt = Player:GetHealthValues()
   self.frame:SetMinMaxValues(0, max)
   self.frame:SetValue(hp)
   self.hp.label:Text(hp)
@@ -145,8 +145,10 @@ local ResourceBar = Class(Frame, function(self)
   self.resourceIdx = nil
   self.fill = {}
   -- https://wowpedia.fandom.com/wiki/Enum.PowerType
-  if classId == 9 then
+  if classId == 9 then -- warlock
     self.resourceIdx = 7
+    self:width(125)
+    self:height(26)
     for i=1,5 do
       Texture:new{
         parent = self,
@@ -171,6 +173,36 @@ local ResourceBar = Class(Frame, function(self)
         },
       }
     end
+  elseif classId == 2 then
+    self.resourceIdx = 9
+    self:width(150)
+    self:height(42.5)
+    Texture:new{
+      parent = self,
+      textureLayer = "BACKGROUND",
+      atlas = "UF-HolyPower-RuneHolder-Ready",
+      blend = "BLEND",
+      vertexColor = ns.Colors.Paladin,
+      position = {
+        left = {},
+        width = 150,
+        height = 42.5,
+      },
+    }
+    local offsets = {16, 40.5, 65.5, 87.5, 110}
+    for i=1,5 do
+      self.fill[i] = Texture:new{
+        parent = self,
+        textureLayer = "ARTWORK",
+        atlas = "UF-HolyPower-Rune"..i.."-Active",
+        blend = "BLEND",
+        position = {
+          left = {offsets[i], (i == 1 or i == 5) and -1 or 0},
+          width = 22.5,
+          height = 23,
+        },
+      }
+    end
   end
   local power = Player:GetPower(self.resourceIdx)
   for i=1,#self.fill do
@@ -179,8 +211,6 @@ local ResourceBar = Class(Frame, function(self)
 end, {
   position = {
     center = {0, -90},
-    height = 26,
-    width = 125,
   },
 })
 

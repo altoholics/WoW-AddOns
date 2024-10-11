@@ -15,6 +15,7 @@ local Texture = Class(nil, function(o)
 
     if o.positionAll then o.texture:SetAllPoints() end
     if o.color then o.texture:SetColorTexture(unpack(o.color)); o.color = nil end
+    if o.vertexColor then o.texture:SetVertexColor(unpack(o.vertexColor)); o.vertexColor = nil end
     if o.blendMode then o.texture:SetBlendMode(o.blendMode); o.blendMode = nil end
     if o.gradient then o.texture:SetGradient(unpack(o.gradient)); o.gradient = nil end
     if o.clamp then
