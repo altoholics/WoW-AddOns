@@ -4,10 +4,14 @@ local ui = ns.ui
 local Class, unpack = ns.lua.Class, ns.lua.unpack
 
 local Texture = Class(nil, function(o)
-    o.texture = o.parent:CreateTexture(o.textureName or nil, o.textureLayer or nil, o.textureTemplate or nil)
+    o.texture = (o.parent.frame or o.parent):CreateTexture(o.textureName or nil, o.textureLayer or nil, o.textureTemplate or nil)
     o.textureName = nil
     o.textureLayer = nil
     o.textureTemplate = nil
+
+    if o.atlas then
+      o.texture:SetAtlas(o.atlas, o.atlasSize ~= nil and o.atlasSize or true)
+    end
 
     if o.positionAll then o.texture:SetAllPoints() end
     if o.color then o.texture:SetColorTexture(unpack(o.color)); o.color = nil end

@@ -39,6 +39,7 @@ local RepBar = Class(StatusBar, function(self)
   self.label.label:SetShadowColor(0, 0, 0, 0.8)
   self.label.label:SetShadowOffset(1, -1)
 end, {
+  backdrop = {0, 0, 0, 0.3},
   level = 1,
   position = {
     height = 7,

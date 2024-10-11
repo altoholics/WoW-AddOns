@@ -1,13 +1,14 @@
 local _, ns = ...
 -- luacheck: globals UnitXP UnitXPMax GetXPExhaustion GetRestState UnitClassBase GetProfessions GetProfessionInfo
 -- luacheck: globals GetAverageItemLevel PlayerHasToy UseToy IsSpellKnown C_MountJournal CastSpell UnitExists
--- luacheck: globals UnitHealth UnitHealthMax InCombatLockdown IsResting
+-- luacheck: globals UnitHealth UnitHealthMax InCombatLockdown IsResting UnitPower UnitPowerMax UnitPowerType
 
 local Mixin, min, max = ns.lua.Mixin, ns.lua.min, ns.lua.max
 local UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
 local UnitClassBase, GetAverageItemLevel = UnitClassBase, GetAverageItemLevel
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
 local UnitHealth, UnitHealthMax, UnitExists = UnitHealth, UnitHealthMax, UnitExists
+local UnitPower, UnitPowerMax, UnitPowerType = UnitPower, UnitPowerMax, UnitPowerType
 local InCombatLockdown, IsResting = InCombatLockdown, IsResting
 local wow = ns.wow
 
@@ -17,6 +18,8 @@ local Player = {
   GetClassId = function() local _, classId = UnitClassBase("player"); return classId end,
   GetClassName = function(self) return wow.GetClassInfo(self:GetClassId()) end,
   GetHealthValues = function() return UnitHealth("player"), UnitHealthMax("player") end,
+  GetPetHealthValues = function() return UnitHealth("pet"), UnitHealthMax("pet") end,
+  GetPowerValues = function() return UnitPower("player"), UnitPowerMax("player") end,
   GetLevel = function() return wow.UnitLevel("player") end,
   GetMaxXP = function() return UnitXPMax("player") end,
   GetMountIcon = function(id)
@@ -24,6 +27,8 @@ local Player = {
     return icon
   end,
   GetName = function() return wow.UnitName("player") end,
+  GetPower = function(self, idx) return UnitPower("player", idx) end,
+  GetPowerType = function() return UnitPowerType("player") end,
   GetXP = function() return UnitXP("player") end,
   GetXPExhaustion = function() return GetXPExhaustion() end,
   GetXPPercent = function(self) return self:GetXP() / self:GetMaxXP() end,

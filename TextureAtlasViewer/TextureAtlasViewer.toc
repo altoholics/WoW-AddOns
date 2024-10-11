@@ -1,0 +1,19 @@
+## Interface: 110002, 40400, 11503
+## Title: TextureAtlasViewer
+## Notes: An interactive viewer to help find texture atlas names.
+## Author: LanceDH
+## Version: 11.0.02
+## IconAtlas: communities-icon-searchmagnifyingglass
+## OptionalDeps: Ace3
+## SavedVariables: ATVDB
+## X-Curse-Project-ID: 348853
+## X-WoWI-ID: 25415
+
+Libs\LibStub\LibStub.lua
+Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml
+
+Data_Cata.lua
+Data_Mainline.lua
+Data_Vanilla.lua
+TextureAtlasViewer.xml

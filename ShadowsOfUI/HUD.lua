@@ -1,7 +1,7 @@
 local _, ns = ...
 local Class = ns.lua.Class
 local ui = ns.ui
-local Frame, StatusBar = ui.Frame, ui.StatusBar
+local Frame, StatusBar, Texture = ui.Frame, ui.StatusBar, ui.Texture
 local Player = ns.wow.Player
 local rgba = ns.wowui.rgba
 
@@ -23,7 +23,7 @@ end, {
   orientation = "VERTICAL",
   position = {
     center = {-80, 0},
-    width = 14,
+    width = 10,
     height = 150,
   },
   unitEvents = {
@@ -38,7 +38,14 @@ function HealthBar:UNIT_HEALTH()
 end
 
 local PowerBar = Class(StatusBar, function(self)
-  self.frame:SetValue(0)
+  local _, powerKey, altR, altG, altB = Player:GetPowerType()
+  local color = ns.Colors.PowerBarColor[powerKey]
+  if color then
+    self:Color({color.r, color.g, color.b})
+  elseif altR then
+    self:Color({altR, altG, altB})
+  end
+
   self:withTextureOverlay("leftEdge", {
     color = {0, 0, 0, 0.5},
     position = {
@@ -57,15 +64,15 @@ local PowerBar = Class(StatusBar, function(self)
       width = 5,
     },
   })
+
+  self:UNIT_POWER_FREQUENT()
 end, {
   backdrop = {color={0, 0, 0, 0.2}},
   orientation = "VERTICAL",
-  color = {1, 0, 0},
-  min = 0,
-  max = 1,
+  color = {0, 0, 1},
   position = {
-    center = {-69, 0},
-    width = 8,
+    center = {-72, 0},
+    width = 6,
     height = 150,
   },
   unitEvents = {
@@ -73,15 +80,95 @@ end, {
   },
 })
 
-function PowerBar:UNIT_POWER_FREQUENT(a, powerType, ...)
-  local power, x = UnitPower("player"), UnitPowerMax("player")
-  self.frame:SetMinMaxValues(0, x)
-  self.frame:SetValue(power)
+-- https://wowpedia.fandom.com/wiki/API_UnitPowerType
+function PowerBar:UNIT_POWER_FREQUENT(_, powerType, ...)
+  if powerType == "MANA" or powerType == "RAGE" or powerType == "FOCUS" or powerType == "ENERGY" or powerType == "CHI"
+  or powerType == "INSANITY" or powerType == "FURY" or powerType == "PAIN" then
+    local power, x = Player.GetPowerValues()
+    self.frame:SetMinMaxValues(0, x)
+    self.frame:SetValue(power)
+  end
 end
+
+local PetBar = Class(StatusBar, function(self)
+  local className = Player:GetClassName()
+  self:Color(ns.Colors[className])
+end, {
+  orientation = "VERTICAL",
+  position = {
+    center = {-89, -75/2},
+    width = 6,
+    height = 75,
+  },
+  unitEvents = {
+    UNIT_HEALTH = {"pet"},
+    UNIT_PET = {"player"},
+  },
+})
+
+function PetBar:UNIT_HEALTH()
+  local hp, max = Player.GetPetHealthValues()
+  self.frame:SetMinMaxValues(0, max)
+  self.frame:SetValue(hp)
+end
+
+function PetBar:UNIT_PET()
+  self.frame:SetShown(ns.wow.UnitExists("pet"))
+end
+
+local ResourceBar = Class(Frame, function(self)
+  local classId = Player:GetClassId()
+  self.resourceIdx = nil
+  self.fill = {}
+  -- https://wowpedia.fandom.com/wiki/Enum.PowerType
+  if classId == 9 then
+    self.resourceIdx = 7
+    for i=1,5 do
+      Texture:new{
+        parent = self,
+        textureLayer = "BACKGROUND",
+        atlas = "UF-SoulShard-Holder",
+        blend = "BLEND",
+        position = {
+          left = {(i-1)*25, 0},
+          width = 23,
+          height = 30,
+        },
+      }
+      self.fill[i] = Texture:new{
+        parent = self,
+        textureLayer = "ARTWORK",
+        atlas = "UF-SoulShard-Icon",
+        blend = "BLEND",
+        position = {
+          left = {(i-1)*25+4, 2},
+          width = 15,
+          height = 20,
+        },
+      }
+    end
+  end
+  local power = Player:GetPower(self.resourceIdx)
+  for i=1,#self.fill do
+    self.fill[i].texture:SetShown(i <= power)
+  end
+end, {
+  position = {
+    center = {0, -90},
+    height = 26,
+    width = 125,
+  },
+})
 
 local HUD = Class(Frame, function(self)
   self.health = HealthBar:new{parent = self}
   self.power = PowerBar:new{parent = self}
+  self.resource = ResourceBar:new{parent = self}
+
+  local classId = Player:GetClassId()
+  if classId == 9 or classId == 3 then
+    self.pet = PetBar:new{parent = self}
+  end
 
   self:PLAYER_TARGET_CHANGED()
 end, {

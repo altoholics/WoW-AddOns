@@ -17,6 +17,7 @@ local StatusBar = Class(Frame, function(self)
     if fill.blend then self.fill.texture:SetBlendMode("ADD") end
   end
   if self.color then self.frame:SetColorFill(unpack(self.color)) end
+  if self.texture then self.frame:SetStatusBarTexture(self.texture) end
 
   if self.orientation then self.frame:SetOrientation(self.orientation) end
   if self.min and self.max then self.frame:SetMinMaxValues(self.min, self.max) end
@@ -33,3 +34,4 @@ function StatusBar:onLoad()
 end
 
 function StatusBar:Color(c) self.frame:SetColorFill(unpack(c)) end
+function StatusBar:Texture(t) self.frame:SetStatusBarTexture(t) end

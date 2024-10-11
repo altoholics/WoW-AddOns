@@ -39,7 +39,7 @@ LibNAddOn{
           default = true,
           table = function(db) return db.settings.xpBar end,
           key = "enabled",
-          label = "XP Bar enabled",
+          label = "Use XP Bar",
           tooltip = "Enable the xp bar at the bottom of the screen",
         },
         {
@@ -48,8 +48,26 @@ LibNAddOn{
           default = true,
           table = function(db) return db.settings.repBars end,
           key = "enabled",
-          label = "Rep bars enabled",
+          label = "Use Rep bars",
           tooltip = "Enable the rep bars at the bottom of the screen",
+        },
+        {
+          name = "ActionBarsEnabled",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.actionBars end,
+          key = "enabled",
+          label = "Use action bars",
+          tooltip = "Enable the replacement action bars",
+        },
+        {
+          name = "HUDEnabled",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.hud end,
+          key = "enabled",
+          label = "Use HUD",
+          tooltip = "Enable the HUD",
         },
         {
           name = "HideDefaultXPBar",
@@ -79,22 +97,13 @@ LibNAddOn{
           tooltip = "Hide bar buttons",
         },
         {
-          name = "ActionBarsEnabled",
+          name = "HidePlayerFrame",
           typ = "checkbox",
           default = false,
-          table = function(db) return db.settings.actionBars end,
-          key = "enabled",
-          label = "Use replacement action bars",
-          tooltip = "Enable the replacement action bars",
-        },
-        {
-          name = "HUDEnabled",
-          typ = "checkbox",
-          default = false,
-          table = function(db) return db.settings.hud end,
-          key = "enabled",
-          label = "Use HUD",
-          tooltip = "Enable the HUD",
+          table = function(db) return db.settings.blizz end,
+          key = "hidePlayerFrame",
+          label = "Hide player frame",
+          tooltip = "Hide player frame",
         },
       },
     },
@@ -124,14 +133,6 @@ function ns:MigrateDB()
 end
 
 function ns:settingChanged(var, value, name) --, setting
-  if "XpBarEnabled" == name then
-    if value and self.xpBar then
-      self.xpBar:hide()
-    else
-      self.xpBar = self.ExpBar:new{}
-      self.xpBar:PLAYER_ENTERING_WORLD(false, true)
-    end
-  end
   if "HideDefaultXPBar" == name then
     ns.wowui.StatusTrackingBarManager:SetShown(not value)
   end
@@ -140,6 +141,18 @@ function ns:settingChanged(var, value, name) --, setting
   end
   if "HideBags" == name then
     ns.wowui.BagsBar:SetShown(not value)
+  end
+  if "HidePlayerFrame" == name then
+    ns.wowui.PlayerFrame:SetShown(not value)
+  end
+
+  if "XpBarEnabled" == name then
+    if value and self.xpBar then
+      self.xpBar:hide()
+    else
+      self.xpBar = self.ExpBar:new{}
+      self.xpBar:PLAYER_ENTERING_WORLD(false, true)
+    end
   end
   if "HUDEnabled" == name then
     if value and self.hud then
@@ -151,13 +164,6 @@ function ns:settingChanged(var, value, name) --, setting
 end
 
 function ns:onLoad()
-  local maxLvl = self.wow.Player:isMaxLevel()
-  if self.db.settings.xpBar.enabled and not maxLvl then
-    self.xpBar = ns.ExpBar:new{}
-  end
-  if self.db.settings.repBars.enabled and maxLvl then
-    self.repBars = ns.RepBarContainer:new{}
-  end
   if self.db.settings.xpBar.hideDefault then
     ns.wowui.StatusTrackingBarManager:Hide()
   end
@@ -166,6 +172,17 @@ function ns:onLoad()
   end
   if self.db.settings.blizz.hideBags then
     ns.wowui.BagsBar:Hide()
+  end
+  if self.db.settings.blizz.hidePlayerFrame then
+    ns.wowui.PlayerFrame:Hide()
+  end
+
+  local maxLvl = self.wow.Player:isMaxLevel()
+  if self.db.settings.xpBar.enabled and not maxLvl then
+    self.xpBar = ns.ExpBar:new{}
+  end
+  if self.db.settings.repBars.enabled and maxLvl then
+    self.repBars = ns.RepBarContainer:new{}
   end
   if self.db.settings.actionBars.enabled then
     ns.ActionBars:new{}

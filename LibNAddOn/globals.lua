@@ -1,4 +1,7 @@
 local _, ns = ...
+-- luacheck: globals PowerBarColor
+
+local PowerBarColor = PowerBarColor
 
 local Colors = {
   -- https://wowpedia.fandom.com/wiki/Class_colors
@@ -17,6 +20,7 @@ local Colors = {
   Warrior = {0.78, 0.61, 0.43},
 
  -- https://wowpedia.fandom.com/wiki/ColorMixin#Global_Colors
+ PowerBarColor = PowerBarColor,
 }
 
 function ns.linkGlobals(addOn, features)
