@@ -26,6 +26,8 @@ local UtilityBar = Class(Frame, function(self)
   -- 1236	200630	WoW Icon update	Ohn'ir Windsage's Hearthstone		10.0.0
   -- 1293	140192	Legion	Dalaran Hearthstone	Quest	10.1.5
   -- 1294	110560	Warlords of Draenor	Garrison Hearthstone	Quest	10.1.5
+  -- Draenic Hologem
+  -- Deepdweller's Earthen Hearthstone
   self.hearth = self:addToyButton(172179) -- button 1: hearthstone
   self.dalaran = self:addToyButton(140192) -- button 2: Dalaran Hearthstone
   self.garrison = self:addToyButton(110560) -- button 3: Garrison Hearthstone
@@ -40,21 +42,36 @@ local UtilityBar = Class(Frame, function(self)
   self.warband = self:addSpellButton(460905) -- warband bank distance inhibitor (460925, 465226)
 
   -- professions
-  self.skinning = self:addSpellButton(194174)
+  self.herbalism = self:addSpellButton(193290)
+  self.overloadHerb = self:addOffsetSpellButton(423395, nil, self.herbalism)
   self.mining = self:addSpellButton(2656)
   self.overloadOre = self:addOffsetSpellButton(423394, nil, self.mining)
+  self.skinning = self:addSpellButton(194174)
+
+  self.alchemy = self:addSpellButton(195095)
 
   self.blacksmithing = self:addSpellButton(264434)
 
   self.enchanting = self:addSpellButton(264455)
   self.disenchant = self:addOffsetSpellButton(13262, nil, self.enchanting)
 
+  self.engineering = self:addSpellButton(195112)
+
+  self.inscription = self:addSpellButton(195115)
+
+  self.jewelcrafting = self:addSpellButton(195116)
+
+  self.leatherworking = self:addSpellButton(195119)
+
+  self.tailoring = self:addSpellButton(195126)
+
+  -- secondary
   self.fishing = self:addSpellButton(271990)
   self.fish = self:addOffsetSpellButton(131474, nil, self.fishing)
   self.raft = self:addOffsetToyButton(85500, self.fish, -self.spacing)
 
-  self.cooking = self:addSpellButton(158765)
-  self.fire = self:addOffsetSpellButton(818, nil, self.cooking)
+  self.cooking = self:addSpellButton(158765) or self:addSpellButton(88053)
+  self.fire = self.cooking and self:addOffsetSpellButton(818, nil, self.cooking)
 
   self:height(#self.buttons * self.iconSize + (#self.buttons-1) * self.spacing)
   if self.raft then
@@ -154,7 +171,7 @@ function UtilityBar:addSpellButton(id, icon)
     actions = {
       {
         type = "spell",
-        spell = GetSpellName(id),
+        spell = id,--GetSpellName(id),
       },
     },
   }

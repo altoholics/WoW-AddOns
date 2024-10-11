@@ -184,11 +184,14 @@ function ns:onLoad()
   if self.db.settings.repBars.enabled and maxLvl then
     self.repBars = ns.RepBarContainer:new{}
   end
-  if self.db.settings.actionBars.enabled then
-    ns.ActionBars:new{}
-  end
   if self.db.settings.hud.enabled then
     ns.HUD:new{}
+  end
+end
+
+function ns:onLogin()
+  if self.db.settings.actionBars.enabled then
+    ns.ActionBars:new{}
   end
 end
 
