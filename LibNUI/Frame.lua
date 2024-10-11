@@ -107,6 +107,7 @@ function Frame:hide() self.frame:Hide(); return self end
 function Frame:toggle()
   self.frame:SetShown(not self.frame:IsVisible())
 end
+function Frame:SetShown(b) self.frame:SetShown(b); return self end
 function Frame:listenForEvents()
   self._listening = true
   local o = self

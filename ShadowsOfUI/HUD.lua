@@ -206,7 +206,14 @@ local ResourceBar = Class(StatusBar, function(self)
     }
   end
 
-  self.frame:SetValue(Player:GetPower(self.resourceIdx) / self.countMax)
+  if self.classId == 11 then -- druid
+    self:registerEvent("UPDATE_SHAPESHIFT_FORM")
+    self:UPDATE_SHAPESHIFT_FORM()
+  end
+
+  local p = Player:GetPower(self.resourceIdx)
+  print(p)
+  if p then self.frame:SetValue(Player:GetPower(self.resourceIdx) / self.countMax) end
 end, {
   min = 0,
   max = 1,
@@ -228,6 +235,11 @@ function ResourceBar:UNIT_POWER_FREQUENT(_, powerType)
   end
 end
 
+function ResourceBar:UPDATE_SHAPESHIFT_FORM()
+  -- we only register this for druid, so only show in cat form for combo points
+  self:SetShown(Player:GetShapeshiftFormID() == 1) -- cat form
+end
+
 local HUD = Class(Frame, function(self)
   self.health = HealthBar:new{parent = self}
   self.power = PowerBar:new{parent = self}
@@ -237,13 +249,13 @@ local HUD = Class(Frame, function(self)
   if resourceIdx then
     self.resource = ResourceBar:new{
       parent = self,
+      classId = classId,
       resourceIdx = resourceIdx,
       color = ResourceColorByClass[classId],
     }
   end
 
-  local classId = Player:GetClassId()
-  if classId == 9 or classId == 3 then
+  if classId == 9 or classId == 3 then -- warlock, hunter
     self.pet = PetBar:new{parent = self}
   end
 

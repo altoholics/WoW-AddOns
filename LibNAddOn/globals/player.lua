@@ -2,6 +2,7 @@ local _, ns = ...
 -- luacheck: globals UnitXP UnitXPMax GetXPExhaustion GetRestState UnitClassBase GetProfessions GetProfessionInfo
 -- luacheck: globals GetAverageItemLevel PlayerHasToy UseToy IsSpellKnown C_MountJournal CastSpell UnitExists
 -- luacheck: globals UnitHealth UnitHealthMax InCombatLockdown IsResting UnitPower UnitPowerMax UnitPowerType
+-- luacheck: globals GetShapeshiftFormID
 
 local Mixin, min, max = ns.lua.Mixin, ns.lua.min, ns.lua.max
 local UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
@@ -9,7 +10,7 @@ local UnitClassBase, GetAverageItemLevel = UnitClassBase, GetAverageItemLevel
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
 local UnitHealth, UnitHealthMax, UnitExists = UnitHealth, UnitHealthMax, UnitExists
 local UnitPower, UnitPowerMax, UnitPowerType = UnitPower, UnitPowerMax, UnitPowerType
-local InCombatLockdown, IsResting = InCombatLockdown, IsResting
+local InCombatLockdown, IsResting, GetShapeshiftFormID = InCombatLockdown, IsResting, GetShapeshiftFormID
 local wow = ns.wow
 
 local Player = {
@@ -33,6 +34,8 @@ local Player = {
   GetPowerMax = function(self, idx) return UnitPowerMax("player", idx) end,
   GetPowerType = function() return UnitPowerType("player") end,
   GetPowerValues = function(self) return self:GetPower(), self:GetPowerMax() end,
+  -- https://wowpedia.fandom.com/wiki/API_GetShapeshiftFormID (forms, stealth, wolf, stance, etc)
+  GetShapeshiftFormID = GetShapeshiftFormID,
   GetXP = function() return UnitXP("player") end,
   GetXPExhaustion = function() return GetXPExhaustion() end,
   GetXPPercent = function(self) return self:GetXP() / self:GetMaxXP() end,
