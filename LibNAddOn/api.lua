@@ -13,6 +13,7 @@ function LibNAddOn(features)
   local addOnName = features.name
 
   function addOn.Print(...) print("|cFF33FF99".. addOnName.. "|r:", ...) end
+  addOn._NAME = addOnName
 
   ns.createEventListener(addOn, addOnName)
 

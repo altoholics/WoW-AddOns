@@ -178,20 +178,20 @@ function ns:onLoad()
   end
 
   local maxLvl = self.wow.Player:isMaxLevel()
-  if self.db.settings.xpBar.enabled and not maxLvl then
+  if self.db.settings.xpBar.enabled and not maxLvl and not self.xpBar then
     self.xpBar = ns.ExpBar:new{}
   end
-  if self.db.settings.repBars.enabled and maxLvl then
+  if self.db.settings.repBars.enabled and maxLvl and not self.repBars then
     self.repBars = ns.RepBarContainer:new{}
-  end
-  if self.db.settings.hud.enabled then
-    ns.HUD:new{}
   end
 end
 
 function ns:onLogin()
-  if self.db.settings.actionBars.enabled then
-    ns.ActionBars:new{}
+  if self.db.settings.actionBars.enabled and not self.actionBars then
+    self.actionBars = ns.ActionBars:new{}
+  end
+  if self.db.settings.hud.enabled and not self.hud then
+    self.hud = ns.HUD:new{}
   end
 end
 
