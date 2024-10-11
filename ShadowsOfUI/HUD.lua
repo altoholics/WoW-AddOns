@@ -58,8 +58,8 @@ function HealthBar:UNIT_HEALTH()
   local hp, max, pcnt = Player:GetHealthValues()
   self.frame:SetMinMaxValues(0, max)
   self.frame:SetValue(hp)
-  self.hp.label:Text(AbbreviateNumbers(hp))
-  self.hpPcnt.label:Text(pcnt)
+  self.hp:Text(AbbreviateNumbers(hp))
+  self.hpPcnt:Text(pcnt)
 end
 
 local PowerBar = Class(StatusBar, function(self)
@@ -109,7 +109,7 @@ end, {
 function PowerBar:UNIT_POWER_FREQUENT(_, powerType, ...)
   if powerType == "MANA" or powerType == "RAGE" or powerType == "FOCUS" or powerType == "ENERGY" or powerType == "CHI"
   or powerType == "INSANITY" or powerType == "FURY" or powerType == "PAIN" then
-    local power, x = Player.GetPowerValues()
+    local power, x = Player:GetPowerValues()
     self.frame:SetMinMaxValues(0, x)
     self.frame:SetValue(power)
   end
@@ -141,84 +141,106 @@ function PetBar:UNIT_PET()
   self.frame:SetShown(ns.wow.UnitExists("pet"))
 end
 
-local ResourceBar = Class(Frame, function(self)
-  local classId = Player:GetClassId()
-  self.resourceIdx = nil
-  self.fill = {}
-  -- https://wowpedia.fandom.com/wiki/Enum.PowerType
-  if classId == 9 then -- warlock
-    self.resourceIdx = 7
-    self:width(125)
-    self:height(26)
-    for i=1,5 do
-      Texture:new{
-        parent = self,
-        textureLayer = "BACKGROUND",
-        atlas = "UF-SoulShard-Holder",
-        blend = "BLEND",
-        position = {
-          left = {(i-1)*25, 0},
-          width = 23,
-          height = 30,
-        },
-      }
-      self.fill[i] = Texture:new{
-        parent = self,
-        textureLayer = "ARTWORK",
-        atlas = "UF-SoulShard-Icon",
-        blend = "BLEND",
-        position = {
-          left = {(i-1)*25+4, 2},
-          width = 15,
-          height = 20,
-        },
-      }
-    end
-  elseif classId == 2 then
-    self.resourceIdx = 9
-    self:width(150)
-    self:height(42.5)
+local PowerByClass = {
+  nil,
+  9, -- paladin holy power
+  nil,
+  4, -- rogue combo points
+  nil,
+  5, -- death knight runes
+  nil,
+  16, -- mage arcane charges
+  7, -- warlock soul shard
+  nil,
+  4, -- druid combo points
+}
+local ResourceColorByClass = {
+  nil,
+  ns.Colors.Gold,
+  nil,
+  ns.Colors.LightYellow,
+  nil,
+  ns.Colors.LightBlue,
+  nil,
+  ns.Colors.Blue,
+  ns.Colors.Corruption,
+  nil,
+  ns.Colors.LightYellow
+}
+
+local ResourceBar = Class(StatusBar, function(self)
+  self.countMax = Player:GetPowerMax(self.resourceIdx)
+  if self.countMax == 6 then self:width(198)
+  elseif self.countMax == 7 then self:width(196)
+  end
+
+  self.border = Frame:new{
+    parent = self,
+    name = "$parentBorder",
+    template = "BackdropTemplate",
+    position = {
+      topLeft = {self.frame, ui.edge.TopLeft, -3, 3},
+      bottomRight = {self.frame, ui.edge.BottomRight, 3, -3},
+    },
+  }
+  -- from BackdropTemplate
+  self.border.frame:SetBackdrop({
+    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+    edgeSize = 16,
+    insets = {left = 4, right = 4, top = 4, bottom = 4},
+  })
+  self.border.frame:SetBackdropBorderColor(0, 0, 0, .5)
+
+  -- notches
+  local o = self:width() / self.countMax
+  for i=1,self.countMax-1 do
     Texture:new{
       parent = self,
-      textureLayer = "BACKGROUND",
-      atlas = "UF-HolyPower-RuneHolder-Ready",
-      blend = "BLEND",
-      vertexColor = ns.Colors.Paladin,
+      layer = "OVERLAY",
       position = {
-        left = {},
-        width = 150,
-        height = 42.5,
+        left = {i*o, 0},
+        height = 14,
+        width = 2,
       },
+      color = {0, 0, 0, 0.8},
     }
-    local offsets = {16, 40.5, 65.5, 87.5, 110}
-    for i=1,5 do
-      self.fill[i] = Texture:new{
-        parent = self,
-        textureLayer = "ARTWORK",
-        atlas = "UF-HolyPower-Rune"..i.."-Active",
-        blend = "BLEND",
-        position = {
-          left = {offsets[i], (i == 1 or i == 5) and -1 or 0},
-          width = 22.5,
-          height = 23,
-        },
-      }
-    end
   end
-  local power = Player:GetPower(self.resourceIdx)
-  for i=1,#self.fill do
-    self.fill[i].texture:SetShown(i <= power)
-  end
+
+  self.frame:SetValue(Player:GetPower(self.resourceIdx) / self.countMax)
 end, {
+  min = 0,
+  max = 1,
+  backdrop = {color={0, 0, 0, 0.2}},
   position = {
-    center = {0, -90},
+    center = {0, -92},
+    width = 200,
+    height = 14,
+  },
+  unitEvents = {
+    UNIT_POWER_FREQUENT = {"player"},
   },
 })
+
+function ResourceBar:UNIT_POWER_FREQUENT(_, powerType)
+  if powerType == "SOUL_SHARDS" or powerType == "HOLY_POWER" or powerType == "ARCANE_CHARGES"
+  or powerType == "RUNES" or powerType == "COMBO_POINTS" then
+    self.frame:SetValue(Player:GetPower(self.resourceIdx) / self.countMax)
+  end
+end
 
 local HUD = Class(Frame, function(self)
   self.health = HealthBar:new{parent = self}
   self.power = PowerBar:new{parent = self}
-  self.resource = ResourceBar:new{parent = self}
+
+  local classId = Player:GetClassId()
+  local resourceIdx = PowerByClass[classId]
+  if resourceIdx then
+    self.resource = ResourceBar:new{
+      parent = self,
+      resourceIdx = resourceIdx,
+      color = ResourceColorByClass[classId],
+    }
+  end
 
   local classId = Player:GetClassId()
   if classId == 9 or classId == 3 then

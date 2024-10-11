@@ -38,9 +38,8 @@ local TitleFrame = Class(CleanFrame, function(o)
       size = {20, 20},
     },
   }
-  o.titlebar.icon:withTextureArtwork({
-    name = "icon",
-    textureName = "$parentIcon",
+  o.titlebar.icon:withTextureArtwork("icon", {
+    name = "$parentIcon",
     texturePath = "Interface/Icons/inv_10_tailoring2_banner_green.blp",
     coords = {0.1, 0.9, 0.1, 0.9},
     positionAll = true,
@@ -68,7 +67,7 @@ local TitleFrame = Class(CleanFrame, function(o)
     o.closeButton.background.texture:SetColorTexture(1, 1, 1, 0)
   end)
   o.closeButton:withTextureArtwork("icon", {
-    textureName = "$parentIcon",
+    name = "$parentIcon",
     clamp = {
       {Center, o.closeButton.frame, Center},
     },

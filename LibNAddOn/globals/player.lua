@@ -21,8 +21,6 @@ local Player = {
   GetHealthMax = function() return UnitHealthMax("player") end,
   GetHealthPercent = function(self) return math.floor(100 * (self:GetHealth() / self:GetHealthMax())).."%" end,
   GetHealthValues = function(self) return self:GetHealth(), self:GetHealthMax(), self:GetHealthPercent() end,
-  GetPetHealthValues = function() return UnitHealth("pet"), UnitHealthMax("pet") end,
-  GetPowerValues = function() return UnitPower("player"), UnitPowerMax("player") end,
   GetLevel = function() return wow.UnitLevel("player") end,
   GetMaxXP = function() return UnitXPMax("player") end,
   GetMountIcon = function(id)
@@ -30,8 +28,11 @@ local Player = {
     return icon
   end,
   GetName = function() return wow.UnitName("player") end,
+  GetPetHealthValues = function() return UnitHealth("pet"), UnitHealthMax("pet") end,
   GetPower = function(self, idx) return UnitPower("player", idx) end,
+  GetPowerMax = function(self, idx) return UnitPowerMax("player", idx) end,
   GetPowerType = function() return UnitPowerType("player") end,
+  GetPowerValues = function(self) return self:GetPower(), self:GetPowerMax() end,
   GetXP = function() return UnitXP("player") end,
   GetXPExhaustion = function() return GetXPExhaustion() end,
   GetXPPercent = function(self) return self:GetXP() / self:GetMaxXP() end,
@@ -64,13 +65,13 @@ end
 local Profession = {}
 function Profession:GetInfo()
   if not self.id then return nil end
-  local name, icon, skillLvl, max, abils, offset, skillID, skillMod, specIdx, specOffset, v = GetProfessionInfo(self.id)
+  local name, icon, skillLvl, x, abils, offset, skillID, skillMod, specIdx, specOffset, v = GetProfessionInfo(self.id)
   return {
     id = self.id,
     name = name,
     icon = icon,
     skillLevel = skillLvl,
-    maxSkill = max,
+    maxSkill = x,
     skillID = skillID,
     skillMod = skillMod,
     numAbilities = abils,

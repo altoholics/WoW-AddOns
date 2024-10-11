@@ -22,6 +22,10 @@ local Colors = {
   PowerBarColor = PowerBarColor,
 
   -- https://wowpedia.fandom.com/wiki/ColorMixin#Global_Colors
+  Blue = {0, 0.749, 0.953},
+  Corruption = {0.584, 0.427, 0.82},
+  LightBlue = {0.529, 0.671, 1},
+  LightYellow = {1, 1, 0.6},
   Gold = {0.949, 0.902, 0.6},
 }
 

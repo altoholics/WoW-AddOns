@@ -5,7 +5,7 @@ local CreateFrame = ns.wowui.CreateFrame
 local UISpecialFrames = ns.wowui.UISpecialFrames
 local _G, tinsert = _G, table.insert
 
-local Class, CopyTables = ns.lua.Class, ns.lua.CopyTables
+local Class, CopyTables, unpack = ns.lua.Class, ns.lua.CopyTables, ns.lua.unpack
 local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.layer.Overlay
 local Texture, Label = ui.Texture, ui.Label
 
@@ -52,8 +52,7 @@ local Frame = Class(nil, function(o)
     tinsert(UISpecialFrames, o.frame:GetName()) -- make it a special frame
   end
   if o.background then
-    o:withTextureBackground({
-      name = "background",
+    o:withTextureBackground("background", {
       color = o.background,
       positionAll = true,
     })
@@ -168,7 +167,7 @@ function Frame:withTextureBackground(name, o)
     o = name
     name = o.name
   end
-  o.textureLayer = Background
+  o.layer = Background
   return self:withTexture(name, o)
 end
 function Frame:withTextureArtwork(name, o)
@@ -176,7 +175,7 @@ function Frame:withTextureArtwork(name, o)
     o = name
     name = o.name
   end
-  o.textureLayer = Artwork
+  o.layer = Artwork
   return self:withTexture(name, o)
 end
 function Frame:withTextureOverlay(name, o)
@@ -184,7 +183,7 @@ function Frame:withTextureOverlay(name, o)
     o = name
     name = o.name
   end
-  o.textureLayer = Overlay
+  o.layer = Overlay
   return self:withTexture(name, o)
 end
 
