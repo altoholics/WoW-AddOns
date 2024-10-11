@@ -18,6 +18,28 @@ local HealthBar = Class(StatusBar, function(self)
       width = 5,
     },
   })
+  self:withLabel("level", {
+    text = Player:GetLevel(),
+    font = "GameFontNormalSmall",
+    -- color = ns.Colors.Gold,
+    position = {
+      topRight = {self.frame, ui.edge.TopLeft, -2, -2}
+    },
+  })
+  self:withLabel("hp", {
+    text = Player:GetHealth(),
+    font = "GameFontHighlight",
+    position = {
+      topRight = {self.level.label, ui.edge.BottomRight, 0, -2},
+    },
+  })
+  self:withLabel("hpPcnt", {
+    text = Player:GetHealthPercent(),
+    font = "GameFontHighlight",
+    position = {
+      topRight = {self.hp.label, ui.edge.BottomRight, 0, -2},
+    },
+  })
 end, {
   backdrop = {color={0, 0, 0, 0.2}},
   orientation = "VERTICAL",
@@ -32,9 +54,11 @@ end, {
 })
 
 function HealthBar:UNIT_HEALTH()
-  local hp, max = Player.GetHealthValues()
+  local hp, max, pcnt = Player.GetHealthValues()
   self.frame:SetMinMaxValues(0, max)
   self.frame:SetValue(hp)
+  self.hp.label:Text(hp)
+  self.hpPcnt.label:Text(pcnt)
 end
 
 local PowerBar = Class(StatusBar, function(self)

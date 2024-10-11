@@ -19,8 +19,10 @@ local Colors = {
   Warlock = {0.58, 0.51, 0.79},
   Warrior = {0.78, 0.61, 0.43},
 
- -- https://wowpedia.fandom.com/wiki/ColorMixin#Global_Colors
- PowerBarColor = PowerBarColor,
+  PowerBarColor = PowerBarColor,
+
+  -- https://wowpedia.fandom.com/wiki/ColorMixin#Global_Colors
+  Gold = {0.949, 0.902, 0.6},
 }
 
 function ns.linkGlobals(addOn, features)

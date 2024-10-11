@@ -4,6 +4,8 @@ local ui = ns.ui
 local unpack = ns.lua.unpack
 local Class = ns.lua.Class
 
+-- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_FontStyles_Shared/SharedFontStyles.xml
+-- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_FontStyles_Frame/Mainline/FontStyles.xml#L4
 ui.fonts = ns.lua.ToMap({
   "GameFontHighlight", "GameFontHighlightSmall",
   "SystemFont_Med2",
