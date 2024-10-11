@@ -1,5 +1,6 @@
 local _, ns = ...
 local Class = ns.lua.Class
+local AbbreviateNumbers = ns.lua.AbbreviateNumbers
 local ui = ns.ui
 local Frame, StatusBar, Texture = ui.Frame, ui.StatusBar, ui.Texture
 local Player = ns.wow.Player
@@ -27,7 +28,7 @@ local HealthBar = Class(StatusBar, function(self)
     },
   })
   self:withLabel("hp", {
-    text = Player:GetHealth(),
+    text = AbbreviateNumbers(Player:GetHealth()),
     font = "GameFontHighlight",
     position = {
       topRight = {self.level.label, ui.edge.BottomRight, 0, -2},
@@ -57,7 +58,7 @@ function HealthBar:UNIT_HEALTH()
   local hp, max, pcnt = Player:GetHealthValues()
   self.frame:SetMinMaxValues(0, max)
   self.frame:SetValue(hp)
-  self.hp.label:Text(hp)
+  self.hp.label:Text(AbbreviateNumbers(hp))
   self.hpPcnt.label:Text(pcnt)
 end
 

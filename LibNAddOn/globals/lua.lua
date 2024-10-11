@@ -1,5 +1,5 @@
 local _, ns = ...
--- luacheck: globals unpack table CopyTable Mixin floor
+-- luacheck: globals unpack table CopyTable Mixin floor AbbreviateNumbers
 
 local table = table
 local Mixin, setmetatable = Mixin, setmetatable
@@ -114,6 +114,7 @@ ns.lua = {
   CopyTable = CopyTable,
   Mixin = Mixin, -- Interface/AddOns/Blizzard_SharedXMLBase/Mixin.lua#L6
   -- Interface/AddOns/Blizzard_SharedXMLBase/TableUtil.lua
+  AbbreviateNumbers = AbbreviateNumbers,
 
   -- lua extensions
   min = function(a,b) return a < b and a or b end, -- todo: move to `math`
