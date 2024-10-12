@@ -46,7 +46,7 @@ local ResourceBar = Class(StatusBar, function(self)
     self:registerEvent("RUNE_POWER_UPDATE")
   end
 
-  self.frame:SetMinMaxValues(1, countMax)
+  self.frame:SetMinMaxValues(0, countMax)
   self:RUNE_POWER_UPDATE()
   -- self:SetValue(countMax)
 end, {

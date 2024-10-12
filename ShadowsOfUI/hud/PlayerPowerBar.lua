@@ -26,7 +26,9 @@ local PowerBar = Class(StatusBar, function(self)
   })
 
   self:UPDATE_SHAPESHIFT_FORM()
-  self:UNIT_POWER_FREQUENT()
+  local power, x = Player:GetPowerValues()
+  self.frame:SetMinMaxValues(0, x)
+  self:SetValue(power)
 end, {
   name = "$parentPower",
   alpha = 0.8,
@@ -57,7 +59,7 @@ function PowerBar:UNIT_POWER_FREQUENT(_, powerType, ...)
   or powerType == "INSANITY" or powerType == "FURY" or powerType == "PAIN" or powerType == "RUNIC_POWER" then
     local power, x = Player:GetPowerValues()
     self.frame:SetMinMaxValues(0, x)
-    self.frame:SetValue(power)
+    self:SetValue(power)
   end
 end
 

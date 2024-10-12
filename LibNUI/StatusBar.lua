@@ -20,16 +20,17 @@ local StatusBar = Class(Frame, function(self)
 
   if self.texture then
     if type(self.texture) == "table" then
+      local tOps = self.texture
       local tex = Texture:new(Mixin({
         parent = self,
-      }, self.texture))
+      }, tOps))
       self.frame:SetStatusBarTexture(tex.texture)
       tex.texture:ClearAllPoints()
       tex:top(self.frame)
       tex:left(self.frame)
       tex:right(self.frame)
       tex:bottom(self.frame)
-      local l, r, t, b = unpack(self.texture.coords or {0, 1, 0, 1})
+      local l, r, t, b = unpack(tOps.coords or {0, 1, 0, 1})
       self.X1 = l
       self.X2 = r
       self.Xd = r - l
@@ -66,7 +67,7 @@ function StatusBar:SetValue(v)
   local p = 1 - (v / (m-n))
   local dx, dy = self.Xd * p, self.Yd * p
   local l, r, t, b = self.X1, self.X2, self.Y1, self.Y2
-  if self.frame:GetOrientation() == "horizontal" then
+  if self.frame:GetOrientation() == "HORIZONTAL" then
     if dx > 0 then -- luacheck: ignore
       --
     end
