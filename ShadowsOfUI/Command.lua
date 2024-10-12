@@ -3,11 +3,11 @@ local _, ns = ...
 local ui, Colors = ns.ui, ns.Colors
 local Class = ns.lua.Class
 local unpack, strsub, string, strmatch = ns.lua.unpack, ns.lua.strsub, ns.lua.string, ns.lua.strmatch
-local CleanFrame, SecureButton = ui.CleanFrame, ui.SecureButton
+local CleanFrame, Button = ui.CleanFrame, ui.Button
 local UpdateHashLists = ChatFrame_ImportAllListsToHash
 local COMMANDS, CHANNELS, EMOTES = hash_SlashCmdList, hash_ChatTypeInfoList, hash_EmoteTokenList
 local MAX_WOW_CHAT_CHANNELS = MAX_WOW_CHAT_CHANNELS
-local GetChannelName, DoEmote = ns.wow.GetChannelName, ns.wow.DoEmote
+local GetChannelName, DoEmote, SendChatMessage = ns.wow.GetChannelName, ns.wow.DoEmote, ns.wow.SendChatMessage
 
 local file, _, flags = ChatFontNormal:GetFont()
 local chatFont = CreateFont("ButtonKeybind")
@@ -24,12 +24,13 @@ local EditBox = Class(CleanFrame, function(self)
   if self.font then self.frame:SetFontObject(self.font); self.font = nil end
 end, {
   type = "EditBox",
+  -- template = "SecureFrameTemplate",
 })
 
 local Command = Class(EditBox, function(self)
   local f = self
   -- invis button for custom keybind handler
-  self.binder = SecureButton:new{
+  self.binder = Button:new{
     parent = self,
     name = "$parentBinder",
     bindLeftClick = "ENTER",
@@ -40,7 +41,7 @@ local Command = Class(EditBox, function(self)
     },
     onClick = function() if not f.frame:IsShown() then f:show() end end,
   }
-  self.binderSlash = SecureButton:new{
+  self.binderSlash = Button:new{
     parent = self,
     name = "$parentBinderSlash",
     bindLeftClick = "/",
@@ -76,8 +77,8 @@ end, {
   background = {0, 0, 0, 0.8},
   position = {
     center = {0, -50},
-    width = "600",
-    height = "48",
+    width = 800,
+    height = 48,
     hide = true,
   },
   insets = {5, 5, 5, 5},
@@ -117,27 +118,17 @@ function Command:OnEnterPressed()
           if chanNum > 0 and chanNum <= MAX_WOW_CHAT_CHANNELS then
             local num, name = GetChannelName(channel)
             if num > 0 then
-              if msg == "" then
-                -- set target
-                print(num, name)
-              else
-                -- todo send to channel
-                -- SendChatMessage(msg, "CHANNEL", nil, num)
-              end
+              self:UpdateChannelDisplay("CHANNEL", num, name)
             end
           end
         elseif CHANNELS[cmd] then
-          if msg == "" then
-            -- set target
-            print(CHANNELS[cmd])
-          else
-            -- todo send to channel
-            -- SendChatMessage(msg, CHANNELS[cmd])
-          end
+          self:UpdateChannelDisplay(CHANNELS[cmd])
         else
           print("Unknown command:", cmd)
         end
       end
+    else
+      SendChatMessage(text, self.channelType, nil, self.channelNum)
     end
   end
 
@@ -151,7 +142,35 @@ local ChannelInfo = {
   PARTY = { title = "Party", color = Colors.Party },
   RAID = { title = "Raid", color = Colors.Raid },
   SAY = { title = "Say", color = Colors.White },
+  SMART_WHISPER = { title = "Whisper", color = Colors.Whisper },
+  YELL = { title = "Yell", color = Colors.Yell },
 }
+
+function Command:UpdateChannelDisplay(type, num, name)
+  self.channelType = type
+  self.channelNum = num
+  if num then
+    self.channelTitle:Text(name)
+    self.channelTargetName:Text("")
+    if num == 1 then
+      self.channelTitle:Color(unpack(Colors.General))
+      self.frame:SetTextColor(unpack(Colors.General))
+    else
+      self.channelTitle:Color(unpack(Colors.White))
+      self.frame:SetTextColor(unpack(Colors.White))
+    end
+  else
+    local info = ChannelInfo[type]
+    if info then
+      self.channelTitle:Text(info.title)
+      self.channelTargetName:Text("")
+      self.channelTitle:Color(unpack(info.color))
+      self.frame:SetTextColor(unpack(info.color))
+    else
+      print("Unrecognized channel type", type)
+    end
+  end
+end
 
 function Command:OnSpacePressed()
   local text = self.frame:GetText()
@@ -161,15 +180,20 @@ function Command:OnSpacePressed()
   cmd = string.upper(cmd)
 
   if CHANNELS[cmd] then
-    self.channelType = CHANNELS[cmd]
-    local info = ChannelInfo[self.channelType]
-    if info then
-      self.channelTitle:Text(info.title)
-      self.channelTitle:Color(unpack(info.color))
-      self.frame:SetTextColor(unpack(info.color))
-    else
-      print(CHANNELS[cmd])
-    end
+    -- todo: fix DUMP being recognized as a channel
+    self:UpdateChannelDisplay(CHANNELS[cmd])
     self.frame:SetText("")
+  else
+    local channel = strmatch(cmd, "/([0-9]+)$")
+    if channel then
+      local chanNum = tonumber(channel)
+      if chanNum > 0 and chanNum <= MAX_WOW_CHAT_CHANNELS then
+        local num, name = GetChannelName(channel)
+        if num > 0 then
+          self:UpdateChannelDisplay("CHANNEL", num, name)
+          self.frame:SetText("")
+        end
+      end
+    end
   end
 end

@@ -3,7 +3,7 @@ local _, ns = ...
 -- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetRealmName
 -- luacheck: globals GetServerTime C_DateAndTime UnitLevel UnitName UnitRace C_AddOns
 -- luacheck: globals UnitExists UnitAffectingCombat GetSpellInfo GetChannelName
--- luacheck: globals C_WeeklyRewards C_Item LoadAddOn C_Spell DoEmote
+-- luacheck: globals C_WeeklyRewards C_Item LoadAddOn C_Spell DoEmote SendChatMessage
 
 local wow = {
   -- WoW API
@@ -12,6 +12,7 @@ local wow = {
 
   -- Chat
   GetChannelName = GetChannelName,
+  SendChatMessage = SendChatMessage,
 
   -- Class
   GetClassColor = C_ClassColor.GetClassColor,
