@@ -16,6 +16,7 @@ local PowerBar = Class(StatusBar, function(self)
     position = {
       bottomLeft = {self.frame, ui.edge.BottomRight, 0, -6},
     },
+    alpha = 0.8,
   })
   self:withLabel("percent", {
     text = Player:GetPowerPercent(),
@@ -23,6 +24,7 @@ local PowerBar = Class(StatusBar, function(self)
     position = {
       bottomLeft = {self.frame, ui.edge.BottomRight, 0, 6},
     },
+    alpha = 0.8,
   })
 
   self:UPDATE_SHAPESHIFT_FORM()

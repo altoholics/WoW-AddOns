@@ -18,9 +18,8 @@ local Label = Class(nil, function(o)
   o.layer = nil
   o.font = nil
   if o.fontObj then l:SetFontObject(o.fontObj) end
-  if o.text then
-    l:SetText(o.text)
-  end
+  if o.text then l:SetText(o.text) end
+  if o.alpha then l:SetAlpha(o.alpha) end
   if o.position then
     for p,args in pairs(o.position) do
       if o[p] then

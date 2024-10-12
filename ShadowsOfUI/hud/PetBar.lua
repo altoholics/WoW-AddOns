@@ -1,40 +1,33 @@
 local _, ns = ...
-local Class, gsub, unpack = ns.lua.Class, ns.lua.gsub, ns.lua.unpack
+local Class, unpack = ns.lua.Class, ns.lua.unpack
 local AbbreviateNumbers = ns.lua.AbbreviateNumbers
 local ui = ns.ui
 local StatusBar = ui.StatusBar
 local Player = ns.wow.Player
 
-local HealthBar = Class(StatusBar, function(self)
-  local className = gsub(Player:GetClassName(), " ", "")
+local PetBar = Class(StatusBar, function(self)
+  local className = Player:GetClassName()
   local t = self.frame:GetStatusBarTexture()
   t:SetVertexColor(unpack(ns.Colors[className]))
-  self:withLabel("level", {
-    text = Player:GetLevel(),
-    font = "GameFontNormalSmall",
-    position = {
-      topRight = {self.frame, ui.edge.TopLeft, 16, -2}
-    },
-    alpha = 0.8,
-  })
+
   self:withLabel("hp", {
     text = AbbreviateNumbers(Player:GetHealth()),
-    font = "GameFontHighlight",
+    font = "GameFontHighlightSmall",
     position = {
-      bottomRight = {self.frame, ui.edge.BottomLeft, 14, 2},
+      bottomRight = {self.frame, ui.edge.BottomLeft, 7, 2},
     },
     alpha = 0.8,
   })
   self:withLabel("hpPcnt", {
     text = Player:GetHealthPercent(),
-    font = "GameFontHighlight",
+    font = "GameFontHighlightSmall",
     position = {
       bottomRight = {self.hp.label, ui.edge.TopRight, -4, 2},
     },
     alpha = 0.8,
   })
 end, {
-  name = "$parentHealth",
+  name = "$parentPet",
   alpha = 0.8,
   backdrop = {
     color = false,
@@ -47,20 +40,23 @@ end, {
     coords = {0.32, 0.05, 0.01, 0.99},
   },
   position = {
-    center = {},
-    width = 30,
-    height = 200,
+    center = {-14, 0},
+    width = 15,
+    height = 136,
   },
   unitEvents = {
-    UNIT_HEALTH = {"player"},
+    UNIT_HEALTH = {"pet"},
+    UNIT_PET = {"player"},
   },
 })
-ns.PlayerHealthBar = HealthBar
+ns.PetBar = PetBar
 
-function HealthBar:UNIT_HEALTH()
-  local hp, max, pcnt = Player:GetHealthValues()
+function PetBar:UNIT_HEALTH()
+  local hp, max = Player.GetPetHealthValues()
   self.frame:SetMinMaxValues(0, max)
-  self:SetValue(hp)
-  self.hp:Text(AbbreviateNumbers(hp))
-  self.hpPcnt:Text(pcnt)
+  self.frame:SetValue(hp)
+end
+
+function PetBar:UNIT_PET()
+  self.frame:SetShown(ns.wow.UnitExists("pet"))
 end

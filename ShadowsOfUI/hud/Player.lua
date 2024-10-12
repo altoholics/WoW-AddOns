@@ -1,35 +1,10 @@
 local _, ns = ...
 local Class = ns.lua.Class
 local ui = ns.ui
-local Frame, StatusBar = ui.Frame, ui.StatusBar
+local Frame = ui.Frame
 local Player = ns.wow.Player
 local PlayerHealthBar, PlayerPowerBar, ResourceBar = ns.PlayerHealthBar, ns.PlayerPowerBar, ns.ResourceBar
-
-local PetBar = Class(StatusBar, function(self)
-  local className = Player:GetClassName()
-  self:Color(ns.Colors[className])
-end, {
-  orientation = "VERTICAL",
-  position = {
-    center = {-89, -75/2},
-    width = 6,
-    height = 75,
-  },
-  unitEvents = {
-    UNIT_HEALTH = {"pet"},
-    UNIT_PET = {"player"},
-  },
-})
-
-function PetBar:UNIT_HEALTH()
-  local hp, max = Player.GetPetHealthValues()
-  self.frame:SetMinMaxValues(0, max)
-  self.frame:SetValue(hp)
-end
-
-function PetBar:UNIT_PET()
-  self.frame:SetShown(ns.wow.UnitExists("pet"))
-end
+local PetBar = ns.PetBar
 
 local PowerByClass = {
   nil,
@@ -75,9 +50,9 @@ local PlayerHUD = Class(Frame, function(self)
     }
   end
 
-  -- if classId == 9 or classId == 3 then -- warlock, hunter
-  --   self.pet = PetBar:new{parent = self}
-  -- end
+  if classId == 9 or classId == 3 then -- warlock, hunter
+    self.pet = PetBar:new{parent = self}
+  end
 end, {
   name = "$parentPlayer",
   position = {
