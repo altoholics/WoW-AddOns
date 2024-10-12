@@ -66,6 +66,11 @@ local Frame = Class(nil, function(o)
   end
   if o.dragTarget then o:setDragTarget(o.dragTarget.frame or o.dragTarget) end
 
+  if o.scripts then
+    for _,s in ipairs(o.scripts) do
+      o:SetScript(s, function(...) if o[s] then o[s](o, ...) end end)
+    end
+  end
   if o.events then
     if not o._listening then o:listenForEvents() end
     for _,e in pairs(o.events) do
@@ -111,6 +116,8 @@ function Frame:toggle()
   self.frame:SetShown(not self.frame:IsVisible())
 end
 function Frame:SetShown(b) self.frame:SetShown(b); return self end
+
+function Frame:SetScript(event, handler) self.frame:SetScript(event, handler); return self end
 function Frame:listenForEvents()
   self._listening = true
   local o = self

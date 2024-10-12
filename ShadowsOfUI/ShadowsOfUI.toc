@@ -21,4 +21,5 @@ hud/PetBar.lua
 hud/Player.lua
 HUD.lua
 
+Command.lua
 Chat.lua

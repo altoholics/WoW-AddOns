@@ -3,6 +3,7 @@ local _, ns = ...
 
 local PowerBarColor = PowerBarColor
 
+-- https://www.rapidtables.com/convert/color/hex-to-rgb.html
 local Colors = {
   -- https://wowpedia.fandom.com/wiki/Class_colors
   DeathKnight = {0.77, 0.12, 0.23},
@@ -28,6 +29,25 @@ local Colors = {
   LightBlue = {0.529, 0.671, 1},
   LightYellow = {1, 1, 0.6},
   Gold = {0.949, 0.902, 0.6},
+  Green = {0.098, 1, 0.098},
+  White = {1, 1, 1},
+
+  -- Chat
+  Achievement = {1, 0.988, 0.004},
+  BattleNet = {0, 0.6784, 0.9373},
+  BNWhisper = {0, 0.9804, 0.9647},
+  Emote = {1, 0.494, 0.251},
+  General = {0.996, 0.7569, 0.7529},
+  Guild = {0.2352941176, 0.8823529411764706, 0.247},
+  Officer = {0.25, 0.7372549019607844, 0.25},
+  Party = {0.67, 0.67, 0.996},
+  PartyLead = {0.47, 0.78, 1},
+  Raid = {1, 0.49, 0.004},
+  RaidLeader = {1, 0.2784, 0.0353},
+  RaidWarn = {1, 0.2784, 0},
+  System = {1, 1, 0},
+  Whisper = {1, 0.494, 1},
+  Yell = {1, 0.247, 0.251},
 }
 
 function ns.linkGlobals(addOn, features)

@@ -1,5 +1,5 @@
 local _, ns = ...
--- luacheck: globals unpack table CopyTable Mixin floor AbbreviateNumbers gsub
+-- luacheck: globals unpack table CopyTable Mixin floor AbbreviateNumbers gsub strsub strmatch strupper
 
 local table = table
 local Mixin, setmetatable = Mixin, setmetatable
@@ -109,7 +109,11 @@ ns.lua = {
   tinsert = table.insert,
   tremove = table.remove,
   floor = floor,
+  string = string,
   gsub = gsub,
+  strsub = strsub,
+  strmatch = strmatch,
+  strupper = strupper,
 
   -- WoW lua extensions
   CopyTable = CopyTable,

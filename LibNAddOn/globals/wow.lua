@@ -2,13 +2,16 @@ local _, ns = ...
 -- luacheck: globals InterfaceOptionsFrame_OpenToCategory GetAverageItemLevel C_ClassColor GetClassInfo
 -- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetRealmName
 -- luacheck: globals GetServerTime C_DateAndTime UnitLevel UnitName UnitRace C_AddOns
--- luacheck: globals UnitExists UnitAffectingCombat GetSpellInfo
--- luacheck: globals C_WeeklyRewards C_Item LoadAddOn C_Spell
+-- luacheck: globals UnitExists UnitAffectingCombat GetSpellInfo GetChannelName
+-- luacheck: globals C_WeeklyRewards C_Item LoadAddOn C_Spell DoEmote
 
 local wow = {
   -- WoW API
   -- Bags / Inventory
   GetAverageItemLevel = GetAverageItemLevel,
+
+  -- Chat
+  GetChannelName = GetChannelName,
 
   -- Class
   GetClassColor = C_ClassColor.GetClassColor,
@@ -30,6 +33,8 @@ local wow = {
   end,
   GetSpellTexture = C_Spell.GetSpellTexture,
 
+  -- System
+  DoEmote = DoEmote,
   -- System / Date & Time
   GetServerTime = GetServerTime,
   GetSecondsUntilWeeklyReset = C_DateAndTime.GetSecondsUntilWeeklyReset,

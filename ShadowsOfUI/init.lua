@@ -7,7 +7,7 @@ LibNAddOn{
   db = {
     name = "ShadowsOfUIDB",
     defaults = {
-      version = 3,
+      version = 4,
       settings = {
         xpBar = {
           enabled = true,
@@ -26,6 +26,12 @@ LibNAddOn{
           enabled = false,
         },
         hud = {
+          enabled = false,
+        },
+        chat = {
+          enabled = false,
+        },
+        command = {
           enabled = false,
         },
       },
@@ -70,6 +76,24 @@ LibNAddOn{
           key = "enabled",
           label = "Use HUD",
           tooltip = "Enable the HUD",
+        },
+        {
+          name = "CommandEnabled",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.command end,
+          key = "enabled",
+          label = "Use Fancy Command",
+          tooltip = "Enable fancy command input",
+        },
+        {
+          name = "ChatEnabled",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.chat end,
+          key = "enabled",
+          label = "Use Fancy Chat",
+          tooltip = "Enable fancy chat features",
         },
         {
           name = "HideDefaultXPBar",
@@ -141,6 +165,11 @@ function ns:MigrateDB()
     db.settings.hud = { enabled = false }
     db.version = 3
   end
+  if 3 == db.version then
+    db.settings.chat = { enabled = false }
+    db.settings.command = { enabled = false }
+    db.version = 4
+  end
 end
 
 local Hider = ns.wowui.CreateFrame("Frame")
@@ -166,18 +195,27 @@ function ns:settingChanged(var, value, name) --, setting
   end
 
   if "XpBarEnabled" == name then
-    if value and self.xpBar then
-      self.xpBar:hide()
-    else
+    if self.xpBar then
+      self.xpBar:SetShown(value)
+    elseif value then
       self.xpBar = self.ExpBar:new{}
       self.xpBar:PLAYER_ENTERING_WORLD(false, true)
     end
   end
   if "HUDEnabled" == name then
-    if value and self.hud then
-      self.hud:hide()
-    else
+    if self.hud then
+      self.hud:SetShown(value)
+    elseif value then
       self.hud = ns.HUD:new{}
+    end
+  end
+  if "ChatEnabled" == name then
+  end
+  if "CommandEnabled" == name then
+    if self.command then
+      -- todo: disable
+    elseif value then
+      self.command = ns.Command:new{}
     end
   end
 end
@@ -216,6 +254,9 @@ function ns:onLogin()
   end
   if self.db.settings.hud.enabled and not self.hud then
     self.hud = ns.HUD:new{}
+  end
+  if self.db.settings.command.enabled and not self.command then
+    self.command = ns.Command:new{}
   end
 end
 
