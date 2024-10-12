@@ -40,7 +40,7 @@ local TitleFrame = Class(CleanFrame, function(o)
   }
   o.titlebar.icon:withTextureArtwork("icon", {
     name = "$parentIcon",
-    texturePath = "Interface/Icons/inv_10_tailoring2_banner_green.blp",
+    path = "Interface/Icons/inv_10_tailoring2_banner_green.blp",
     coords = {0.1, 0.9, 0.1, 0.9},
     positionAll = true,
   })
@@ -71,7 +71,7 @@ local TitleFrame = Class(CleanFrame, function(o)
     clamp = {
       {Center, o.closeButton.frame, Center},
     },
-    texturePath = "Interface/AddOns/Warbandeer/icons/close.blp",
+    path = "Interface/AddOns/Warbandeer/icons/close.blp",
   })
   o.closeButton.icon.texture:SetSize(10, 10)
   o.closeButton.icon.texture:SetVertexColor(0.7, 0.7, 0.7, 1)

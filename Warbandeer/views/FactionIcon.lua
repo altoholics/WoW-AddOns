@@ -10,7 +10,7 @@ local FactionIcon = Class(Frame, function(o)
   o:withTextureArtwork("factionIcon", {
     positionAll = true,
     coords = {0.1, 0.9, 0.1, 0.9},
-    texturePath = o.allianceIcon,
+    path = o.allianceIcon,
   })
 end)
 ns.views.FactionIcon = FactionIcon

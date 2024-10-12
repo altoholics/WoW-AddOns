@@ -51,12 +51,15 @@ local Frame = Class(nil, function(o)
     _G[o.frame:GetName()] = o.frame -- put it in the global namespace
     tinsert(UISpecialFrames, o.frame:GetName()) -- make it a special frame
   end
+
   if o.background then
     o:withTextureBackground("background", {
       color = o.background,
       positionAll = true,
     })
   end
+  if o.alpha then o.frame:SetAlpha(o.alpha); o.alpha = nil end
+
   if o.drag then
     o:makeDraggable()
     o:makeContainerDraggable()

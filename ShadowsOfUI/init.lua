@@ -19,6 +19,8 @@ LibNAddOn{
         blizz = {
           hideMicroMenu = true,
           hideBags = true,
+          hidePlayerFrame = false,
+          hideTargetFrame = false,
         },
         actionBars = {
           enabled = false,
@@ -105,6 +107,15 @@ LibNAddOn{
           label = "Hide player frame",
           tooltip = "Hide player frame",
         },
+        {
+          name = "HideTargetFrame",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.blizz end,
+          key = "hideTargetFrame",
+          label = "Hide target frame",
+          tooltip = "Hide target frame",
+        },
       },
     },
   },
@@ -132,6 +143,9 @@ function ns:MigrateDB()
   end
 end
 
+local Hider = ns.wowui.CreateFrame("Frame")
+Hider:Hide()
+
 function ns:settingChanged(var, value, name) --, setting
   if "HideDefaultXPBar" == name then
     ns.wowui.StatusTrackingBarManager:SetShown(not value)
@@ -144,6 +158,11 @@ function ns:settingChanged(var, value, name) --, setting
   end
   if "HidePlayerFrame" == name then
     ns.wowui.PlayerFrame:SetShown(not value)
+    ns.wowui.PlayerFrame:SetParent(Hider)
+  end
+  if "HideTargetFrame" == name then
+    ns.wowui.TargetFrame:SetShown(not value)
+    ns.wowui.TargetFrame:SetParent(Hider)
   end
 
   if "XpBarEnabled" == name then
@@ -163,9 +182,6 @@ function ns:settingChanged(var, value, name) --, setting
   end
 end
 
-local Hider = ns.wowui.CreateFrame("Frame")
-Hider:Hide()
-
 function ns:onLoad()
   if self.db.settings.xpBar.hideDefault then
     ns.wowui.StatusTrackingBarManager:Hide()
@@ -179,6 +195,10 @@ function ns:onLoad()
   if self.db.settings.blizz.hidePlayerFrame then
     ns.wowui.PlayerFrame:Hide()
     ns.wowui.PlayerFrame:SetParent(Hider)
+  end
+  if self.db.settings.blizz.hideTargetFrame then
+    ns.wowui.TargetFrame:Hide()
+    ns.wowui.TargetFrame:SetParent(Hider)
   end
 
   local maxLvl = self.wow.Player:isMaxLevel()

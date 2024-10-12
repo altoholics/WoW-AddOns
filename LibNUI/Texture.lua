@@ -35,8 +35,8 @@ local Texture = Class(nil, function(o)
       end
       o.position = nil
     end
-    if o.texturePath then
-      o.texture:SetTexture(o.texturePath)
+    if o.path then
+      o.texture:SetTexture(o.path)
     end
     if o.coords then
       o.texture:SetTexCoord(unpack(o.coords))
@@ -67,6 +67,7 @@ function Texture:hide() self.texture:Hide(); return self end
 function Texture:toggle()
   self.texture:SetShown(not self.texture:IsVisible())
 end
+function Texture:SetShown(b) self.texture:SetShown(b); return self end
 
 function Texture:setTexture(texture)
   self.texture:SetTexture(texture)

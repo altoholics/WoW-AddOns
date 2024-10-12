@@ -2,7 +2,7 @@ local _, ns = ...
 -- luacheck: globals CreateColor CreateFrame ShowUIPanel HideUIPanel UISpecialFrames UIParent Settings
 -- luacheck: globals StatusTrackingBarManager BagsBar MicroMenuContainer MainMenuBar MultiBarBottomLeft
 -- luacheck: globals MultiBarBottomRight MultiBarRight MultiBarLeft MultiBar5 MultiBar6 MultiBar7 Tutorials
--- luacheck: globals PlayerFrame
+-- luacheck: globals PlayerFrame TargetFrame
 
 ns.wowui = {
   CreateColor = CreateColor,
@@ -28,6 +28,7 @@ ns.wowui = {
   MultiBar7 = MultiBar7,
   Tutorials = Tutorials,
   PlayerFrame = PlayerFrame,
+  TargetFrame = TargetFrame,
 }
 
 function ns.wowui.rgba(r, g, b, a)

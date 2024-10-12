@@ -14,5 +14,8 @@ RepBars.lua
 bars/UtilityBar.lua
 ActionBars.lua
 
+hud/PlayerHealthBar.lua
+hud/PlayerPowerBar.lua
+hud/ResourceBar.lua
 hud/Player.lua
 HUD.lua

@@ -9,8 +9,7 @@ local HUD = Class(Frame, function(self)
   self.player = PlayerHUD:new{
     parent = self,
     position = {
-      center = {},
-      -- left = {self.frame, ui.edge.Center, -100, 0}
+      center = {-120, -20},
     },
   }
 
@@ -19,8 +18,8 @@ end, {
   parent = ns.wowui.UIParent,
   position = {
     center = {},
-    width = 300,
-    height = 300,
+    width = 1,
+    height = 1,
   },
   events = {"PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
 })

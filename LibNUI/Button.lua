@@ -39,7 +39,7 @@ local Button = Class(Frame, function(self)
 
   -- hover texture
   self:withTextureOverlay("border", {
-    texturePath = "interface/buttons/UI-ActionButton-Border",
+    path = "interface/buttons/UI-ActionButton-Border",
     blendMode = "ADD",
     positionAll = true,
     coords = {0.21, 0.77, 0.24, 0.79},
