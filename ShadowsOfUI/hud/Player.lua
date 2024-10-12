@@ -79,6 +79,7 @@ local PlayerHUD = Class(Frame, function(self)
   --   self.pet = PetBar:new{parent = self}
   -- end
 end, {
+  name = "$parentPlayer",
   position = {
     width = 1,
     height = 1,

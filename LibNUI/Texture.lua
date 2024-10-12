@@ -3,44 +3,47 @@ local _, ns = ...
 local ui = ns.ui
 local Class, unpack = ns.lua.Class, ns.lua.unpack
 
-local Texture = Class(nil, function(o)
-    o.texture = (o.parent.frame or o.parent):CreateTexture(o.name or nil, o.layer or nil, o.template or nil)
-    o.name = nil
-    o.layer = nil
-    o.template = nil
+local Texture = Class(nil, function(self)
+  self.texture = (self.parent.frame or self.parent):CreateTexture(
+    self.name or nil, self.layer or nil, self.template or nil
+  )
+  self.name = nil
+  self.layer = nil
+  self.template = nil
 
-    if o.atlas then
-      o.texture:SetAtlas(o.atlas, o.atlasSize ~= nil and o.atlasSize or true)
-    end
+  if self.atlas then
+    self.texture:SetAtlas(self.atlas, self.atlasSize ~= nil and self.atlasSize or true)
+  end
+  if self.rotation then self.texture:SetRotation(self.rotation); self.rotation = nil end
 
-    if o.positionAll then o.texture:SetAllPoints() end
-    if o.color then o.texture:SetColorTexture(unpack(o.color)); o.color = nil end
-    if o.vertexColor then o.texture:SetVertexColor(unpack(o.vertexColor)); o.vertexColor = nil end
-    if o.blendMode then o.texture:SetBlendMode(o.blendMode); o.blendMode = nil end
-    if o.gradient then o.texture:SetGradient(unpack(o.gradient)); o.gradient = nil end
-    if o.clamp then
-      for i=1,#o.clamp do
-        o.texture:SetPoint(unpack(o.clamp[i]))
-      end
+  if self.positionAll then self.texture:SetAllPoints() end
+  if self.color then self.texture:SetColorTexture(unpack(self.color)); self.color = nil end
+  if self.vertexColor then self.texture:SetVertexColor(unpack(self.vertexColor)); self.vertexColor = nil end
+  if self.blendMode then self.texture:SetBlendMode(self.blendMode); self.blendMode = nil end
+  if self.gradient then self.texture:SetGradient(unpack(self.gradient)); self.gradient = nil end
+  if self.clamp then
+    for i=1,#self.clamp do
+      self.texture:SetPoint(unpack(self.clamp[i]))
     end
-    if o.position then
-      for p,args in pairs(o.position) do
-        if o[p] then
-          if type(args) == "table" then
-            o[p](o, unpack(args))
-          elseif args then
-            o[p](o, args)
-          end
+  end
+  if self.position then
+    for p,args in pairs(self.position) do
+      if self[p] then
+        if type(args) == "table" then
+          self[p](self, unpack(args))
+        elseif args then
+          self[p](self, args)
         end
       end
-      o.position = nil
     end
-    if o.path then
-      o.texture:SetTexture(o.path)
-    end
-    if o.coords then
-      o.texture:SetTexCoord(unpack(o.coords))
-    end
+    self.position = nil
+  end
+  if self.path then
+    self.texture:SetTexture(self.path)
+  end
+  if self.coords then
+    self.texture:SetTexCoord(unpack(self.coords))
+  end
 end)
 ui.Texture = Texture
 

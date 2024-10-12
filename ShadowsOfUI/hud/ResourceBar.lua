@@ -1,77 +1,42 @@
 local _, ns = ...
-local Class, tinsert = ns.lua.Class, ns.lua.tinsert
+local Class, gsub, unpack = ns.lua.Class, ns.lua.gsub, ns.lua.unpack
 local ui = ns.ui
-local Frame, Texture = ui.Frame, ui.Texture
+local StatusBar, Texture = ui.StatusBar, ui.Texture
 local Player = ns.wow.Player
 
-local OFFSETS = {
-  nil, nil, nil, nil,
+local offsets = {
+  nil,
+  nil,
+  nil,
+  nil,
   { -- 5
-    { x = 0, y = -80 },
-    { x = 0, y = -40 },
-    { x = 0, y = 0 },
-    { x = 0, y = 40 },
-    { x = 0, y = 80 },
-  },
-  { -- 6
-    { x = 2, y = -76 },
-    { x = -6, y = -45 },
-    { x = -10, y = -14 },
-    { x = -10, y = 14 },
-    { x = -6, y = 45 },
-    { x = 2, y = 76 },
-  },
-  { -- 7
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-  },
-  nil,
-  nil,
-  { -- 10
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
-    { x = 0, y = 0 },
+    { x = -1, y = -45, r = math.pi / 2},
+    { x = -5, y = -15, r = math.pi / 2},
+    { x = -5, y = 15, r = math.pi / 2},
+    { x = -1, y = 45, r = math.pi / 2},
   },
 }
 
-local ResourceBar = Class(Frame, function(self)
-  self.countMax = Player:GetPowerMax(self.resourceIdx)
+local ResourceBar = Class(StatusBar, function(self)
+  local className = gsub(Player:GetClassName(), " ", "")
+  local t = self.frame:GetStatusBarTexture()
+  t:SetVertexColor(unpack(ns.Colors[className]))
 
-  self.bubbles = {}
-  for i=1,self.countMax do
-    local o = OFFSETS[self.countMax][i]
+  local countMax = Player:GetPowerMax(self.resourceIdx)
+  for i=1,countMax - 1 do
     Texture:new{
       parent = self,
-      path = "interface/addons/ShadowsOfUI/art/ComboRoundBG",
-      vertexColor = {0, 0, 0, 0.7},
+      layer = "OVERLAY",
+      path = "interface/addons/ShadowsOfUI/art/Separator.tga",
+      coords = {0.359375, 0.640625, 0, 1},
+      rotation = offsets[countMax][i].r,
+      vertexColor = {0, 0, 0, 0.8},
       position = {
-        center = {o.x, o.y},
-        width = 18,
-        height = 18,
+        center = {offsets[countMax][i].x, offsets[countMax][i].y},
+        width = 4.5,
+        height = 8,
       },
     }
-    tinsert(self.bubbles, Texture:new{
-      parent = self,
-      path = "interface/addons/ShadowsOfUI/art/ComboRound",
-      vertexColor = self.color,
-      position = {
-        center = {o.x, o.y},
-        width = 18,
-        height = 18,
-      },
-    })
   end
 
   if self.classId == 11 then -- druid
@@ -81,25 +46,32 @@ local ResourceBar = Class(Frame, function(self)
     self:registerEvent("RUNE_POWER_UPDATE")
   end
 
-  local p = Player:GetPower(self.resourceIdx)
-  self:SetValue(p)
+  self.frame:SetMinMaxValues(1, countMax)
+  self:RUNE_POWER_UPDATE()
+  -- self:SetValue(countMax)
 end, {
+  name = "$parentResource",
+  level = 5,
+  backdrop = {
+    color = false,
+    path = "interface/addons/ShadowsOfUI/art/CleanCurvesBG",
+    coords = {0.32, 0.05, 0.01, 0.99},
+  },
+  orientation = "VERTICAL",
+  texture = {
+    path = "interface/addons/ShadowsOfUI/art/CleanCurves",
+    coords = {0.32, 0.05, 0.01, 0.99},
+  },
   position = {
-    center = {20, 0},
-    width = 27,
-    height = 188,
+    center = {11, 0},
+    width = 17,
+    height = 150,
   },
   unitEvents = {
     UNIT_POWER_FREQUENT = {"player"},
   },
 })
 ns.ResourceBar = ResourceBar
-
-function ResourceBar:SetValue(val)
-  for i=1,#self.bubbles do
-    self.bubbles[i]:SetShown(val >= i)
-  end
-end
 
 function ResourceBar:UNIT_POWER_FREQUENT(_, powerType)
   if powerType == "SOUL_SHARDS" or powerType == "HOLY_POWER"

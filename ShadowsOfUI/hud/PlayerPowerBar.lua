@@ -1,26 +1,34 @@
 local _, ns = ...
 local Class = ns.lua.Class
+local AbbreviateNumbers = ns.lua.AbbreviateNumbers
 local ui = ns.ui
 local StatusBar = ui.StatusBar
 local Player = ns.wow.Player
 
 local PowerBar = Class(StatusBar, function(self)
-  local _, powerKey, altR, altG, altB = Player:GetPowerType()
-  local color = ns.Colors.PowerBarColor[powerKey]
-  local t = self.frame:GetStatusBarTexture()
-  if color then
-    t:SetVertexColor(color.r, color.g, color.b)
-  elseif altR then
-    t:SetVertexColor(altR, altG, altB)
-  end
-
   if self.classId == 11 then -- druid
     self:registerEvent("UPDATE_SHAPESHIFT_FORM")
-    self:UPDATE_SHAPESHIFT_FORM()
   end
 
+  self:withLabel("value", {
+    text = AbbreviateNumbers(Player:GetPower()),
+    font = "GameFontHighlight",
+    position = {
+      bottomLeft = {self.frame, ui.edge.BottomRight, 0, -6},
+    },
+  })
+  self:withLabel("percent", {
+    text = Player:GetPowerPercent(),
+    font = "GameFontHighlight",
+    position = {
+      bottomLeft = {self.frame, ui.edge.BottomRight, 0, 6},
+    },
+  })
+
+  self:UPDATE_SHAPESHIFT_FORM()
   self:UNIT_POWER_FREQUENT()
 end, {
+  name = "$parentPower",
   alpha = 0.8,
   backdrop = {
     color = false,
@@ -56,9 +64,10 @@ end
 function PowerBar:UPDATE_SHAPESHIFT_FORM()
   local _, powerKey, altR, altG, altB = Player:GetPowerType()
   local color = ns.Colors.PowerBarColor[powerKey]
+  local t = self.frame:GetStatusBarTexture()
   if color then
-    self:Color({color.r, color.g, color.b})
+    t:SetVertexColor(color.r, color.g, color.b)
   elseif altR then
-    self:Color({altR, altG, altB})
+    t:SetVertexColor(altR, altG, altB)
   end
 end

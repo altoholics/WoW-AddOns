@@ -16,6 +16,7 @@ local HUD = Class(Frame, function(self)
   self:PLAYER_TARGET_CHANGED()
 end, {
   parent = ns.wowui.UIParent,
+  name = "ShadowHUD",
   position = {
     center = {},
     width = 1,

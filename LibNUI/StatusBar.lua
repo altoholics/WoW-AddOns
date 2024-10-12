@@ -46,7 +46,7 @@ local StatusBar = Class(Frame, function(self)
   if self.orientation then self.frame:SetOrientation(self.orientation) end
   if self.min and self.max then self.frame:SetMinMaxValues(self.min, self.max) end
 end, {
-    type = "StatusBar"
+  type = "StatusBar"
 })
 ui.StatusBar = StatusBar
 
@@ -63,7 +63,7 @@ function StatusBar:Texture(t) self.frame:SetStatusBarTexture(t) end
 function StatusBar:SetValue(v)
   if not self.texture then self.frame:SetValue(v); return end
   local n, m = self.frame:GetMinMaxValues()
-  local p = v / (m-n)
+  local p = 1 - (v / (m-n))
   local dx, dy = self.Xd * p, self.Yd * p
   local l, r, t, b = self.X1, self.X2, self.Y1, self.Y2
   if self.frame:GetOrientation() == "horizontal" then

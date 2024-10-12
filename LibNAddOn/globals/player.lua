@@ -32,8 +32,9 @@ local Player = {
   GetPetHealthValues = function() return UnitHealth("pet"), UnitHealthMax("pet") end,
   GetPower = function(self, idx) return UnitPower("player", idx) end,
   GetPowerMax = function(self, idx) return UnitPowerMax("player", idx) end,
+  GetPowerPercent = function(self, idx) return math.floor(100 * (self:GetPower(idx) / self:GetPowerMax(idx))).."%" end,
   GetPowerType = function() return UnitPowerType("player") end,
-  GetPowerValues = function(self) return self:GetPower(), self:GetPowerMax() end,
+  GetPowerValues = function(self, idx) return self:GetPower(idx), self:GetPowerMax(idx) end,
   -- https://wowpedia.fandom.com/wiki/API_GetShapeshiftFormID (forms, stealth, wolf, stance, etc)
   GetShapeshiftFormID = GetShapeshiftFormID,
   GetXP = function() return UnitXP("player") end,

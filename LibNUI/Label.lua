@@ -5,7 +5,7 @@ local unpack = ns.lua.unpack
 local Class = ns.lua.Class
 
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_FontStyles_Shared/SharedFontStyles.xml
--- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_FontStyles_Frame/Mainline/FontStyles.xml#L4
+-- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_FontStyles_Frame/Mainline/FontStyles.xml
 ui.fonts = ns.lua.ToMap({
   "GameFontHighlight", "GameFontHighlightSmall",
   "SystemFont_Med2",
@@ -16,8 +16,6 @@ local Label = Class(nil, function(o)
   o.label = l
   o.name = nil
   o.layer = nil
-  -- https://www.townlong-yak.com/framexml/live/Blizzard_FontStyles_Shared/SharedFontStyles.xml
-  -- https://www.townlong-yak.com/framexml/live/Blizzard_FontStyles_Frame/FontStyles.xml
   o.font = nil
   if o.fontObj then l:SetFontObject(o.fontObj) end
   if o.text then

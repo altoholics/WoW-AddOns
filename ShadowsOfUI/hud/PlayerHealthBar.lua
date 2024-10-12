@@ -31,6 +31,7 @@ local HealthBar = Class(StatusBar, function(self)
     },
   })
 end, {
+  name = "$parentHealth",
   alpha = 0.8,
   backdrop = {
     color = false,
