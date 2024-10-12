@@ -27,37 +27,43 @@ local Button = Class(Frame, function(self)
   -- https://wowpedia.fandom.com/wiki/Creating_key_bindings
   if self.bindLeftClick then
     SetOverrideBindingClick(self.frame, false, self.bindLeftClick, self.frame:GetName(), "LeftButton")
-    self:withLabel("keybind", {
-      text = string.gsub(self.bindLeftClick, "CTRL", "c"),
-      color = {0.8, 0.8, 0.8, 1},
-      fontObj = keybindFont,
-      position = {
-        topRight = {0, -2},
-      },
-    })
+    if self.kbLabel ~= false then
+      self:withLabel("keybind", {
+        text = string.gsub(self.bindLeftClick, "CTRL", "c"),
+        color = {0.8, 0.8, 0.8, 1},
+        fontObj = keybindFont,
+        position = {
+          topRight = {0, -2},
+          -- width = 1,
+          -- height = 1,
+        },
+      })
+    end
   end
 
   -- hover texture
-  self:withTextureOverlay("border", {
-    path = "interface/buttons/UI-ActionButton-Border",
-    blendMode = "ADD",
-    positionAll = true,
-    coords = {0.21, 0.77, 0.24, 0.79},
-  })
-  local border = self.border.texture
-  border:Hide()
-  self.frame:SetScript("OnEnter", function()
-    border:Show()
-  end)
-  self.frame:SetScript("OnLeave", function()
+  if self.glow ~= false then
+    self:withTextureOverlay("border", {
+      path = "interface/buttons/UI-ActionButton-Border",
+      blendMode = "ADD",
+      positionAll = true,
+      coords = {0.21, 0.77, 0.24, 0.79},
+    })
+    local border = self.border.texture
     border:Hide()
-  end)
-  self.frame:SetScript("OnMouseDown", function()
-    border:SetVertexColor(0, 1, 0)
-  end)
-  self.frame:SetScript("OnMouseUp", function()
-    border:SetVertexColor(1, 1, 1)
-  end)
+    self.frame:SetScript("OnEnter", function()
+      border:Show()
+    end)
+    self.frame:SetScript("OnLeave", function()
+      border:Hide()
+    end)
+    self.frame:SetScript("OnMouseDown", function()
+      border:SetVertexColor(0, 1, 0)
+    end)
+    self.frame:SetScript("OnMouseUp", function()
+      border:SetVertexColor(1, 1, 1)
+    end)
+  end
 end, {
   type = "Button",
 })

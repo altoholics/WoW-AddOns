@@ -17,5 +17,8 @@ ActionBars.lua
 hud/PlayerHealthBar.lua
 hud/PlayerPowerBar.lua
 hud/ResourceBar.lua
+hud/PetBar.lua
 hud/Player.lua
 HUD.lua
+
+Chat.lua
