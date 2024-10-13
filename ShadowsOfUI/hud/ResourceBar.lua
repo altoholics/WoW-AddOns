@@ -8,7 +8,11 @@ local offsets = {
   nil,
   nil,
   nil,
-  nil,
+  {
+    { x = -3, y = -38, r = math.pi / 2 },
+    { x = -6, y = 2, r = math.pi / 2 },
+    { x = -3, y = 35, r = math.pi / 2 },
+  },
   { -- 5
     { x = -1, y = -45, r = math.pi / 2 },
     { x = -5, y = -15, r = math.pi / 2 },
