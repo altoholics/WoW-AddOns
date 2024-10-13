@@ -53,11 +53,44 @@ local PlayerHUD = Class(Frame, function(self)
   if classId == 9 or classId == 3 then -- warlock, hunter
     self.pet = PetBar:new{parent = self}
   end
+
+  self:PLAYER_TARGET_CHANGED()
 end, {
   name = "$parentPlayer",
+  alpha = 0.9,
   position = {
     width = 1,
     height = 1,
   },
+  events = {"PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
+  unitEvents = {
+    UNIT_HEALTH = {"player"},
+  },
 })
 ns.PlayerHUD = PlayerHUD
+
+function PlayerHUD:UpdateVisibility()
+  local hp, max = Player:GetHealthValues()
+  if hp >= max then
+    self:hide()
+  end
+end
+
+function PlayerHUD:PLAYER_REGEN_DISABLED()
+  self._combat = true
+  self:show()
+end
+
+function PlayerHUD:PLAYER_REGEN_ENABLED()
+  self._combat = false
+  self:UpdateVisibility()
+end
+
+function PlayerHUD:PLAYER_TARGET_CHANGED()
+  if Player:HasTarget() then self:show() end
+end
+
+function PlayerHUD:UNIT_HEALTH()
+  if self._combat then return end
+  self:UpdateVisibility()
+end
