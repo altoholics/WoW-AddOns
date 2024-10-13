@@ -36,7 +36,7 @@ local UtilityBar = Class(Frame, function(self)
   self.flightStyle = self:addSpellButton(436854) -- switch flight style
   -- https://wowpedia.fandom.com/wiki/MountID
   self.mount = self:addMountButton(1799, 419345, "$parentMount", "CTRL-R") -- Eve's Ghastly Rider
-  self.shopMount = self:addMountButton(2237, 457485) -- Grizzly Hills Packmaster
+  self.shopMount = self:addMountButton(2237, 457485, "$parentShopMount", "CTRL-SHIFT-R") -- Grizzly Hills Packmaster
   self.waterMount = self:addMountButton(855, 228919) -- darkwater skate
   self.bank = self:addSpellButton(83958) -- guild perk: mobile banking
   self.warband = self:addSpellButton(460905) -- warband bank distance inhibitor (460925, 465226)
@@ -68,7 +68,7 @@ local UtilityBar = Class(Frame, function(self)
   -- secondary
   self.fishing = self:addSpellButton(271990)
   self.fish = self:addOffsetSpellButton(131474, nil, self.fishing)
-  self.raft = self:addOffsetToyButton(85500, self.fish, -self.spacing)
+  self.raft = self.fish and self:addOffsetToyButton(85500, self.fish, -self.spacing)
 
   self.cooking = self:addSpellButton(158765) or self:addSpellButton(88053)
   self.fire = self.cooking and self:addOffsetSpellButton(818, nil, self.cooking)

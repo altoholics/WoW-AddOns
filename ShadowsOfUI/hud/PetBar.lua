@@ -41,7 +41,7 @@ end, {
   },
   position = {
     center = {-14, 0},
-    width = 15,
+    width = 14,
     height = 136,
   },
   unitEvents = {
@@ -54,7 +54,7 @@ ns.PetBar = PetBar
 function PetBar:UNIT_HEALTH()
   local hp, max = Player.GetPetHealthValues()
   self.frame:SetMinMaxValues(0, max)
-  self.frame:SetValue(hp)
+  self:SetValue(hp)
 end
 
 function PetBar:UNIT_PET()

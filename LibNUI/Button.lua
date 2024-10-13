@@ -9,6 +9,19 @@ local file, _, flags = NumberFontNormalSmallGray:GetFont()
 local keybindFont = CreateFont("LibNUIButtonKeybind")
 keybindFont:SetFont(file, 7, flags)
 
+local patterns = {
+  ["ALT%-"] = "a-", -- alt
+  ["CTRL%-"] = "c-", -- ctrl
+  ["SHIFT%-"] = "s-", -- shift
+}
+
+local function formatKeybind(bind)
+  for p,s in pairs(patterns) do
+    bind = bind:gsub(p, s)
+  end
+  return bind
+end
+
 -- https://wowpedia.fandom.com/wiki/UIOBJECT_Button
 local Button = Class(Frame, function(self)
   if self.normal then
@@ -30,7 +43,7 @@ local Button = Class(Frame, function(self)
     SetOverrideBindingClick(self.frame, false, self.bindLeftClick, self.frame:GetName(), "LeftButton")
     if self.kbLabel ~= false then
       self:withLabel("keybind", {
-        text = string.gsub(self.bindLeftClick, "CTRL", "c"),
+        text = formatKeybind(self.bindLeftClick),
         color = {0.8, 0.8, 0.8, 1},
         fontObj = keybindFont,
         position = {
