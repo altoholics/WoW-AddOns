@@ -1,11 +1,12 @@
 local _, ns = ...
--- luacheck: globals SetOverrideBindingClick NumberFontNormalSmallGray CreateFont
+-- luacheck: globals NumberFontNormalSmallGray CreateFont
 local ui = ns.ui
 local Class, unpack = ns.lua.Class, ns.lua.unpack
 local Frame = ui.Frame
+local GameTooltip, SetOverrideBindingClick = ns.wowui.GameTooltip, ns.wowui.SetOverrideBindingClick
 
 local file, _, flags = NumberFontNormalSmallGray:GetFont()
-local keybindFont = CreateFont("ButtonKeybind")
+local keybindFont = CreateFont("LibNUIButtonKeybind")
 keybindFont:SetFont(file, 7, flags)
 
 -- https://wowpedia.fandom.com/wiki/UIOBJECT_Button
@@ -34,8 +35,7 @@ local Button = Class(Frame, function(self)
         fontObj = keybindFont,
         position = {
           topRight = {0, -2},
-          -- width = 1,
-          -- height = 1,
+          height = 7,
         },
       })
     end
@@ -51,12 +51,6 @@ local Button = Class(Frame, function(self)
     })
     local border = self.border.texture
     border:Hide()
-    self.frame:SetScript("OnEnter", function()
-      border:Show()
-    end)
-    self.frame:SetScript("OnLeave", function()
-      border:Hide()
-    end)
     self.frame:SetScript("OnMouseDown", function()
       border:SetVertexColor(0, 1, 0)
     end)
@@ -66,5 +60,43 @@ local Button = Class(Frame, function(self)
   end
 end, {
   type = "Button",
+  scripts = {
+    "OnEnter",
+    "OnLeave",
+  },
 })
 ui.Button = Button
+
+function Button:OnEnter()
+  if self.border then self.border.texture:Show() end
+  if self.tooltip then
+    local gt = self.tooltip.frame
+    if not gt then
+      gt = GameTooltip
+      if self.tooltip.owner then
+        gt:SetOwner(unpack(self.tooltip.owner))
+      else
+        gt:SetOwner(self.frame, "ANCHOR_TOPRIGHT", -2, 0)
+      end
+      if self.tooltip.point then
+        gt:SetPoint(unpack(self.tooltip.point))
+      end
+    end
+    local td = self.tooltip
+    if td.itemId then
+      gt:SetOwnedItemByID(td.itemId)
+    elseif td.toyId then
+      gt:SetToyByItemID(td.toyId)
+    elseif td.spellId then
+      gt:SetSpellByID(td.spellId)
+    elseif td.mountSpellId then
+      gt:SetMountBySpellID(td.mountSpellId)
+    end
+    gt:Show()
+  end
+end
+
+function Button:OnLeave()
+  if self.border then self.border.texture:Hide() end
+  if self.tooltip then (self.tooltip.frame or GameTooltip):Hide() end
+end

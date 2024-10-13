@@ -2,7 +2,7 @@ local _, ns = ...
 -- luacheck: globals CreateColor CreateFrame ShowUIPanel HideUIPanel UISpecialFrames UIParent Settings
 -- luacheck: globals StatusTrackingBarManager BagsBar MicroMenuContainer MainMenuBar MultiBarBottomLeft
 -- luacheck: globals MultiBarBottomRight MultiBarRight MultiBarLeft MultiBar5 MultiBar6 MultiBar7 Tutorials
--- luacheck: globals PlayerFrame TargetFrame
+-- luacheck: globals PlayerFrame TargetFrame GameTooltip SetOverrideBindingClick
 
 ns.wowui = {
   CreateColor = CreateColor,
@@ -14,6 +14,9 @@ ns.wowui = {
   UISpecialFrames = UISpecialFrames,
   UIParent = UIParent,
 
+  SetOverrideBindingClick = SetOverrideBindingClick,
+
+  GameTooltip = GameTooltip,
   Settings = Settings,
   StatusTrackingBarManager = StatusTrackingBarManager,
   BagsBar = BagsBar,

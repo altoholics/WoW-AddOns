@@ -24,7 +24,6 @@ local EditBox = Class(CleanFrame, function(self)
   if self.font then self.frame:SetFontObject(self.font); self.font = nil end
 end, {
   type = "EditBox",
-  -- template = "SecureFrameTemplate",
 })
 
 local Command = Class(EditBox, function(self)
@@ -72,6 +71,8 @@ local Command = Class(EditBox, function(self)
 end, {
   parent = ns.wow.UIParent,
   name = "ShadowsOfUI_Command",
+  strata = "DIALOG",
+  level = 9000,
   autoFocus = true,
   alpha = 0.8,
   background = {0, 0, 0, 0.8},

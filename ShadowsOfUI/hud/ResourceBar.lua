@@ -10,10 +10,17 @@ local offsets = {
   nil,
   nil,
   { -- 5
-    { x = -1, y = -45, r = math.pi / 2},
-    { x = -5, y = -15, r = math.pi / 2},
-    { x = -5, y = 15, r = math.pi / 2},
-    { x = -1, y = 45, r = math.pi / 2},
+    { x = -1, y = -45, r = math.pi / 2 },
+    { x = -5, y = -15, r = math.pi / 2 },
+    { x = -5, y = 15, r = math.pi / 2 },
+    { x = -1, y = 45, r = math.pi / 2 },
+  },
+  { -- 6
+    { x  = 0, y = -50, r = math.pi / 2 },
+    { x  = -4, y = -25, r = math.pi / 2 },
+    { x  = -6, y = 0, r = math.pi / 2 },
+    { x  = -4, y = 25, r = math.pi / 2 },
+    { x  = 0, y = 50, r = math.pi / 2 },
   },
 }
 

@@ -82,13 +82,14 @@ local UtilityBar = Class(Frame, function(self)
   self.frame:SetScript("OnEnter", function(f) f:SetAlpha(1) end)
   self.frame:SetScript("OnLeave", function(f) if not f:IsMouseOver() then f:SetAlpha(0.5) end end)
 end, {
+  parent = ns.wowui.UIParent,
+  name = "ShadowsOfUIUtilBar",
   spacing = 2,
-  iconSize = 20,
-  smallSize = 14,
-  name = "ShadowsOfUIBars",
+  iconSize = 30,
+  smallSize = 20,
   position = {
     right = {},
-    width = 24,
+    width = 48,
   },
 })
 ns.UtilityBar = UtilityBar
@@ -104,6 +105,10 @@ function UtilityBar:addButton(ops)
     },
     normal = {
       coords = {0.07, 0.93, 0.07, 0.93},
+    },
+    tooltip = {
+      owner = {self.frame, "ANCHOR_NONE"},
+      point = {ui.edge.Right, self.frame, ui.edge.Left, -2, 0},
     },
   }))
   tinsert(self.buttons, btn)
@@ -122,6 +127,10 @@ function UtilityBar:addSecureButton(ops)
     normal = {
       coords = {0.07, 0.93, 0.07, 0.93},
     },
+    tooltip = {
+      owner = {self.frame, "ANCHOR_NONE"},
+      point = {ui.edge.Right, self.frame, ui.edge.Left, -2, 0},
+    },
   }))
   if not ops.offset then tinsert(self.buttons, btn) end
   return btn
@@ -138,6 +147,7 @@ function UtilityBar:addToyButton(id)
         toy = id,
       },
     },
+    tooltip = { toyId = id },
   }
 end
 
@@ -160,6 +170,7 @@ function UtilityBar:addOffsetToyButton(id, target, x, y)
         toy = id,
       },
     },
+    tooltip = { toyId = id },
   }
 end
 
@@ -174,6 +185,7 @@ function UtilityBar:addSpellButton(id, icon)
         spell = id,--GetSpellName(id),
       },
     },
+    tooltip = { spellId = id },
   }
 end
 
@@ -196,6 +208,7 @@ function UtilityBar:addOffsetSpellButton(id, icon, target, x, y)
         spell = GetSpellName(id),
       },
     },
+    tooltip = { spellId = id },
   }
 end
 
@@ -212,5 +225,6 @@ function UtilityBar:addMountButton(id, spell, name, bind)
       },
     },
     bindLeftClick = bind,
+    tooltip = { mountSpellId = spell },
   }
 end

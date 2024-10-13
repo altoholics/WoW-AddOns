@@ -17,6 +17,7 @@ local HUD = Class(Frame, function(self)
 end, {
   parent = ns.wowui.UIParent,
   name = "ShadowHUD",
+  strata = "BACKGROUND",
   position = {
     center = {},
     width = 1,
