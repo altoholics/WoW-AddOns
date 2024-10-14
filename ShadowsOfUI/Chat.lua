@@ -2,24 +2,37 @@ local _, ns = ...
 local Class, UIParent = ns.lua.Class, ns.wowui.UIParent
 local ui = ns.ui
 local Frame = ui.Frame
+local ChatTypeInfo = ChatTypeInfo -- luacheck: globals ChatTypeInfo
+
 -- luacheck: globals ChatFontNormal CreateFont
+local file, _, flags = ChatFontNormal:GetFont()
+local chatFont = CreateFont("ShadowChatFont")
+chatFont:SetFont(file, 18, flags)
+chatFont:SetJustifyH("LEFT")
+chatFont:SetShadowColor(0, 0, 0, 0.5)
+chatFont:SetShadowOffset(2, -2)
 
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_ChatFrameBase/Mainline/ChatFrame.lua
 local MessageFrame = Class(Frame, function(self)
+  self.frame:SetFontObject(chatFont)
+  self.frame:SetTimeVisible(60)
+  -- self.frame:SetFading(false)
+
+  -- for i=1,10 do self.frame:AddMessage("sample line of text "..i, 1, 1, 1) end
 end, {
-  parent = UIParent,
-  type = "MessageFrame",
-  name = "ShadowUIChat",
-  position = {
-    bottomLeft = {5, 12},
-    width = 600,
-    height = 400,
-  },
+  type = "ScrollingMessageFrame",
 })
 
 -- https://wowpedia.fandom.com/wiki/ChatTypeInfo
 local Chat = Class(MessageFrame, function(self)
 end, {
+  parent = UIParent,
+  name = "ShadowUIChat",
+  position = {
+    bottomLeft = {20, 20},
+    width = 800,
+    height = 300,
+  },
   events = {
     -- "CHAT_MSG_ADDON",
     -- "CHAT_MSG_ADDON_LOGGED",
@@ -33,7 +46,7 @@ end, {
     "CHAT_MSG_INSTANCE_CHAT_LEADER",
     "CHAT_MSG_MONSTER_EMOTE",
     "CHAT_MSG_MONSTER_PARTY",
-    "CHAT_MSG_MOSNTER_SAY",
+    "CHAT_MSG_MONSTER_SAY",
     "CHAT_MSG_MONSTER_WHISPER",
     "CHAT_MSG_MONSTER_YELL",
     "CHAT_MSG_OFFICER",
@@ -54,3 +67,22 @@ end, {
   },
 })
 ns.Chat = Chat
+
+local ChannelStrings = {
+  SAY = " says: ",
+  GUILD = " says: ",
+}
+
+function Chat:AddChannelMessage(channel, text, player)
+  local info = ChatTypeInfo[channel]
+  -- process player "Name-Realm" and color by class
+  self.frame:AddMessage(player..ChannelStrings[channel]..text, info.r, info.g, info.b)
+end
+
+function Chat:CHAT_MSG_SAY(text, player)
+  self:AddChannelMessage("SAY", text, player)
+end
+
+function Chat:CHAT_MSG_GUILD(text, player)
+  self:AddChannelMessage("GUILD", text, player)
+end

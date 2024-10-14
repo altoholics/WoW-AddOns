@@ -230,6 +230,12 @@ function ns:settingChanged(var, value, name) --, setting
     end
   end
   if "ChatEnabled" == name then
+    if self.chat then
+      -- todo: disable
+      self.chat:Hide()
+    elseif value then
+      self.chat = ns.Chat:new{}
+    end
   end
   if "CommandEnabled" == name then
     if self.command then
@@ -275,6 +281,9 @@ function ns:onLogin()
   end
   if self.db.settings.command.enabled and not self.command then
     self.command = ns.Command:new{}
+  end
+  if self.db.settings.chat.enabled and not self.chat then
+    self.chat = ns.Chat:new{}
   end
 end
 

@@ -179,6 +179,7 @@ function Command:OnSpacePressed()
   if text == "" then return end
   if strsub(text, 1, 1) ~= "/" then return end
   local cmd = strmatch(text, "(/%w+) $")
+  if not cmd then return end
   cmd = string.upper(cmd)
 
   if CHANNELS[cmd] then
