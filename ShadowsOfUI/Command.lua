@@ -181,7 +181,7 @@ function Command:OnSpacePressed()
   cmd = string.upper(cmd)
 
   if CHANNELS[cmd] then
-    -- todo: fix DUMP being recognized as a channel
+    if "/DUMP" == cmd then return end -- why is dump a channel?
     self:UpdateChannelDisplay(CHANNELS[cmd])
     self.frame:SetText("")
   else

@@ -1,14 +1,20 @@
 local _, ns = ...
--- luacheck: globals ChatFontNormal CreateFont
-local Class = ns.lua.Class
+local Class, UIParent = ns.lua.Class, ns.wowui.UIParent
 local ui = ns.ui
-local Frame, CleanFrame, SecureButton = ui.Frame, ui.CleanFrame, ui.SecureButton
+local Frame = ui.Frame
+-- luacheck: globals ChatFontNormal CreateFont
 
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_ChatFrameBase/Mainline/ChatFrame.lua
-
 local MessageFrame = Class(Frame, function(self)
 end, {
+  parent = UIParent,
   type = "MessageFrame",
+  name = "ShadowUIChat",
+  position = {
+    bottomLeft = {5, 12},
+    width = 600,
+    height = 400,
+  },
 })
 
 -- https://wowpedia.fandom.com/wiki/ChatTypeInfo

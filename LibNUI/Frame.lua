@@ -161,11 +161,14 @@ function Frame:setDragTarget(target)
     target:StopMovingOrSizing()
   end)
 end
+
 function Frame:startUpdates()
   if self.onUpdate and not self.animating then
     self.animating = true
     local s = self
-    self.frame:SetScript("OnUpdate", function(_, elapsed) s:onUpdate(elapsed * 1000) end)
+    self.frame:SetScript("OnUpdate", function(_, elapsed)
+      if not s.animating then s:onUpdate(elapsed * 1000) end
+    end)
   end
 end
 function Frame:stopUpdates()
