@@ -260,6 +260,10 @@ function ns:onLoad()
   if self.db.settings.repBars.enabled and maxLvl and not self.repBars then
     self.repBars = ns.RepBarContainer:new{}
   end
+
+  if not self.queueIndicator then
+    self.queueIndicator = ns.QueueIndicator:new{}
+  end
 end
 
 function ns:onLogin()

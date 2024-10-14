@@ -90,6 +90,7 @@ function Frame:OnEvent(event, ...)
   end
 end
 
+function Frame:all() self.frame:SetAllPoints(); return self end
 function Frame:center(...) self.frame:SetPoint(ui.edge.Center, ...); return self end
 function Frame:top(...) self.frame:SetPoint(ui.edge.Top, ...); return self end
 function Frame:topLeft(...) self.frame:SetPoint(ui.edge.TopLeft, ...); return self end

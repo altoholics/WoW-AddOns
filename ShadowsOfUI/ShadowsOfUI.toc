@@ -25,3 +25,5 @@ HUD.lua
 
 Command.lua
 Chat.lua
+
+QueueIndicator.lua

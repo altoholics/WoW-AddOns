@@ -12,7 +12,7 @@ ui.fonts = ns.lua.ToMap({
 })
 
 local Label = Class(nil, function(o)
-  local l = o.parent:CreateFontString(o.name, o.layer, o.font)
+  local l = (o.parent.frame or o.parent):CreateFontString(o.name, o.layer, o.font)
   o.label = l
   o.name = nil
   o.layer = nil
