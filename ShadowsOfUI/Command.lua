@@ -94,6 +94,7 @@ end, {
 ns.Command = Command
 
 function Command:OnEscapePressed()
+  self.frame:SetText("")
   self:hide()
 end
 

@@ -7,6 +7,9 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
 
   -- party/raid buffs
   self.fortitude = self:addSpellButton(21562)
+  self.aranceInt = self:addSpellButton(1459)
+
+  self.refreshments = self:addSpellButton(190336)
 
   -- resurrect
   self.resurrect = self:addSpellButton(212036) or self:addSpellButton(2006)
