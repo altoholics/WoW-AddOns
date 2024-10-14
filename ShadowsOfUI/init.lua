@@ -21,6 +21,7 @@ LibNAddOn{
           hideBags = true,
           hidePlayerFrame = false,
           hideTargetFrame = false,
+          hideSimpleStanceBar = false,
         },
         actionBars = {
           enabled = false,
@@ -140,6 +141,15 @@ LibNAddOn{
           label = "Hide target frame",
           tooltip = "Hide target frame",
         },
+        {
+          name = "HideSimpleStanceBar",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.blizz end,
+          key = "hideSimpleStanceBar",
+          label = "Hide 1-action stance bar",
+          tooltip = "Hide stance bar for classes like Rogue, Priest",
+        },
       },
     },
   },
@@ -172,26 +182,36 @@ function ns:MigrateDB()
   end
 end
 
-local Hider = ns.wowui.CreateFrame("Frame")
+-- luacheck: globals UIParent CreateFrame
+local CreateFrame, UIParent = CreateFrame, UIParent
+local Hider = CreateFrame("Frame", "ShadowUIHider", UIParent)
 Hider:Hide()
 
+local function updateVisAndParent(frame, hide)
+  if hide then
+    frame:Hide()
+    frame:SetParent(Hider)
+  else
+    frame:Show()
+    frame:SetParent(UIParent)
+  end
+end
+
+-- luacheck: globals PlayerFrame TargetFrame StatusTrackingBarManager MicroMenuContainer BagsBar StanceBar
+local StatusTrackingBarManager, MicroMenuContainer, BagsBar = StatusTrackingBarManager, MicroMenuContainer, BagsBar
+local PlayerFrame, TargetFrame, StanceBar = PlayerFrame, TargetFrame, StanceBar
+
 function ns:settingChanged(var, value, name) --, setting
-  if "HideDefaultXPBar" == name then
-    ns.wowui.StatusTrackingBarManager:SetShown(not value)
-  end
-  if "HideMicroMenu" == name then
-    ns.wowui.MicroMenuContainer:SetShown(not value)
-  end
-  if "HideBags" == name then
-    ns.wowui.BagsBar:SetShown(not value)
-  end
-  if "HidePlayerFrame" == name then
-    ns.wowui.PlayerFrame:SetShown(not value)
-    ns.wowui.PlayerFrame:SetParent(Hider)
-  end
-  if "HideTargetFrame" == name then
-    ns.wowui.TargetFrame:SetShown(not value)
-    ns.wowui.TargetFrame:SetParent(Hider)
+  if "HideDefaultXPBar" == name then StatusTrackingBarManager:SetShown(not value) end
+  if "HideMicroMenu" == name then MicroMenuContainer:SetShown(not value) end
+  if "HideBags" == name then BagsBar:SetShown(not value) end
+  if "HidePlayerFrame" == name then updateVisAndParent(PlayerFrame, value) end
+  if "HideTargetFrame" == name then updateVisAndParent(TargetFrame, value) end
+  if "HideSimpleStanceBar" == name then
+    local classId = ns.wow.Player:GetClassId()
+    if classId == 4 then
+      updateVisAndParent(StanceBar, value)
+    end
   end
 
   if "XpBarEnabled" == name then
@@ -221,22 +241,16 @@ function ns:settingChanged(var, value, name) --, setting
 end
 
 function ns:onLoad()
-  if self.db.settings.xpBar.hideDefault then
-    ns.wowui.StatusTrackingBarManager:Hide()
-  end
-  if self.db.settings.blizz.hideMicroMenu then
-    ns.wowui.MicroMenuContainer:Hide()
-  end
-  if self.db.settings.blizz.hideBags then
-    ns.wowui.BagsBar:Hide()
-  end
-  if self.db.settings.blizz.hidePlayerFrame then
-    ns.wowui.PlayerFrame:Hide()
-    ns.wowui.PlayerFrame:SetParent(Hider)
-  end
-  if self.db.settings.blizz.hideTargetFrame then
-    ns.wowui.TargetFrame:Hide()
-    ns.wowui.TargetFrame:SetParent(Hider)
+  if self.db.settings.xpBar.hideDefault then StatusTrackingBarManager:Hide() end
+  if self.db.settings.blizz.hideMicroMenu then MicroMenuContainer:Hide() end
+  if self.db.settings.blizz.hideBags then BagsBar:Hide() end
+  if self.db.settings.blizz.hidePlayerFrame then updateVisAndParent(PlayerFrame, true) end
+  if self.db.settings.blizz.hideTargetFrame then updateVisAndParent(TargetFrame, true) end
+  if self.db.settings.blizz.hideSimpleStanceBar then
+    local classId = ns.wow.Player:GetClassId()
+    if classId == 4 or classId == 5 then -- rogue, priest
+      updateVisAndParent(StanceBar, true)
+    end
   end
 
   local maxLvl = self.wow.Player:isMaxLevel()

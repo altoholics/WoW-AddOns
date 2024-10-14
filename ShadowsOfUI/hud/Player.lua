@@ -87,7 +87,11 @@ function PlayerHUD:PLAYER_REGEN_ENABLED()
 end
 
 function PlayerHUD:PLAYER_TARGET_CHANGED()
-  if Player:HasTarget() then self:show() end
+  if Player:HasTarget() then
+    self:show()
+  elseif not self._combat then
+    self:UpdateVisibility()
+  end
 end
 
 function PlayerHUD:UNIT_HEALTH()

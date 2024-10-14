@@ -47,6 +47,7 @@ local UtilityBar = Class(Frame, function(self)
   self.mining = self:addSpellButton(2656)
   self.overloadOre = self:addOffsetSpellButton(423394, nil, self.mining)
   self.skinning = self:addSpellButton(194174)
+  self.sharpen = self:addOffsetSpellButton(440977, nil, self.skinning)
 
   self.alchemy = self:addSpellButton(195095)
 
@@ -72,6 +73,8 @@ local UtilityBar = Class(Frame, function(self)
 
   self.cooking = self:addSpellButton(158765) or self:addSpellButton(88053)
   self.fire = self.cooking and self:addOffsetSpellButton(818, nil, self.cooking)
+
+  self.picking = self:addSpellButton(1804) -- lock picking
 
   self:height(#self.buttons * self.iconSize + (#self.buttons-1) * self.spacing)
   if self.raft then
