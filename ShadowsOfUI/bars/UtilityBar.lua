@@ -1,14 +1,9 @@
 local _, ns = ...
-local ui, Player, Items = ns.ui, ns.wow.Player, ns.wow.Items
-local Class, tinsert, Fill = ns.lua.Class, ns.lua.tinsert, ns.lua.Fill
-local Frame, Button, SecureButton = ui.Frame, ui.Button, ui.SecureButton
-local GetSpellName, GetSpellTexture = ns.wow.GetSpellName, ns.wow.GetSpellTexture
-local HasToy, IsSpellKnown = Player.HasToy, Player.IsSpellKnown
-local IsMountCollected, GetMountIcon = Player.IsMountCollected, Player.GetMountIcon
-local Bottom = ui.edge.Bottom
+local ui = ns.ui
+local Class = ns.lua.Class
 
-local UtilityBar = Class(Frame, function(self)
-  self.buttons = {}
+local UtilityBar = Class(ns.VerticalBar, function(self)
+  self.tooltipPoint = {ui.edge.Right, self.frame, ui.edge.Left, -2, 0}
   -- 791	162973	WoW Icon update	Greatfather Winter's Hearthstone	World Event	8.0.1
   -- 792	163045	WoW Icon update	Headless Horseman's Hearthstone	World Event	8.0.1
   -- 916	165669	WoW Icon update	Lunar Elder's Hearthstone		8.1.0
@@ -76,158 +71,18 @@ local UtilityBar = Class(Frame, function(self)
 
   self.picking = self:addSpellButton(1804) -- lock picking
 
-  self:height(#self.buttons * self.iconSize + (#self.buttons-1) * self.spacing)
+  self:UpdateHeight()
   if self.raft then
     self:width(self.iconSize + 2*self.smallSize)
   end
-
-  self.frame:SetAlpha(0.5)
-  self.frame:SetScript("OnEnter", function(f) f:SetAlpha(1) end)
-  self.frame:SetScript("OnLeave", function(f) if not f:IsMouseOver() then f:SetAlpha(0.5) end end)
 end, {
-  parent = ns.wowui.UIParent,
   name = "ShadowsOfUIUtilBar",
-  spacing = 2,
-  iconSize = 30,
-  smallSize = 20,
+  alpha = 0.5,
+  mouseOverAlpha = 1,
   position = {
     right = {},
     width = 48,
   },
+  firstButtonPoint = "topRight",
 })
 ns.UtilityBar = UtilityBar
-
-function UtilityBar:addButton(ops)
-  local btn = Button:new(Fill(ops, {
-    parent = self,
-    position = {
-      topRight = #self.buttons == 0 and {} or nil,
-      top = #self.buttons > 0 and {self.buttons[#self.buttons].frame, Bottom, 0, -self.spacing} or nil,
-      width = self.iconSize,
-      height = self.iconSize,
-    },
-    normal = {
-      coords = {0.07, 0.93, 0.07, 0.93},
-    },
-    tooltip = {
-      owner = {self.frame, "ANCHOR_NONE"},
-      point = {ui.edge.Right, self.frame, ui.edge.Left, -2, 0},
-    },
-  }))
-  tinsert(self.buttons, btn)
-  return btn
-end
-
-function UtilityBar:addSecureButton(ops)
-  local btn = SecureButton:new(Fill(ops, {
-    parent = self,
-    position = {
-      topRight = #self.buttons == 0 and {} or nil,
-      top = #self.buttons > 0 and {self.buttons[#self.buttons].frame, Bottom, 0, -self.spacing} or nil,
-      width = self.iconSize,
-      height = self.iconSize,
-    },
-    normal = {
-      coords = {0.07, 0.93, 0.07, 0.93},
-    },
-    tooltip = {
-      owner = {self.frame, "ANCHOR_NONE"},
-      point = {ui.edge.Right, self.frame, ui.edge.Left, -2, 0},
-    },
-  }))
-  if not ops.offset then tinsert(self.buttons, btn) end
-  return btn
-end
-
-function UtilityBar:addToyButton(id)
-  return HasToy(id) and self:addSecureButton{
-    normal = {
-      texture = Items.GetIcon(id),
-    },
-    actions = {
-      {
-        type = "toy",
-        toy = id,
-      },
-    },
-    tooltip = { toyId = id },
-  }
-end
-
-function UtilityBar:addOffsetToyButton(id, target, x, y)
-  return HasToy(id) and self:addSecureButton{
-    offset = true,
-    level = target.frame:GetFrameLevel() + 1,
-    position = {
-      top = false,
-      right = {target.frame, ui.edge.Left, x or 2 * self.spacing, y or 0},
-      width = self.smallSize,
-      height = self.smallSize,
-    },
-    normal = {
-      texture = Items.GetIcon(id),
-    },
-    actions = {
-      {
-        type = "toy",
-        toy = id,
-      },
-    },
-    tooltip = { toyId = id },
-  }
-end
-
-function UtilityBar:addSpellButton(id, icon)
-  return IsSpellKnown(id) and self:addSecureButton{
-    normal = {
-      texture = icon or GetSpellTexture(id),
-    },
-    actions = {
-      {
-        type = "spell",
-        spell = id,--GetSpellName(id),
-      },
-    },
-    tooltip = { spellId = id },
-  }
-end
-
-function UtilityBar:addOffsetSpellButton(id, icon, target, x, y)
-  return IsSpellKnown(id) and self:addSecureButton{
-    offset = true,
-    level = target.frame:GetFrameLevel() + 1,
-    position = {
-      top = false,
-      right = {target.frame, ui.edge.Left, x or 2 * self.spacing, y or 0},
-      width = self.smallSize,
-      height = self.smallSize,
-    },
-    normal = {
-      texture = icon or GetSpellTexture(id),
-    },
-    actions = {
-      {
-        type = "spell",
-        spell = GetSpellName(id),
-      },
-    },
-    tooltip = { spellId = id },
-  }
-end
-
-function UtilityBar:addMountButton(id, spell, name, bind)
-  return IsMountCollected(id) and self:addSecureButton{
-    name = name,
-    normal = {
-      texture = GetMountIcon(id),
-    },
-    actions = {
-      {
-        type = "spell",
-        spell = GetSpellName(spell),
-      },
-    },
-    bindLeftClick = bind,
-    tooltip = { mountSpellId = spell },
-  }
-end

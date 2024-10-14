@@ -11,7 +11,9 @@ init.lua
 ExpBar.lua
 RepBars.lua
 
+bars/VerticalBar.lua
 bars/UtilityBar.lua
+bars/UtilityBar2.lua
 ActionBars.lua
 
 hud/PlayerHealthBar.lua

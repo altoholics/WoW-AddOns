@@ -72,7 +72,7 @@ end, {
   parent = ns.wow.UIParent,
   name = "ShadowsOfUI_Command",
   strata = "DIALOG",
-  level = 9000,
+  level = 512,
   autoFocus = true,
   alpha = 0.8,
   background = {0, 0, 0, 0.8},

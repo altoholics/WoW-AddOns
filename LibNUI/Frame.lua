@@ -58,7 +58,7 @@ local Frame = Class(nil, function(o)
       positionAll = true,
     })
   end
-  if o.alpha then o.frame:SetAlpha(o.alpha); o.alpha = nil end
+  if o.alpha then o.frame:SetAlpha(o.alpha) end
 
   if o.drag then
     o:makeDraggable()
@@ -67,9 +67,7 @@ local Frame = Class(nil, function(o)
   if o.dragTarget then o:setDragTarget(o.dragTarget.frame or o.dragTarget) end
 
   if o.scripts then
-    for _,s in ipairs(o.scripts) do
-      o:SetScript(s, function(...) if o[s] then o[s](o, ...) end end)
-    end
+    o:RegisterScript(unpack(o.scripts))
   end
   if o.events then
     if not o._listening then o:listenForEvents() end
@@ -117,6 +115,19 @@ function Frame:toggle()
 end
 function Frame:SetShown(b) self.frame:SetShown(b); return self end
 
+-- separate func so we don't occlude the varargs (...)
+local function scriptHandlerFor(c, e)
+  return function(...)
+    if c[e] then c[e](c, ...) end
+  end
+end
+function Frame:RegisterScript(...)
+  local e
+  for i=1,select("#", ...) do
+    e = select(i, ...)
+    self:SetScript(e, scriptHandlerFor(self, e))
+  end
+end
 function Frame:SetScript(event, handler) self.frame:SetScript(event, handler); return self end
 function Frame:listenForEvents()
   self._listening = true

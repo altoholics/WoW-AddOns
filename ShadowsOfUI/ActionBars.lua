@@ -12,6 +12,7 @@ local Class = ns.lua.Class
 
 local ActionBars = Class(nil, function(self)
   self.utility = ns.UtilityBar:new{}
+  self.utility2 = ns.UtilityBar2:new{}
 end)
 ns.ActionBars = ActionBars
 
