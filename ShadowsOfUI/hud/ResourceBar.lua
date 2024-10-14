@@ -8,10 +8,10 @@ local offsets = {
   nil,
   nil,
   nil,
-  {
-    { x = -3, y = -38, r = math.pi / 2 },
+  { -- 4
+    { x = -3, y = -35, r = math.pi / 2 },
     { x = -6, y = 2, r = math.pi / 2 },
-    { x = -3, y = 35, r = math.pi / 2 },
+    { x = -2.5, y = 38.5, r = math.pi / 2 },
   },
   { -- 5
     { x = -1, y = -45, r = math.pi / 2 },
@@ -25,6 +25,23 @@ local offsets = {
     { x  = -6, y = 0, r = math.pi / 2 },
     { x  = -4, y = 25, r = math.pi / 2 },
     { x  = 0, y = 50, r = math.pi / 2 },
+  },
+  { -- 7
+    { x = 0, y = -51, r = math.pi / 2 },
+    { x = -3, y = -29, r = math.pi / 2 },
+    { x = -6, y = -9, r = math.pi / 2 },
+    { x = -5, y = 12, r = math.pi / 2 },
+    { x = -3, y = 33, r = math.pi / 2 },
+    { x = 0, y = 54, r = math.pi / 2 },
+  },
+  { -- 8
+    { x = 0, y = -30, r = math.pi / 2 },
+    { x = 0, y = -20, r = math.pi / 2 },
+    { x = 0, y = -10, r = math.pi / 2 },
+    { x = 0, y = 0, r = math.pi / 2 },
+    { x = 0, y = 10, r = math.pi / 2 },
+    { x = 0, y = 20, r = math.pi / 2 },
+    { x = 0, y = 30, r = math.pi / 2 },
   },
 }
 
@@ -45,7 +62,7 @@ local ResourceBar = Class(StatusBar, function(self)
       position = {
         center = {offsets[countMax][i].x, offsets[countMax][i].y},
         width = 4.5,
-        height = 8,
+        height = 9,
       },
     }
   end
@@ -59,7 +76,6 @@ local ResourceBar = Class(StatusBar, function(self)
 
   self.frame:SetMinMaxValues(0, countMax)
   self:RUNE_POWER_UPDATE()
-  -- self:SetValue(countMax)
 end, {
   name = "$parentResource",
   level = 5,
