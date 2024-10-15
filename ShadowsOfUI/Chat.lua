@@ -3,6 +3,7 @@ local Class, UIParent = ns.lua.Class, ns.wowui.UIParent
 local ui = ns.ui
 local Frame = ui.Frame
 local ChatTypeInfo = ChatTypeInfo -- luacheck: globals ChatTypeInfo
+local strsplit = strsplit -- luacheck: globals strsplit
 
 -- luacheck: globals ChatFontNormal CreateFont
 local file, _, flags = ChatFontNormal:GetFont()
@@ -16,6 +17,11 @@ chatFont:SetShadowOffset(2, -2)
 local MessageFrame = Class(Frame, function(self)
   self.frame:SetFontObject(chatFont)
   self.frame:SetTimeVisible(60)
+  self.frame:SetSpacing(3)
+  -- self.frame:EnableMouse(true)
+  -- self.frame:SetMouseClickEnabled(true)
+  -- self.frame:EnableMouseWheel(true)
+  self.frame:SetHyperlinksEnabled(true)
   -- self.frame:SetFading(false)
 
   -- for i=1,10 do self.frame:AddMessage("sample line of text "..i, 1, 1, 1) end
@@ -65,29 +71,55 @@ end, {
     "CHAT_MSG_YELL",
     -- "UPDATE_CHAT_WINDOWS", -- Fired on load when chat settings are available for chat windows.
   },
+  scripts = {
+    "OnHyperlinkClick"
+  },
 })
 ns.Chat = Chat
 
-local ChannelStrings = {
-  INSTANCE = " says: ",
-  PARTY = " says: ",
-  GUILD = " says: ",
-  MONSTER_SAY = " says: ",
-  RAID = " says: ",
-  SAY = " says: ",
-  YELL = " yells: ",
-}
-
-function Chat:AddChannelMessage(channel, text, player)
-  local info = ChatTypeInfo[channel]
-  -- process player "Name-Realm" and color by class
-  self.frame:AddMessage(player..ChannelStrings[channel]..text, info.r, info.g, info.b, info.id)
+function Chat:OnHyperlinkClick(_, link)
+  local linkType, cmd, arg1 = strsplit(":", link) -- item,
+  if linkType == "item" then
+    -- show item tooltip
+  elseif linkType == "ShadowUI" then
+    -- handle
+    print(cmd, arg1)
+    if "player" == cmd then
+      -- set whisper target, open command
+    end
+  end
 end
 
-function Chat:CHAT_MSG_INSTANCE_CHAT(text, player) self:AddChannelMessage("INSTANCE", text, player) end
-function Chat:CHAT_MSG_PARTY(text, player) self:AddChannelMessage("PARTY", text, player) end
-function Chat:CHAT_MSG_GUILD(text, player) self:AddChannelMessage("GUILD", text, player) end
-function Chat:CHAT_MSG_RAID(text, player) self:AddChannelMessage("RAID", text, player) end
-function Chat:CHAT_MSG_SAY(text, player) self:AddChannelMessage("SAY", text, player) end
-function Chat:CHAT_MSG_YELL(text, player) self:AddChannelMessage("YELL", text, player) end
+local ChannelStrings = {
+  EMOTE = "%s %s",
+  INSTANCE = "[Instance] %s: %s",
+  PARTY = "[Party] %s: %s",
+  GUILD = "[Guild] %s: %s",
+  MONSTER_EMOTE = "%s %s",
+  MONSTER_SAY = "%s says: %s",
+  MONSTER_YELL = "%s yells: %s",
+  RAID = "[Raid] %s: %s",
+  SAY = "%s says: %s",
+  YELL = "%s yells: %s",
+}
+
+local strf = string.format
+function Chat:AddChannelMessage(channel, text, player)
+  local info = ChatTypeInfo[channel]
+  self.frame:AddMessage(strf(ChannelStrings[channel], player, text), info.r, info.g, info.b, info.id)
+end
+
+local function linkPlayer(player)
+  return "[|cff1eff00|HShadowUI:player:"..player.."|h"..player.."|h|r]"
+end
+
+function Chat:CHAT_MSG_EMOTE(text, player) self:AddChannelMessage("EMOTE", text, linkPlayer(player)) end
+function Chat:CHAT_MSG_INSTANCE_CHAT(text, player) self:AddChannelMessage("INSTANCE", text, linkPlayer(player)) end
+function Chat:CHAT_MSG_PARTY(text, player) self:AddChannelMessage("PARTY", text, linkPlayer(player)) end
+function Chat:CHAT_MSG_GUILD(text, player) self:AddChannelMessage("GUILD", text, linkPlayer(player)) end
+function Chat:CHAT_MSG_RAID(text, player) self:AddChannelMessage("RAID", text, linkPlayer(player)) end
+function Chat:CHAT_MSG_SAY(text, player) self:AddChannelMessage("SAY", text, linkPlayer(player)) end
+function Chat:CHAT_MSG_YELL(text, player) self:AddChannelMessage("YELL", text, linkPlayer(player)) end
 function Chat:CHAT_MSG_MONSTER_SAY(text, player) self:AddChannelMessage("MONSTER_SAY", text, player) end
+function Chat:CHAT_MSG_MONSTER_YELL(text, player) self:AddChannelMessage("MONSTER_YELL", text, player) end
+function Chat:CHAT_MSG_MONSTER_EMOTE(text, player) self:AddChannelMessage("MONSTER_EMOTE", text, player) end

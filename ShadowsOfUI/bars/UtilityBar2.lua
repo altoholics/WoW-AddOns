@@ -25,6 +25,7 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
   self.soothe = self:addSpellButton(2908)
 
   self.runeforging = self:addSpellButton(53428)
+  self.pathOfFrost = self:addSpellButton(3714)
 
   self:UpdateHeight()
 end, {

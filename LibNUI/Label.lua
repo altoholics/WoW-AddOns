@@ -48,7 +48,7 @@ end, {
 ui.Label = Label
 
 function Label:fill() self.label:SetAllPoints(); return self end
-function Label:center() self.label:SetPoint(ui.edge.Center); return self end
+function Label:center(...) self.label:SetPoint(ui.edge.Center, ...); return self end
 function Label:topLeft(...) self.label:SetPoint(ui.edge.TopLeft, ...); return self end
 function Label:topRight(...) self.label:SetPoint(ui.edge.TopRight, ...); return self end
 function Label:bottomLeft(...) self.label:SetPoint(ui.edge.BottomLeft, ...); return self end

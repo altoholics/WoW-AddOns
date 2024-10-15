@@ -184,6 +184,7 @@ function Command:OnSpacePressed()
 
   if CHANNELS[cmd] then
     if "/DUMP" == cmd then return end -- why is dump a channel?
+    if "/RUN" == cmd then return end -- and run? (type script)
     self:UpdateChannelDisplay(CHANNELS[cmd])
     self.frame:SetText("")
   else
