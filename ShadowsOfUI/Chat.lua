@@ -69,8 +69,12 @@ end, {
 ns.Chat = Chat
 
 local ChannelStrings = {
-  SAY = " says: ",
+  INSTANCE = " says: ",
+  PARTY = " says: ",
   GUILD = " says: ",
+  RAID = " says: ",
+  SAY = " says: ",
+  YELL = " yells: ",
 }
 
 function Chat:AddChannelMessage(channel, text, player)
@@ -79,10 +83,9 @@ function Chat:AddChannelMessage(channel, text, player)
   self.frame:AddMessage(player..ChannelStrings[channel]..text, info.r, info.g, info.b)
 end
 
-function Chat:CHAT_MSG_SAY(text, player)
-  self:AddChannelMessage("SAY", text, player)
-end
-
-function Chat:CHAT_MSG_GUILD(text, player)
-  self:AddChannelMessage("GUILD", text, player)
-end
+function Chat:CHAT_MSG_INSTANCE_CHAT(text, player) self:AddChannelMessage("INSTANCE", text, player) end
+function Chat:CHAT_MSG_PARTY(text, player) self:AddChannelMessage("PARTY", text, player) end
+function Chat:CHAT_MSG_GUILD(text, player) self:AddChannelMessage("GUILD", text, player) end
+function Chat:CHAT_MSG_RAID(text, player) self:AddChannelMessage("RAID", text, player) end
+function Chat:CHAT_MSG_SAY(text, player) self:AddChannelMessage("SAY", text, player) end
+function Chat:CHAT_MSG_YELL(text, player) self:AddChannelMessage("YELL", text, player) end

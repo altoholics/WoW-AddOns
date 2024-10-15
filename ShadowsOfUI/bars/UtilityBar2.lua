@@ -16,12 +16,15 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
   self.resurrect = self:addSpellButton(212036) or self:addSpellButton(2006)
   self.revive = self:addSpellButton(50769)
   self.rebirth = self:addSpellButton(20484)
+  self.raiseAlly = self:addSpellButton(61999)
 
   -- soothe
   self.mindSoothe = self:addSpellButton(453)
   self.dominateMind = self:addSpellButton(205364)
   self.mindVision = self:addSpellButton(2096)
   self.soothe = self:addSpellButton(2908)
+
+  self.runeforging = self:addSpellButton(53428)
 
   self:UpdateHeight()
 end, {
