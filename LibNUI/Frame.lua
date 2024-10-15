@@ -163,7 +163,7 @@ function Frame:setDragTarget(target)
 end
 
 function Frame:startUpdates()
-  if self.onUpdate and not self.animating then
+  if self.onUpdate and self.animating == false then
     self.animating = true
     local s = self
     self.frame:SetScript("OnUpdate", function(_, elapsed)

@@ -26,6 +26,7 @@ local UtilityBar = Class(ns.VerticalBar, function(self)
   self.hearth = self:addToyButton(172179) -- button 1: hearthstone
   self.dalaran = self:addToyButton(140192) -- button 2: Dalaran Hearthstone
   self.garrison = self:addToyButton(110560) -- button 3: Garrison Hearthstone
+  self.dreamwalk = self:addSpellButton(193753)
 
   -- mounts
   self.flightStyle = self:addSpellButton(436854) -- switch flight style
