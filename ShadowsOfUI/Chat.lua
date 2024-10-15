@@ -72,6 +72,7 @@ local ChannelStrings = {
   INSTANCE = " says: ",
   PARTY = " says: ",
   GUILD = " says: ",
+  MONSTER_SAY = " says: ",
   RAID = " says: ",
   SAY = " says: ",
   YELL = " yells: ",
@@ -80,7 +81,7 @@ local ChannelStrings = {
 function Chat:AddChannelMessage(channel, text, player)
   local info = ChatTypeInfo[channel]
   -- process player "Name-Realm" and color by class
-  self.frame:AddMessage(player..ChannelStrings[channel]..text, info.r, info.g, info.b)
+  self.frame:AddMessage(player..ChannelStrings[channel]..text, info.r, info.g, info.b, info.id)
 end
 
 function Chat:CHAT_MSG_INSTANCE_CHAT(text, player) self:AddChannelMessage("INSTANCE", text, player) end
@@ -89,3 +90,4 @@ function Chat:CHAT_MSG_GUILD(text, player) self:AddChannelMessage("GUILD", text,
 function Chat:CHAT_MSG_RAID(text, player) self:AddChannelMessage("RAID", text, player) end
 function Chat:CHAT_MSG_SAY(text, player) self:AddChannelMessage("SAY", text, player) end
 function Chat:CHAT_MSG_YELL(text, player) self:AddChannelMessage("YELL", text, player) end
+function Chat:CHAT_MSG_MONSTER_SAY(text, player) self:AddChannelMessage("MONSTER_SAY", text, player) end
