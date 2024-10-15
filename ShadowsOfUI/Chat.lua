@@ -4,6 +4,9 @@ local ui = ns.ui
 local Frame = ui.Frame
 local ChatTypeInfo = ChatTypeInfo -- luacheck: globals ChatTypeInfo
 local strsplit = strsplit -- luacheck: globals strsplit
+local strf = string.format
+local Ambiguate = Ambiguate -- luacheck: globals Ambiguate
+local PlayerLocation, C_PlayerInfo, C_ClassColor = PlayerLocation, C_PlayerInfo, C_ClassColor -- luacheck: globals PlayerLocation C_PlayerInfo C_ClassColor
 
 -- luacheck: globals ChatFontNormal CreateFont
 local file, _, flags = ChatFontNormal:GetFont()
@@ -79,47 +82,63 @@ ns.Chat = Chat
 
 function Chat:OnHyperlinkClick(_, link)
   local linkType, cmd, arg1 = strsplit(":", link) -- item,
-  if linkType == "item" then
-    -- show item tooltip
-  elseif linkType == "ShadowUI" then
-    -- handle
-    print(cmd, arg1)
+  if linkType == "ShadowUI" then
     if "player" == cmd then
-      -- set whisper target, open command
+      if ns.command then
+        ns.command:UpdateChannelDisplay("SMART_WHISPER", nil, nil, arg1, Ambiguate(arg1, "short"))
+        ns.command:show()
+      end
     end
+  else
+    print(link)
   end
 end
 
 local ChannelStrings = {
   EMOTE = "%s %s",
   INSTANCE = "[Instance] %s: %s",
+  INSTANCE_LEADER = "[Instance] %s: %s",
   PARTY = "[Party] %s: %s",
+  PARTY_LEADER = "[Party] %s: %s",
   GUILD = "[Guild] %s: %s",
   MONSTER_EMOTE = "%s %s",
   MONSTER_SAY = "%s says: %s",
   MONSTER_YELL = "%s yells: %s",
   RAID = "[Raid] %s: %s",
+  RAID_LEADER = "[Raid] %s: %s",
   SAY = "%s says: %s",
+  WHISPER = "%s whispers: %s",
+  WHISPER_INFORM = "To %s: %s",
   YELL = "%s yells: %s",
 }
 
-local strf = string.format
 function Chat:AddChannelMessage(channel, text, player)
   local info = ChatTypeInfo[channel]
   self.frame:AddMessage(strf(ChannelStrings[channel], player, text), info.r, info.g, info.b, info.id)
 end
 
-local function linkPlayer(player)
-  return "[|cff1eff00|HShadowUI:player:"..player.."|h"..player.."|h|r]"
+function Chat:HandlePlayerMessage(channel, text, player, ...)
+  local lineId = select(9, ...)
+  local pl = PlayerLocation:CreateFromChatLineID(lineId)
+  local _, className = C_PlayerInfo.GetClass(pl)
+  local color = C_ClassColor.GetClassColor(className):GenerateHexColor()
+  local p = Ambiguate(player, "short")
+  self:AddChannelMessage(channel, text, "[|c"..color.."|HShadowUI:player:"..player.."|h"..p.."|h|r]")
 end
 
-function Chat:CHAT_MSG_EMOTE(text, player) self:AddChannelMessage("EMOTE", text, linkPlayer(player)) end
-function Chat:CHAT_MSG_INSTANCE_CHAT(text, player) self:AddChannelMessage("INSTANCE", text, linkPlayer(player)) end
-function Chat:CHAT_MSG_PARTY(text, player) self:AddChannelMessage("PARTY", text, linkPlayer(player)) end
-function Chat:CHAT_MSG_GUILD(text, player) self:AddChannelMessage("GUILD", text, linkPlayer(player)) end
-function Chat:CHAT_MSG_RAID(text, player) self:AddChannelMessage("RAID", text, linkPlayer(player)) end
-function Chat:CHAT_MSG_SAY(text, player) self:AddChannelMessage("SAY", text, linkPlayer(player)) end
-function Chat:CHAT_MSG_YELL(text, player) self:AddChannelMessage("YELL", text, linkPlayer(player)) end
+function Chat:CHAT_MSG_EMOTE(...) self:HandlePlayerMessage("EMOTE", ...) end
+function Chat:CHAT_MSG_INSTANCE_CHAT(...) self:HandlePlayerMessage("INSTANCE", ...) end
+function Chat:CHAT_MSG_INSTANCE_CHAT_LEADER(...) self:HandlePlayerMessage("INSTANCE_LEADER", ...) end
+function Chat:CHAT_MSG_PARTY(...) self:HandlePlayerMessage("PARTY", ...) end
+function Chat:CHAT_MSG_PARTY_LEADER(...) self:HandlePlayerMessage("PARTY_LEADER", ...) end
+function Chat:CHAT_MSG_GUILD(...) self:HandlePlayerMessage("GUILD", ...) end
+function Chat:CHAT_MSG_RAID(...) self:HandlePlayerMessage("RAID", ...) end
+function Chat:CHAT_MSG_RAID_LEADER(...) self:HandlePlayerMessage("RAID_LEADER", ...) end
+function Chat:CHAT_MSG_SAY(...) self:HandlePlayerMessage("SAY", ...) end
+function Chat:CHAT_MSG_WHISPER(...) self:HandlePlayerMessage("WHISPER", ...) end
+function Chat:CHAT_MSG_WHISPER_INFORM(...) self:HandlePlayerMessage("WHISPER_INFORM", ...) end
+function Chat:CHAT_MSG_YELL(...) self:HandlePlayerMessage("YELL", ...) end
+
 function Chat:CHAT_MSG_MONSTER_SAY(text, player) self:AddChannelMessage("MONSTER_SAY", text, player) end
 function Chat:CHAT_MSG_MONSTER_YELL(text, player) self:AddChannelMessage("MONSTER_YELL", text, player) end
 function Chat:CHAT_MSG_MONSTER_EMOTE(text, player) self:AddChannelMessage("MONSTER_EMOTE", text, player) end

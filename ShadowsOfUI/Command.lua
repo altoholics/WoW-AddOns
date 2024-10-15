@@ -64,8 +64,9 @@ local Command = Class(EditBox, function(self)
     text = "",
     fontObj = SoUICmdTitleFont,
     alpha = 0.8,
+    color = Colors.Whisper,
     position = {
-      left = {self.channelTitle.label, ui.edge.Left, 2, 0},
+      left = {self.channelTitle.label, ui.edge.Right, 2, 0},
     },
   })
 end, {
@@ -92,6 +93,10 @@ end, {
   channelType = "SAY",
 })
 ns.Command = Command
+
+function Command:Show()
+  self.frame:Show()
+end
 
 function Command:OnEscapePressed()
   self.frame:SetText("")
@@ -130,7 +135,12 @@ function Command:OnEnterPressed()
         end
       end
     else
-      SendChatMessage(text, self.channelType, nil, self.channelNum)
+      if "SMART_WHISPER" == self.channelType then
+        print(self.channelTarget, text)
+        SendChatMessage(text, "WHISPER", nil, self.channelTarget)
+      else
+        SendChatMessage(text, self.channelType, nil, self.channelNum)
+      end
     end
   end
 
@@ -148,9 +158,10 @@ local ChannelInfo = {
   YELL = { title = "Yell", color = Colors.Yell },
 }
 
-function Command:UpdateChannelDisplay(type, num, name)
+function Command:UpdateChannelDisplay(type, num, name, target, targetDisplay)
   self.channelType = type
   self.channelNum = num
+  self.channelTarget = target
   if num then
     self.channelTitle:Text(name)
     self.channelTargetName:Text("")
@@ -165,7 +176,7 @@ function Command:UpdateChannelDisplay(type, num, name)
     local info = ChannelInfo[type]
     if info then
       self.channelTitle:Text(info.title)
-      self.channelTargetName:Text("")
+      self.channelTargetName:Text(targetDisplay or "")
       self.channelTitle:Color(unpack(info.color))
       self.frame:SetTextColor(unpack(info.color))
     else

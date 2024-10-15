@@ -3,7 +3,7 @@ local ui = ns.ui
 local Class = ns.lua.Class
 local Frame, Label = ui.Frame, ui.Label
 local PlayerHUD = ns.PlayerHUD
-local IsResting = IsResting() -- luacheck: globals IsResting
+local IsResting = IsResting -- luacheck: globals IsResting
 
 local HUD = Class(Frame, function(self)
   self.player = PlayerHUD:new{
