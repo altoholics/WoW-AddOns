@@ -72,6 +72,7 @@ local ResourceBar = Class(StatusBar, function(self)
     self:UPDATE_SHAPESHIFT_FORM()
   elseif self.classId == 6 then -- DK
     self:registerEvent("RUNE_POWER_UPDATE")
+    self:unregisterEvent("UNIT_POWER_FREQUENT")
   end
 
   self.frame:SetMinMaxValues(0, countMax)
@@ -107,8 +108,16 @@ function ResourceBar:UNIT_POWER_FREQUENT(_, powerType)
   end
 end
 
+local GetRuneCooldown = GetRuneCooldown -- luacheck: globals GetRuneCooldown
 function ResourceBar:RUNE_POWER_UPDATE()
-  self:SetValue(Player:GetPower(self.resourceIdx))
+  local amount = 0
+  for i = 1, 6 do
+    local _, _, runeReady = GetRuneCooldown(i)
+    if runeReady then
+      amount = amount + 1
+    end
+  end
+  self:SetValue(amount)
 end
 
 function ResourceBar:UPDATE_SHAPESHIFT_FORM()
