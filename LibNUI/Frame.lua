@@ -70,16 +70,19 @@ local Frame = Class(nil, function(o)
     o:RegisterScript(unpack(o.scripts))
   end
   if o.events then
-    if not o._listening then o:listenForEvents() end
+    o:listenForEvents()
     for _,e in pairs(o.events) do
       o.frame:RegisterEvent(e)
     end
   end
   if o.unitEvents then
-    if not o._listening then o:listenForEvents() end
+    o:listenForEvents()
     for e,u in pairs(o.unitEvents) do
       o.frame:RegisterUnitEvent(e, unpack(u))
     end
+  end
+  if o.onLogin then
+    o:registerEvent("PLAYER_ENTERING_WORLD")
   end
 end)
 ui.Frame = Frame
@@ -88,6 +91,10 @@ function Frame:OnEvent(event, ...)
   if self[event] then
     self[event](self, ...)
   end
+end
+
+function Frame:PLAYER_ENTERING_WORLD(login, reload)
+  if self.OnLogin and (login or reload) then self:OnLogin() end
 end
 
 function Frame:all() self.frame:SetAllPoints(); return self end
@@ -131,6 +138,7 @@ function Frame:RegisterScript(...)
 end
 function Frame:SetScript(event, handler) self.frame:SetScript(event, handler); return self end
 function Frame:listenForEvents()
+  if self._listening then return end
   self._listening = true
   local o = self
   self.frame:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)

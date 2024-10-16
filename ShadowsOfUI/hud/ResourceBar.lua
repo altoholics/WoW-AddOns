@@ -1,5 +1,5 @@
 local _, ns = ...
-local Class, gsub, unpack = ns.lua.Class, ns.lua.gsub, ns.lua.unpack
+local Class, gsub, unpack, tinsert = ns.lua.Class, ns.lua.gsub, ns.lua.unpack, ns.lua.tinsert
 local ui = ns.ui
 local StatusBar, Texture = ui.StatusBar, ui.Texture
 local Player = ns.wow.Player
@@ -7,7 +7,10 @@ local Player = ns.wow.Player
 local offsets = {
   nil,
   nil,
-  nil,
+  { -- 3
+    { x = 0, y = -25, r = math.pi / 2 },
+    { x = 0, y = 25, r = math.pi / 2 },
+  },
   { -- 4
     { x = -3, y = -35, r = math.pi / 2 },
     { x = -6, y = 2, r = math.pi / 2 },
@@ -50,23 +53,6 @@ local ResourceBar = Class(StatusBar, function(self)
   local t = self.frame:GetStatusBarTexture()
   t:SetVertexColor(unpack(ns.Colors[className]))
 
-  local countMax = Player:GetPowerMax(self.resourceIdx)
-  for i=1,countMax - 1 do
-    Texture:new{
-      parent = self,
-      layer = "OVERLAY",
-      path = "interface/addons/ShadowsOfUI/art/Separator.tga",
-      coords = {0.359375, 0.640625, 0, 1},
-      rotation = offsets[countMax][i].r,
-      vertexColor = {0, 0, 0, 0.8},
-      position = {
-        center = {offsets[countMax][i].x, offsets[countMax][i].y},
-        width = 4.5,
-        height = 9,
-      },
-    }
-  end
-
   if self.classId == 11 then -- druid
     self:registerEvent("UPDATE_SHAPESHIFT_FORM")
     self:UPDATE_SHAPESHIFT_FORM()
@@ -75,8 +61,7 @@ local ResourceBar = Class(StatusBar, function(self)
     self:unregisterEvent("UNIT_POWER_FREQUENT")
   end
 
-  self.frame:SetMinMaxValues(0, countMax)
-  self:RUNE_POWER_UPDATE()
+  self:PLAYER_TALENT_UPDATE()
 end, {
   name = "$parentResource",
   level = 5,
@@ -95,11 +80,41 @@ end, {
     width = 17,
     height = 150,
   },
+  events = {"PLAYER_TALENT_UPDATE"},
   unitEvents = {
     UNIT_POWER_FREQUENT = {"player"},
   },
 })
 ns.ResourceBar = ResourceBar
+
+function ResourceBar:PLAYER_TALENT_UPDATE()
+  local countMax = Player:GetPowerMax(self.resourceIdx)
+  self.notches = self.notches or {}
+  for i=1,countMax - 1 do
+    local n = self.notches[i]
+    if n then
+      n:show()
+      n:center(offsets[countMax][i].x, offsets[countMax][i].y)
+    else
+      tinsert(self.notches, Texture:new{
+        parent = self,
+        layer = "OVERLAY",
+        path = "interface/addons/ShadowsOfUI/art/Separator.tga",
+        coords = {0.359375, 0.640625, 0, 1},
+        rotation = offsets[countMax][i].r,
+        vertexColor = {0, 0, 0, 0.8},
+        position = {
+          center = {offsets[countMax][i].x, offsets[countMax][i].y},
+          width = 4.5,
+          height = 9,
+        },
+      })
+    end
+  end
+  for i=countMax,#self.notches do self.notches[i]:hide() end
+  self.frame:SetMinMaxValues(0, countMax)
+  self:RUNE_POWER_UPDATE()
+end
 
 function ResourceBar:UNIT_POWER_FREQUENT(_, powerType)
   if powerType == "SOUL_SHARDS" or powerType == "HOLY_POWER"
