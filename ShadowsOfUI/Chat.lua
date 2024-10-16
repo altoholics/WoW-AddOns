@@ -80,6 +80,7 @@ end, {
 })
 ns.Chat = Chat
 
+local GameTooltip_SetDefaultAnchor, ItemRefTooltip = GameTooltip_SetDefaultAnchor, ItemRefTooltip -- luacheck: globals GameTooltip_SetDefaultAnchor ItemRefTooltip
 function Chat:OnHyperlinkClick(_, link)
   local linkType, cmd, arg1 = strsplit(":", link) -- item,
   if linkType == "ShadowUI" then
@@ -89,6 +90,10 @@ function Chat:OnHyperlinkClick(_, link)
         ns.command:show()
       end
     end
+  elseif "item" == linkType then
+    GameTooltip_SetDefaultAnchor(ItemRefTooltip, UIParent)
+    ItemRefTooltip:ItemRefSetHyperlink(link)
+    ItemRefTooltip:Show()
   else
     print(link)
   end
