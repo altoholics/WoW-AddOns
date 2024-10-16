@@ -176,7 +176,7 @@ function Command:UpdateChannelDisplay(type, num, name, target, targetDisplay)
     local info = ChannelInfo[type]
     if info then
       self.channelTitle:Text(info.title)
-      self.channelTargetName:Text(targetDisplay or "")
+      self.channelTargetName:Text(targetDisplay or target or "")
       self.channelTitle:Color(unpack(info.color))
       self.frame:SetTextColor(unpack(info.color))
     else
@@ -189,15 +189,22 @@ function Command:OnSpacePressed()
   local text = self.frame:GetText()
   if text == "" then return end
   if strsub(text, 1, 1) ~= "/" then return end
-  local cmd = strmatch(text, "(/%w+) $")
+  local cmd, args = strmatch(text, "(/%w+) (.*) ?$")
   if not cmd then return end
   cmd = string.upper(cmd)
 
   if CHANNELS[cmd] then
     if "/DUMP" == cmd then return end -- why is dump a channel?
     if "/RUN" == cmd then return end -- and run? (type script)
-    self:UpdateChannelDisplay(CHANNELS[cmd])
-    self.frame:SetText("")
+    if "SMART_WHISPER" == CHANNELS[cmd] then
+      if args ~= "" then
+        self:UpdateChannelDisplay(CHANNELS[cmd], nil, nil, args)
+        self.frame:SetText("")
+      end
+    else
+      self:UpdateChannelDisplay(CHANNELS[cmd])
+      self.frame:SetText("")
+    end
   else
     local channel = strmatch(cmd, "/([0-9]+)$")
     if channel then
