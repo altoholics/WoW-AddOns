@@ -4,6 +4,6 @@
 ## Version: 11.0.000-1
 ## SavedVariables: LootDropDB
 ## IconTexture: Interface\Icons\inv_misc_coin_01
-## Dependencies: LibNUI
+## Dependencies: LibNAddOn, LibNUI
 
 main.lua
