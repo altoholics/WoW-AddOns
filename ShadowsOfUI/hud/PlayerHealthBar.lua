@@ -51,6 +51,7 @@ end, {
     width = 30,
     height = 200,
   },
+  events = {"PLAYER_LEVEL_UP"},
   unitEvents = {
     UNIT_HEALTH = {"player"},
   },
@@ -63,4 +64,8 @@ function HealthBar:UNIT_HEALTH()
   self:SetValue(hp)
   self.hp:Text(AbbreviateNumbers(hp))
   self.hpPcnt:Text(pcnt)
+end
+
+function HealthBar:PLAYER_LEVEL_UP()
+  self.level:Text(Player:GetLevel())
 end
