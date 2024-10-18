@@ -2,13 +2,13 @@ local _, ns = ...
 -- luacheck: globals UnitXP UnitXPMax GetXPExhaustion GetRestState UnitClassBase GetProfessions GetProfessionInfo
 -- luacheck: globals GetAverageItemLevel PlayerHasToy UseToy IsSpellKnown C_MountJournal CastSpell UnitExists
 -- luacheck: globals UnitHealth UnitHealthMax InCombatLockdown IsResting UnitPower UnitPowerMax UnitPowerType
--- luacheck: globals GetShapeshiftFormID
+-- luacheck: globals GetShapeshiftFormID UnitIsAFK
 
 local Mixin, min, max = ns.lua.Mixin, ns.lua.min, ns.lua.max
 local UnitXP, UnitXPMax, GetXPExhaustion, GetRestState = UnitXP, UnitXPMax, GetXPExhaustion, GetRestState
 local UnitClassBase, GetAverageItemLevel = UnitClassBase, GetAverageItemLevel
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
-local UnitHealth, UnitHealthMax, UnitExists = UnitHealth, UnitHealthMax, UnitExists
+local UnitHealth, UnitHealthMax, UnitExists, UnitIsAFK = UnitHealth, UnitHealthMax, UnitExists, UnitIsAFK
 local UnitPower, UnitPowerMax, UnitPowerType = UnitPower, UnitPowerMax, UnitPowerType
 local InCombatLockdown, IsResting, GetShapeshiftFormID = InCombatLockdown, IsResting, GetShapeshiftFormID
 local wow = ns.wow
@@ -43,6 +43,7 @@ local Player = {
   HasTarget = function() return UnitExists("target") end,
   HasToy = PlayerHasToy,
   InCombat = InCombatLockdown,
+  IsAFK = function() return UnitIsAFK("player") end,
   isMaxLevel = function(self) return self:GetLevel() == wow.maxLevel end,
   isRested = function() return 1 == GetRestState() end,
   IsResting = IsResting,

@@ -65,6 +65,8 @@ local Button = Class(Frame, function(self)
     local border = self.border.texture
     border:Hide()
     self.frame:SetScript("OnMouseDown", function()
+      -- local info = SafePack(GetCursorInfo())
+      -- print(GetCursorInfo())
       border:SetVertexColor(0, 1, 0)
     end)
     self.frame:SetScript("OnMouseUp", function()

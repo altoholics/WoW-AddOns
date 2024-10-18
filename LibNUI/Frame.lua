@@ -81,9 +81,6 @@ local Frame = Class(nil, function(o)
       o.frame:RegisterUnitEvent(e, unpack(u))
     end
   end
-  if o.onLogin then
-    o:registerEvent("PLAYER_ENTERING_WORLD")
-  end
 end)
 ui.Frame = Frame
 
