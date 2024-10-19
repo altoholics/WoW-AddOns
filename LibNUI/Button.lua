@@ -1,9 +1,10 @@
 local _, ns = ...
--- luacheck: globals NumberFontNormalSmallGray CreateFont
+-- luacheck: globals NumberFontNormalSmallGray CreateFont GetCursorInfo
 local ui = ns.ui
 local Class, unpack = ns.lua.Class, ns.lua.unpack
 local Frame = ui.Frame
 local GameTooltip, SetOverrideBindingClick = ns.wowui.GameTooltip, ns.wowui.SetOverrideBindingClick
+local GetCursorInfo = GetCursorInfo
 
 local file, _, flags = NumberFontNormalSmallGray:GetFont()
 local keybindFont = CreateFont("LibNUIButtonKeybind")
@@ -59,28 +60,35 @@ local Button = Class(Frame, function(self)
     self:withTextureOverlay("border", {
       path = "interface/buttons/UI-ActionButton-Border",
       blendMode = "ADD",
-      positionAll = true,
+      position = {
+        all = true,
+        hide = true,
+      },
       coords = {0.21, 0.77, 0.24, 0.79},
     })
-    local border = self.border.texture
-    border:Hide()
-    self.frame:SetScript("OnMouseDown", function()
-      -- local info = SafePack(GetCursorInfo())
-      -- print(GetCursorInfo())
-      border:SetVertexColor(0, 1, 0)
-    end)
-    self.frame:SetScript("OnMouseUp", function()
-      border:SetVertexColor(1, 1, 1)
-    end)
   end
 end, {
   type = "Button",
   scripts = {
     "OnEnter",
     "OnLeave",
+    "OnMouseDown",
+    "OnMouseUp",
   },
 })
 ui.Button = Button
+
+function Button:OnMouseDown()
+  if self.border then self.border:SetVertexColor(0, 1, 0) end
+  if self.allowAnyTarget then
+    -- local info = SafePack(GetCursorInfo())
+    print(GetCursorInfo())
+  end
+end
+
+function Button:OnMouseUp()
+  if self.border then self.border:SetVertexColor(1, 1, 1) end
+end
 
 function Button:OnEnter()
   if self.border then self.border.texture:Show() end

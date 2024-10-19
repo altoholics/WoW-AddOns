@@ -47,6 +47,7 @@ local Texture = Class(nil, function(self)
 end)
 ui.Texture = Texture
 
+function Texture:all() self.texture:SetAllPoitns() end
 function Texture:center(...) self.texture:SetPoint(ui.edge.Center, ...); return self end
 function Texture:top(...) self.texture:SetPoint(ui.edge.Top, ...); return self end
 function Texture:topLeft(...) self.texture:SetPoint(ui.edge.TopLeft, ...); return self end
@@ -72,8 +73,6 @@ function Texture:toggle()
 end
 function Texture:SetShown(b) self.texture:SetShown(b); return self end
 
-function Texture:setTexture(texture)
-  self.texture:SetTexture(texture)
-end
-
-function Texture:Color(r, g, b, a) self.texture:SetColorTexture(r, g, b, a) end
+function Texture:setTexture(texture) self.texture:SetTexture(texture) end
+function Texture:Color(...) self.texture:SetColorTexture(...) end
+function Texture:SetVertexColor(...) self.texture:SetVertexColor(...) end
