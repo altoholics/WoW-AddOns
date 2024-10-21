@@ -12,6 +12,9 @@ globals.lua
 
 constants.lua
 
+# mixins
+mixins/PositionableMixin.lua
+
 # core wrappers
 Texture.lua
 Label.lua

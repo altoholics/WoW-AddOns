@@ -5,7 +5,7 @@ local CreateFrame = ns.wowui.CreateFrame
 local UISpecialFrames = ns.wowui.UISpecialFrames
 local _G, tinsert = _G, table.insert
 
-local Class, CopyTables, unpack = ns.lua.Class, ns.lua.CopyTables, ns.lua.unpack
+local Class, CopyTables, Drop, unpack = ns.lua.Class, ns.lua.CopyTables, ns.lua.Drop, ns.lua.unpack
 local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.layer.Overlay
 local Texture, Label = ui.Texture, ui.Label
 
@@ -13,75 +13,64 @@ local Texture, Label = ui.Texture, ui.Label
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 -- empty frame
-local Frame = Class(nil, function(o)
-  o.frame = CreateFrame(o.type or "Frame", o.name, o.parent and o.parent.frame or o.parent, o.template)
-  o.name = nil
-  o.parent = nil
-  o.template = nil
-  if o.strata then
-    o.frame:SetFrameStrata(o.strata)
-    o.strata = nil
-  end
-  if o.clamped then
-    o.frame:SetClampedToScreen(true)
-    o.clamped = nil
-  end
-  if o.scale then
-    o.frame:SetScale(o.scale)
-    o.scale = nil
-  end
-  if o.level then
-    o.frame:SetFrameLevel(o.level)
-    o.level = nil
-  end
-  if o.position then
-    for p,args in pairs(o.position) do
-      if o[p] then
+local Frame = Class(nil, function(self)
+  local type, name, parent, template = Drop(self, "type", "name", "parent", "template")
+  local strata, clamped, scale, level = Drop(self, "strata", "clamped", "scale", "level")
+  self.frame = CreateFrame(type or "Frame", name, parent and parent._element or parent, template)
+  self._element = self.frame
+  if strata then self._element:SetFrameStrata(strata) end
+  if clamped then self._element:SetClampedToScreen(true) end
+  if scale then self._element:SetScale(scale) end
+  if level then self._element:SetFrameLevel(level) end
+  local position, special = Drop(self, "position", "self")
+  if position then
+    for p,args in pairs(position) do
+      if self[p] then
         if type(args) == "table" then
-          o[p](o, unpack(args))
+          self[p](self, unpack(args))
         elseif args then
-          o[p](o, args)
+          self[p](self, args)
         end
       end
     end
-    o.position = nil
   end
-  if o.special then
+  if special then
     -- make it closable with Escape key
-    _G[o.frame:GetName()] = o.frame -- put it in the global namespace
-    tinsert(UISpecialFrames, o.frame:GetName()) -- make it a special frame
+    _G[self._element:GetName()] = self._element -- put it in the global namespace
+    tinsert(UISpecialFrames, self._element:GetName()) -- make it a special frame
   end
 
-  if o.background then
-    o:withTextureBackground("background", {
-      color = o.background,
+  if self.background then
+    self:withTextureBackground("background", {
+      color = self.background,
       positionAll = true,
     })
   end
-  if o.alpha then o.frame:SetAlpha(o.alpha) end
+  if self.alpha then self.frame:SetAlpha(self.alpha) end
 
-  if o.drag then
-    o:makeDraggable()
-    o:makeContainerDraggable()
+  if self.drag then
+    self:makeDraggable()
+    self:makeContainerDraggable()
   end
-  if o.dragTarget then o:setDragTarget(o.dragTarget.frame or o.dragTarget) end
+  if self.dragTarget then self:setDragTarget(self.dragTarget.frame or self.dragTarget) end
 
-  if o.scripts then
-    o:RegisterScript(unpack(o.scripts))
+  local scripts, events, unitEvents = Drop(self, "scripts", "events", "unitEvents")
+  if scripts then
+    self:RegisterScript(unpack(scripts))
   end
-  if o.events then
-    o:listenForEvents()
-    for _,e in pairs(o.events) do
-      o.frame:RegisterEvent(e)
+  if events then
+    self:listenForEvents()
+    for _,e in pairs(events) do
+      self.frame:RegisterEvent(e)
     end
   end
-  if o.unitEvents then
-    o:listenForEvents()
-    for e,u in pairs(o.unitEvents) do
-      o.frame:RegisterUnitEvent(e, unpack(u))
+  if unitEvents then
+    self:listenForEvents()
+    for e,u in pairs(unitEvents) do
+      self.frame:RegisterUnitEvent(e, unpack(u))
     end
   end
-end)
+end, nil, ns.PositionableMixin)
 ui.Frame = Frame
 
 function Frame:OnEvent(event, ...)

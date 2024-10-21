@@ -80,8 +80,9 @@ local function ToMap(t, f)
   return r
 end
 
-local function Class(parent, fn, defaults)
+local function Class(parent, fn, defaults, ...)
   local c = {}
+  Mixin(c, ...)
 
   -- define the constructor
   function c:new(o)
@@ -139,3 +140,13 @@ ns.lua = {
 
   Class = Class,
 }
+
+function ns.lua.Drop(t, ...)
+  local r = {}
+  for i=1,select("#", ...) do
+    local k = select(i, ...)
+    r[k] = t[k]
+    t[k] = nil
+  end
+  return unpack(r)
+end
