@@ -40,9 +40,13 @@ end, {
     width = 1,
     height = 1,
   },
-  events = {"PLAYER_UPDATE_RESTING", "PLAYER_FLAGS_CHANGED"},
+  events = {"PLAYER_UPDATE_RESTING", "PLAYER_FLAGS_CHANGED", "PLAYER_ENTERING_WORLD"},
 })
 ns.HUD = HUD
+
+function HUD:PLAYER_ENTERING_WORLD()
+  self.resting.label:SetShown(IsResting())
+end
 
 function HUD:PLAYER_UPDATE_RESTING()
   self.resting.label:SetShown(IsResting())

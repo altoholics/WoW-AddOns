@@ -17,8 +17,8 @@ local offsets = {
     { x = -2.5, y = 38.5, r = math.pi / 2 },
   },
   { -- 5
-    { x = -1, y = -45, r = math.pi / 2 },
-    { x = -5, y = -15, r = math.pi / 2 },
+    { x = -1, y = -43, r = math.pi / 2 },
+    { x = -5, y = -13, r = math.pi / 2 },
     { x = -5, y = 15, r = math.pi / 2 },
     { x = -1, y = 45, r = math.pi / 2 },
   },

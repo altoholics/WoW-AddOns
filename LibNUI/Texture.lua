@@ -47,7 +47,7 @@ local Texture = Class(nil, function(self)
 end)
 ui.Texture = Texture
 
-function Texture:all() self.texture:SetAllPoitns() end
+function Texture:all() self.texture:SetAllPoints() end
 function Texture:center(...) self.texture:SetPoint(ui.edge.Center, ...); return self end
 function Texture:top(...) self.texture:SetPoint(ui.edge.Top, ...); return self end
 function Texture:topLeft(...) self.texture:SetPoint(ui.edge.TopLeft, ...); return self end
