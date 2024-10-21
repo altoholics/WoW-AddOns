@@ -10,26 +10,26 @@ local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 local rgba = ns.wowui.rgba
 
 local RaceGridView = Class(Frame, function(o)
-  o:hide()
+  o:Hide()
   o.allianceView = AllianceView:new{parent = o}
   o.hordeView = HordeView:new{parent = o}
-  o.hordeView:hide()
+  o.hordeView:Hide()
 
   o.factionIcon = FactionIcon:new{
     parent = o,
     position = {
-      topLeft = {53, -4},
-      width = 32,
-      height = 32,
+      TopLeft = {53, -4},
+      Width = 32,
+      Height = 32,
     },
   }
-  o.factionIcon.frame:SetScript("OnMouseUp", function() o:swap() end)
+  o.factionIcon._widget:SetScript("OnMouseUp", function() o:swap() end)
 
   local status = Frame:new{
     parent = o,
     position = {
-      topLeft = {o.frame, BottomLeft, 0, 12},
-      bottomRight = {},
+      TopLeft = {o._widget, BottomLeft, 0, 12},
+      BottomRight = {},
     },
   }
   -- status:addBackdrop({color = {0, 0, 0, 0.2}})
@@ -39,7 +39,7 @@ local RaceGridView = Class(Frame, function(o)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
     clamp = {
       {TopLeft, 0, 3},
-      {BottomRight, status.frame, TopRight},
+      {BottomRight, status._widget, TopRight},
     },
   })
 
@@ -47,7 +47,7 @@ local RaceGridView = Class(Frame, function(o)
     name = "count",
     font = ui.fonts.GameFontHighlightSmall,
     text = "Characters: "..ns.api.GetNumCharacters(),
-    position = {topLeft = {4, -2}},
+    position = {TopLeft = {4, -2}},
     color = {1, 1, 215/255, 0.8},
   }
 
@@ -55,23 +55,23 @@ local RaceGridView = Class(Frame, function(o)
     name = "maxLevel",
     font = "GameFontHighlightSmall",
     text = ns.wow.maxLevel.."'s: "..ns.api.GetNumMaxLevel(),
-    position = {topLeft = {200, -2}},
+    position = {TopLeft = {200, -2}},
     color = {1, 1, 215/255, 0.8},
   }
 
-  o:width(o.allianceView:width())
-  o:height(o.allianceView:height() + 12)
+  o:Width(o.allianceView:Width())
+  o:Height(o.allianceView:Height() + 12)
 end)
 ns.views.RaceGridView = RaceGridView
 
 function RaceGridView:swap()
   self.factionIcon:swap()
   if self.factionIcon.isAlliance then
-    self.hordeView:hide()
-    self.allianceView:show()
+    self.hordeView:Hide()
+    self.allianceView:Show()
   else
-    self.allianceView:hide()
-    self.hordeView:show()
+    self.allianceView:Hide()
+    self.hordeView:Show()
   end
 end
 

@@ -4,23 +4,23 @@ local ui = ns.ui
 local Class, Frame = ns.lua.Class, ui.Frame
 local TopLeft, BottomRight = ui.edge.TopLeft, ui.edge.BottomRight
 
-local CleanFrame = Class(Frame, function(o)
-  o.border = Frame:new{
-    parent = o,
+local CleanFrame = Class(Frame, function(self)
+  self.border = Frame:new{
+    parent = self,
     name = "$parentBorder",
     template = "BackdropTemplate",
     position = {
-      topLeft = {o.frame, TopLeft, -3, 3},
-      bottomRight = {o.frame, BottomRight, 3, -3},
+      TopLeft = {self._widget, TopLeft, -3, 3},
+      BottomRight = {self._widget, BottomRight, 3, -3},
     },
   }
   -- from BackdropTemplate
-  o.border.frame:SetBackdrop({
+  self.border._widget:SetBackdrop({
     edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
     edgeSize = 16,
     insets = {left = 4, right = 4, top = 4, bottom = 4},
   })
-  o.border.frame:SetBackdropBorderColor(0, 0, 0, .5)
+  self.border._widget:SetBackdropBorderColor(0, 0, 0, .5)
 end, {
   parent = ns.wowui.UIParent,
   clamped = true,

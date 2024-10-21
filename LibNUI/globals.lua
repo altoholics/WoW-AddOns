@@ -17,9 +17,9 @@ function ns:SlashCmd(_, msg) -- cmd, msg
   if "tabletest" == cmd then
     ns.ui.TableFrame:new{
       position = {
-        center = {},
-        width = 140,
-        height = 140
+        Center = {},
+        Width = 140,
+        Height = 140
       },
       colNames = {"A", "B", "C"},
       colInfo = {

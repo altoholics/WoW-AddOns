@@ -26,7 +26,7 @@ local function formatBestVaultRewardOption(o)
     onEnter = function(self)
       self.label:Color(1, 1, 1, 0.8)
       if #lines > 1 then
-        GameTooltip:SetOwner(self.frame, "ANCHOR_BOTTOMRIGHT", -10, 10)
+        GameTooltip:SetOwner(self._widget, "ANCHOR_BOTTOMRIGHT", -10, 10)
         GameTooltip:ClearLines()
         for _,l in ipairs(lines) do GameTooltip:AddLine(l, 1, 1, 1) end
         GameTooltip:Show()
@@ -42,7 +42,7 @@ local function formatBestVaultRewardOption(o)
 end
 
 local SummaryView = Class(TableFrame, function(self)
-  self:hide()
+  self:Hide()
   local toons = ns.api.GetAllCharacters() -- returns a copy
   -- sort by level, then ilvl, then name
   table.sort(toons, function(c1, c2)

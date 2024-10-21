@@ -19,9 +19,9 @@ SoUICmdTitleFont:SetShadowOffset(2, -2)
 SoUICmdTitleFont:SetShadowColor(0, 0, 0, 0.5)
 
 local EditBox = Class(CleanFrame, function(self)
-  if self.autoFocus ~= nil then self.frame:SetAutoFocus(self.autoFocus); self.autoFocus = nil end
-  if self.insets then self.frame:SetTextInsets(unpack(self.insets)); self.insets = nil end
-  if self.font then self.frame:SetFontObject(self.font); self.font = nil end
+  if self.autoFocus ~= nil then self._widget:SetAutoFocus(self.autoFocus); self.autoFocus = nil end
+  if self.insets then self._widget:SetTextInsets(unpack(self.insets)); self.insets = nil end
+  if self.font then self._widget:SetFontObject(self.font); self.font = nil end
 end, {
   type = "EditBox",
 })
@@ -36,9 +36,9 @@ local Command = Class(EditBox, function(self)
     kbLabel = false,
     glow = false,
     position = {
-      topRight = {self.frame, ui.edge.TopLeft},
+      TopRight = {self._widget, ui.edge.TopLeft},
     },
-    onClick = function() if not f.frame:IsShown() then f:show() end end,
+    onClick = function() if not f._widget:IsShown() then f:Show() end end,
   }
   self.binderSlash = Button:new{
     parent = self,
@@ -47,9 +47,9 @@ local Command = Class(EditBox, function(self)
     kbLabel = false,
     glow = false,
     position = {
-      topRight = {self.frame, ui.edge.TopLeft},
+      TopRight = {self._widget, ui.edge.TopLeft},
     },
-    onClick = function() if not f.frame:IsShown() then f:show() end end,
+    onClick = function() if not f._widget:IsShown() then f:Show() end end,
   }
 
   self:withLabel("channelTitle", {
@@ -57,7 +57,7 @@ local Command = Class(EditBox, function(self)
     fontObj = SoUICmdTitleFont,
     alpha = 0.8,
     position = {
-      bottomLeft = {self.frame, ui.edge.TopLeft, 15, -2},
+      BottomLeft = {self._widget, ui.edge.TopLeft, 15, -2},
     },
   })
   self:withLabel("channelTargetName", {
@@ -66,7 +66,7 @@ local Command = Class(EditBox, function(self)
     alpha = 0.8,
     color = Colors.Whisper,
     position = {
-      left = {self.channelTitle.label, ui.edge.Right, 2, 0},
+      Left = {self.channelTitle.label, ui.edge.Right, 2, 0},
     },
   })
 end, {
@@ -78,10 +78,10 @@ end, {
   alpha = 0.8,
   background = {0, 0, 0, 0.8},
   position = {
-    center = {0, -50},
-    width = 800,
-    height = 48,
-    hide = true,
+    Center = {0, -50},
+    Width = 800,
+    Height = 48,
+    Hide = true,
   },
   insets = {5, 5, 5, 5},
   font = chatFont,
@@ -95,17 +95,17 @@ end, {
 ns.Command = Command
 
 function Command:Show()
-  self.frame:Show()
+  self:Show()
 end
 
 function Command:OnEscapePressed()
-  self.frame:SetText("")
-  self:hide()
+  self._widget:SetText("")
+  self:Hide()
 end
 
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_ChatFrameBase/Mainline/ChatFrame.lua#L5425
 function Command:OnEnterPressed()
-  local text = self.frame:GetText()
+  local text = self._widget:GetText()
   if text ~= "" then
     if strsub(text, 1, 1) == "/" then
       local _, _, cmd, msg = string.find(text, "(/?%w+) ?(.*)")
@@ -115,7 +115,7 @@ function Command:OnEnterPressed()
 
       -- only secure command needing handling is /target
       if COMMANDS[cmd] then
-        COMMANDS[cmd](msg, self.frame)
+        COMMANDS[cmd](msg, self._widget)
       elseif EMOTES[cmd] then
         DoEmote(EMOTES[cmd], msg)
       else
@@ -144,8 +144,8 @@ function Command:OnEnterPressed()
     end
   end
 
-  self.frame:SetText("")
-  self:hide()
+  self._widget:SetText("")
+  self:Hide()
 end
 
 local ChannelInfo = {
@@ -167,10 +167,10 @@ function Command:UpdateChannelDisplay(type, num, name, target, targetDisplay)
     self.channelTargetName:Text("")
     if num == 1 then
       self.channelTitle:Color(unpack(Colors.General))
-      self.frame:SetTextColor(unpack(Colors.General))
+      self._widget:SetTextColor(unpack(Colors.General))
     else
       self.channelTitle:Color(unpack(Colors.White))
-      self.frame:SetTextColor(unpack(Colors.White))
+      self._widget:SetTextColor(unpack(Colors.White))
     end
   else
     local info = ChannelInfo[type]
@@ -178,7 +178,7 @@ function Command:UpdateChannelDisplay(type, num, name, target, targetDisplay)
       self.channelTitle:Text(info.title)
       self.channelTargetName:Text(targetDisplay or target or "")
       self.channelTitle:Color(unpack(info.color))
-      self.frame:SetTextColor(unpack(info.color))
+      self._widget:SetTextColor(unpack(info.color))
     else
       print("Unrecognized channel type", type)
     end
@@ -186,7 +186,7 @@ function Command:UpdateChannelDisplay(type, num, name, target, targetDisplay)
 end
 
 function Command:OnSpacePressed()
-  local text = self.frame:GetText()
+  local text = self._widget:GetText()
   if text == "" then return end
   if strsub(text, 1, 1) ~= "/" then return end
   local cmd, args = strmatch(text, "(/%w+) (.*) ?$")
@@ -199,11 +199,11 @@ function Command:OnSpacePressed()
     if "SMART_WHISPER" == CHANNELS[cmd] then
       if args ~= "" then
         self:UpdateChannelDisplay(CHANNELS[cmd], nil, nil, args)
-        self.frame:SetText("")
+        self._widget:SetText("")
       end
     else
       self:UpdateChannelDisplay(CHANNELS[cmd])
-      self.frame:SetText("")
+      self._widget:SetText("")
     end
   else
     local channel = strmatch(cmd, "/([0-9]+)$")
@@ -213,7 +213,7 @@ function Command:OnSpacePressed()
         local num, name = GetChannelName(channel)
         if num > 0 then
           self:UpdateChannelDisplay("CHANNEL", num, name)
-          self.frame:SetText("")
+          self._widget:SetText("")
         end
       end
     end

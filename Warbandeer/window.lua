@@ -14,21 +14,21 @@ local MainWindow = Class(TitleFrame, function(self)
   self.views.raceGrid = RaceGridView:new{
     parent = self,
     position = {
-      topLeft = {3, -27},
+      TopLeft = {3, -27},
     },
   }
 
   self.views.summary = SummaryView:new{
     parent = self,
     position = {
-      topLeft = {3, -30},
+      TopLeft = {3, -30},
     },
   }
 
   self.views.detail = DetailView:new{
     parent = self,
     position = {
-      topLeft = {3, -32},
+      TopLeft = {3, -32},
     },
   }
 
@@ -41,8 +41,8 @@ local MainWindow = Class(TitleFrame, function(self)
   -- view control toolip
   self.viewSelector = Tooltip:new{
     position = {
-      topLeft = {self.titlebar.frame, ui.edge.BottomLeft, 6, 3},
-      width = 60,
+      TopLeft = {self.titlebar._widget, ui.edge.BottomLeft, 6, 3},
+      Width = 60,
     },
     lines = {
       {
@@ -50,54 +50,54 @@ local MainWindow = Class(TitleFrame, function(self)
         background = {0, 0, 0, 0},
         onEnter = function(line) line.background:Color(1, 1, 1, 0.2) end,
         onLeave = function(line) line.background:Color(1, 1, 1, 0) end,
-        onClick = function() self:view("raceGrid"); self.views.raceGrid:showAlliance(); self.viewSelector:hide() end,
+        onClick = function() self:view("raceGrid"); self.views.raceGrid:showAlliance(); self.viewSelector:Hide() end,
       },
       {
         text = "Horde",
         background = {0, 0, 0, 0},
         onEnter = function(line) line.background:Color(1, 1, 1, 0.2) end,
         onLeave = function(line) line.background:Color(1, 1, 1, 0) end,
-        onClick = function() self:view("raceGrid"); self.views.raceGrid:showHorde(); self.viewSelector:hide() end,
+        onClick = function() self:view("raceGrid"); self.views.raceGrid:showHorde(); self.viewSelector:Hide() end,
       },
       {
         text = "Summary",
         background = {0, 0, 0, 0},
         onEnter = function(line) line.background:Color(1, 1, 1, 0.2) end,
         onLeave = function(line) line.background:Color(1, 1, 1, 0) end,
-        onClick = function() self:view("summary"); self.viewSelector:hide() end,
+        onClick = function() self:view("summary"); self.viewSelector:Hide() end,
       },
       {
         text = "Detail",
         background = {0, 0, 0, 0},
         onEnter = function(line) line.background:Color(1, 1, 1, 0.2) end,
         onLeave = function(line) line.background:Color(1, 1, 1, 0) end,
-        onClick = function() self:view("detail"); self.viewSelector:hide() end,
+        onClick = function() self:view("detail"); self.viewSelector:Hide() end,
       },
     },
   }
-  self.titlebar.icon.frame:SetScript("OnMouseUp", function()
-    self.viewSelector:toggle()
+  self.titlebar.icon._widget:SetScript("OnMouseUp", function()
+    self.viewSelector:Toggle()
   end)
 end, {
   name = ADDON_NAME,
   title = ADDON_NAME,
   position = {
-    center = {},
+    Center = {},
   },
   special = true,
 })
 
 function MainWindow:view(name)
-  if self._view then self._view:hide() end
+  if self._view then self._view:Hide() end
   self._view = self.views[name]
   if self._view._title then
     self:Title(ADDON_NAME.." | "..self._view._title)
   else
     self:Title(ADDON_NAME)
   end
-  self._view:show()
-  self:width(self._view:width()  + 6)
-  self:height(self._view:height() + 30)
+  self._view:Show()
+  self:Width(self._view:Width()  + 6)
+  self:Height(self._view:Height() + 30)
 end
 
 function ns:Open()
@@ -105,7 +105,7 @@ function ns:Open()
     ns.MainWindow = MainWindow:new{}
   end
 
-  ns.MainWindow:show()
+  ns.MainWindow:Show()
 end
 
 function ns:view(name)

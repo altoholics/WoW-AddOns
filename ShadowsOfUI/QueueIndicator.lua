@@ -8,17 +8,17 @@ local QueueIndicator = Class(Frame, function(self)
   self.timer = Label:new{
     parent = self,
     justifyH = "LEFT",
-    position = { fill = true },
+    position = { Fill = true },
   }
 end, {
   parent = UIParent,
   name = "ShadowUIQueueIndicator",
   strata = "BACKGROUND",
   position = {
-    width = 80,
-    height = 16,
-    bottomLeft = {UIParent, ui.edge.BottomRight, -300, 34},
-    hide = true,
+    Width = 80,
+    Height = 16,
+    BottomLeft = {UIParent, ui.edge.BottomRight, -300, 34},
+    Hide = true,
   },
   events = {"LFG_QUEUE_STATUS_UPDATE"},
 })

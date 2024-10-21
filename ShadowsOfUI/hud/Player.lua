@@ -59,8 +59,8 @@ end, {
   name = "$parentPlayer",
   alpha = 0.9,
   position = {
-    width = 1,
-    height = 1,
+    Width = 1,
+    Height = 1,
   },
   events = {"PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "PLAYER_TARGET_CHANGED"},
   unitEvents = {
@@ -72,13 +72,13 @@ ns.PlayerHUD = PlayerHUD
 function PlayerHUD:UpdateVisibility()
   local hp, max = Player:GetHealthValues()
   if hp >= max then
-    self:hide()
+    self:Hide()
   end
 end
 
 function PlayerHUD:PLAYER_REGEN_DISABLED()
   self._combat = true
-  self:show()
+  self:Show()
 end
 
 function PlayerHUD:PLAYER_REGEN_ENABLED()
@@ -88,7 +88,7 @@ end
 
 function PlayerHUD:PLAYER_TARGET_CHANGED()
   if Player:HasTarget() then
-    self:show()
+    self:Show()
   elseif not self._combat then
     self:UpdateVisibility()
   end

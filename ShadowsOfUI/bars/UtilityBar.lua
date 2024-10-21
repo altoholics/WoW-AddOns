@@ -3,7 +3,7 @@ local ui = ns.ui
 local Class = ns.lua.Class
 
 local UtilityBar = Class(ns.VerticalBar, function(self)
-  self.tooltipPoint = {ui.edge.Right, self.frame, ui.edge.Left, -2, 0}
+  self.tooltipPoint = {ui.edge.Right, self._widget, ui.edge.Left, -2, 0}
   -- 791	162973	WoW Icon update	Greatfather Winter's Hearthstone	World Event	8.0.1
   -- 792	163045	WoW Icon update	Headless Horseman's Hearthstone	World Event	8.0.1
   -- 916	165669	WoW Icon update	Lunar Elder's Hearthstone		8.1.0
@@ -74,16 +74,16 @@ local UtilityBar = Class(ns.VerticalBar, function(self)
 
   self:UpdateHeight()
   if self.raft then
-    self:width(self.iconSize + 2*self.smallSize)
+    self:Width(self.iconSize + 2*self.smallSize)
   end
 end, {
   name = "ShadowsOfUIUtilBar",
   alpha = 0.5,
   mouseOverAlpha = 1,
   position = {
-    right = {},
-    width = 48,
+    Right = {},
+    Width = 48,
   },
-  firstButtonPoint = "topRight",
+  firstButtonPoint = "TopRight",
 })
 ns.UtilityBar = UtilityBar

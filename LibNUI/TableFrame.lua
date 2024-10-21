@@ -19,7 +19,7 @@ local TableRow = Class(BgFrame, function(self)
   if self.label then
     self:withLabel({
       text = self.label,
-      position = {left = {2, 0}},
+      position = {Left = {2, 0}},
       template = self.font,
       color = self.color or {1, 1, 1, 1},
     })
@@ -32,8 +32,8 @@ local TableCol = Class(BgFrame, function(self)
   self:withLabel({
     text = self.label,
     position = {
-      topLeft = {},
-      bottomRight = {self.frame, TopRight, 0, -self.headerHeight},
+      TopLeft = {},
+      BottomRight = {self._widget, TopRight, 0, -self.headerHeight},
     },
     template = self.font,
     color = self.color or {1, 215/255, 0, 1},
@@ -76,9 +76,9 @@ local TableFrame = Class(Frame, function(self)
         label = self.colNames[i],
         headerHeight = self.headerHeight,
         position = {
-          topLeft = i == 1 and {self.offsetX, 0} or {self.cols[i-1].frame, TopRight},
-          bottom = {self.frame, Bottom},
-          width = w,
+          TopLeft = i == 1 and {self.offsetX, 0} or {self.cols[i-1]._widget, TopRight},
+          Bottom = {self._widget, Bottom},
+          Width = w,
         },
         font = self.colHeaderFont or self.headerFont,
         backdrop = self.colInfo and self.colInfo[i].backdrop or
@@ -95,9 +95,9 @@ local TableFrame = Class(Frame, function(self)
         parent = self,
         label = self.rowNames[i],
         position = {
-          topLeft = i == 1 and {0, -self.offsetY} or {self.rows[i-1].frame, BottomLeft},
-          right = {self.frame, Right},
-          height = h,
+          TopLeft = i == 1 and {0, -self.offsetY} or {self.rows[i-1]._widget, BottomLeft},
+          Right = {self._widget, Right},
+          Height = h,
         },
         font = self.rowHeaderFont or self.headerFont,
         backdrop = self.rowInfo and self.rowInfo[i].backdrop or
@@ -114,8 +114,8 @@ local TableFrame = Class(Frame, function(self)
   if not self.colInfo then self.colInfo = {} end
   if not self.rowInfo then self.rowInfo = {} end
 
-  self:width(width)
-  self:height(height)
+  self:Width(width)
+  self:Height(height)
   if self.data then self:update() end
 end, {
   cellWidth = 100,
@@ -144,15 +144,15 @@ function TableFrame:addCol(info)
     label = self.colInfo[n].name,
     headerHeight = self.headerHeight,
     position = {
-      topLeft = n == 1 and {self.offsetX, 0} or {self.cols[n-1].frame, TopRight},
-      bottom = {self.frame, Bottom},
-      width = w,
+      TopLeft = n == 1 and {self.offsetX, 0} or {self.cols[n-1]._widget, TopRight},
+      Bottom = {self._widget, Bottom},
+      Width = w,
     },
     font = self.colHeaderFont or self.headerFont,
     backdrop = self.colInfo and self.colInfo[n].backdrop or
       {color = {0, 0, 0, math.fmod(n, 2) == 0 and 0.6 or 0.4}},
   })
-  self:width(self:width()+w)
+  self:Width(self:Width()+w)
   return self
 end
 
@@ -165,27 +165,27 @@ function TableFrame:addRow(info)
     parent = self,
     label = self.rowInfo[n].name,
     position = {
-      topLeft = n == 1 and {0, -self.offsetY} or {self.rows[n-1].frame, BottomLeft},
-      right = {self.frame, Right},
-      height = h,
+      TopLeft = n == 1 and {0, -self.offsetY} or {self.rows[n-1]._widget, BottomLeft},
+      Right = {self._widget, Right},
+      Height = h,
     },
     backdrop = self.rowInfo and self.rowInfo[n].backdrop or
       {color = {0, 0, 0, math.fmod(n, 2) == 0 and 0.2 or 0}},
   })
-  self:height(self:height()+h)
+  self:Height(self:Height()+h)
   return self
 end
 
 local Cell = Class(Frame, function(self)
   local data = type(self.data) == "table" and self.data or {text = self.data}
-  if data.onClick then self.frame:SetScript("OnMouseUp", function() data.onClick(self) end) end
-  if data.onEnter then self.frame:SetScript("OnEnter", function() data.onEnter(self) end) end
-  if data.onLeave then self.frame:SetScript("OnLeave", function() data.onLeave(self) end) end
+  if data.onClick then self._widget:SetScript("OnMouseUp", function() data.onClick(self) end) end
+  if data.onEnter then self._widget:SetScript("OnEnter", function() data.onEnter(self) end) end
+  if data.onLeave then self._widget:SetScript("OnLeave", function() data.onLeave(self) end) end
   self:withLabel({
     text = data.text,
     color = data.color,
     template = data.font,
-    position = { fill = true },
+    position = { Fill = true },
     justifyH = data.justifyH or Left,
   })
 end, {
@@ -201,10 +201,10 @@ function TableFrame:update()
         self.cells[rowN][colN] = Cell:new{
           parent = self,
           position = {
-            top = {self.rows[rowN].frame, Top},
-            bottom = {self.rows[rowN].frame, Bottom},
-            left = {self.cols[colN].frame, Left},
-            right = {self.cols[colN].frame, Right},
+            Top = {self.rows[rowN]._widget, Top},
+            Bottom = {self.rows[rowN]._widget, Bottom},
+            Left = {self.cols[colN]._widget, Left},
+            Right = {self.cols[colN]._widget, Right},
           },
           data = data,
         }

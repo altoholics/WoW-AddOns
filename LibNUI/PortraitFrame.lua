@@ -11,13 +11,13 @@ local IsAddOnLoaded, UIParent = ns.wow.IsAddOnLoaded, ns.wowui.UIParent
 --   a circle portrait in the top left
 --   a close button in the top right
 --   a title bar
-local PortraitFrame = Class(Dialog, function(o)
-  o:makeDraggable()
-  o:makeTitlebarDraggable()
+local PortraitFrame = Class(Dialog, function(self)
+  self:makeDraggable()
+  self:makeTitlebarDraggable()
 
   -- portrait
-  local frame = o.frame
-  frame:SetPortraitTextureRaw(o.portraitPath)
+  local frame = self._widget
+  frame:SetPortraitTextureRaw(self.portraitPath)
 
   -- re-skin, if present
   if IsAddOnLoaded("FrameColor") then

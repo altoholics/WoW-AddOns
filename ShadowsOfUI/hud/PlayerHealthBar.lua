@@ -7,13 +7,13 @@ local Player = ns.wow.Player
 
 local HealthBar = Class(StatusBar, function(self)
   local className = gsub(Player:GetClassName(), " ", "")
-  local t = self.frame:GetStatusBarTexture()
+  local t = self._widget:GetStatusBarTexture()
   t:SetVertexColor(unpack(ns.Colors[className]))
   self:withLabel("level", {
     text = Player:GetLevel(),
     font = "GameFontNormalSmall",
     position = {
-      topRight = {self.frame, ui.edge.TopLeft, 16, -2}
+      TopRight = {self._widget, ui.edge.TopLeft, 16, -2}
     },
     alpha = 0.8,
   })
@@ -21,7 +21,7 @@ local HealthBar = Class(StatusBar, function(self)
     text = AbbreviateNumbers(Player:GetHealth()),
     font = "GameFontHighlight",
     position = {
-      bottomRight = {self.frame, ui.edge.BottomLeft, 14, 2},
+      BottomRight = {self._widget, ui.edge.BottomLeft, 14, 2},
     },
     alpha = 0.8,
   })
@@ -29,7 +29,7 @@ local HealthBar = Class(StatusBar, function(self)
     text = Player:GetHealthPercent(),
     font = "GameFontHighlight",
     position = {
-      bottomRight = {self.hp.label, ui.edge.TopRight, -4, 2},
+      BottomRight = {self.hp.label, ui.edge.TopRight, -4, 2},
     },
     alpha = 0.8,
   })
@@ -47,9 +47,9 @@ end, {
     coords = {0.32, 0.05, 0.01, 0.99},
   },
   position = {
-    center = {},
-    width = 30,
-    height = 200,
+    Center = {},
+    Width = 30,
+    Height = 200,
   },
   events = {"PLAYER_LEVEL_UP"},
   unitEvents = {
@@ -60,7 +60,7 @@ ns.PlayerHealthBar = HealthBar
 
 function HealthBar:UNIT_HEALTH()
   local hp, max, pcnt = Player:GetHealthValues()
-  self.frame:SetMinMaxValues(0, max)
+  self._widget:SetMinMaxValues(0, max)
   self:SetValue(hp)
   self.hp:Text(AbbreviateNumbers(hp))
   self.hpPcnt:Text(pcnt)

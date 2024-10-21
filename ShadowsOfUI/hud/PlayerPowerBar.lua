@@ -14,7 +14,7 @@ local PowerBar = Class(StatusBar, function(self)
     text = AbbreviateNumbers(Player:GetPower()),
     font = "GameFontHighlight",
     position = {
-      bottomLeft = {self.frame, ui.edge.BottomRight, 0, -6},
+      BottomLeft = {self._widget, ui.edge.BottomRight, 0, -6},
     },
     alpha = 0.8,
   })
@@ -22,14 +22,14 @@ local PowerBar = Class(StatusBar, function(self)
     text = Player:GetPowerPercent(),
     font = "GameFontHighlight",
     position = {
-      bottomLeft = {self.frame, ui.edge.BottomRight, 0, 6},
+      BottomLeft = {self._widget, ui.edge.BottomRight, 0, 6},
     },
     alpha = 0.8,
   })
 
   self:UPDATE_SHAPESHIFT_FORM()
   local power, x = Player:GetPowerValues()
-  self.frame:SetMinMaxValues(0, x)
+  self._widget:SetMinMaxValues(0, x)
   self:SetValue(power)
 end, {
   name = "$parentPower",
@@ -45,9 +45,9 @@ end, {
     coords = {0.32, 0.05, 0.01, 0.99},
   },
   position = {
-    center = {10, 0},
-    width = 27,
-    height = 188,
+    Center = {10, 0},
+    Width = 27,
+    Height = 188,
   },
   unitEvents = {
     UNIT_POWER_FREQUENT = {"player"},
@@ -60,7 +60,7 @@ function PowerBar:UNIT_POWER_FREQUENT(_, powerType, ...)
   if powerType == "MANA" or powerType == "RAGE" or powerType == "FOCUS" or powerType == "ENERGY" or powerType == "CHI"
   or powerType == "INSANITY" or powerType == "FURY" or powerType == "PAIN" or powerType == "RUNIC_POWER" then
     local power, x = Player:GetPowerValues()
-    self.frame:SetMinMaxValues(0, x)
+    self._widget:SetMinMaxValues(0, x)
     self:SetValue(power)
   end
 end
@@ -68,7 +68,7 @@ end
 function PowerBar:UPDATE_SHAPESHIFT_FORM()
   local _, powerKey, altR, altG, altB = Player:GetPowerType()
   local color = ns.Colors.PowerBarColor[powerKey]
-  local t = self.frame:GetStatusBarTexture()
+  local t = self._widget:GetStatusBarTexture()
   if color then
     t:SetVertexColor(color.r, color.g, color.b)
   elseif altR then

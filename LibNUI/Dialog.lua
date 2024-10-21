@@ -8,8 +8,8 @@ local _G, tinsert = _G, table.insert
 local UISpecialFrames = ns.wowui.UISpecialFrames
 
 -- dialog with title bar and close button, closable with escape
-local Dialog = Class(Frame, function(o)
-  local frame = o.frame
+local Dialog = Class(Frame, function(self)
+  local frame = self._widget
   frame:SetFrameStrata("DIALOG")
   frame:SetClampedToScreen(true)
 
@@ -18,20 +18,20 @@ local Dialog = Class(Frame, function(o)
   tinsert(UISpecialFrames, frame:GetName()) -- make it a special frame
 
   -- set the title
-  frame:SetTitle(o.title or frame:GetName())
-  o.title = nil
-  if o.titleColor then
-    o.frame.TitleContainer.TitleText:SetTextColor(unpack(o.titleColor))
+  frame:SetTitle(self.title or frame:GetName())
+  self.title = nil
+  if self.titleColor then
+    self._widget.TitleContainer.TitleText:SetTextColor(unpack(self.titleColor))
   end
 end)
 ui.Dialog = Dialog
 
 function Dialog:makeTitlebarDraggable()
-  self.frame.TitleContainer:SetScript("OnMouseDown", function()
-    self.frame:StartMoving()
+  self._widget.TitleContainer:SetScript("OnMouseDown", function()
+    self._widget:StartMoving()
   end)
-  self.frame.TitleContainer:SetScript("OnMouseUp", function()
-    self.frame:StopMovingOrSizing()
+  self._widget.TitleContainer:SetScript("OnMouseUp", function()
+    self._widget:StopMovingOrSizing()
   end)
   return self
 end

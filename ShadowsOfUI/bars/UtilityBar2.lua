@@ -3,7 +3,7 @@ local ui = ns.ui
 local Class = ns.lua.Class
 
 local UtilityBar2 = Class(ns.VerticalBar, function(self)
-  self.tooltipPoint = {ui.edge.Left, self.frame, ui.edge.Right, -2, 0}
+  self.tooltipPoint = {ui.edge.Left, self._widget, ui.edge.Right, -2, 0}
 
   -- party/raid buffs
   self.fortitude = self:addSpellButton(21562)
@@ -33,9 +33,9 @@ end, {
   alpha = 0.5,
   mouseOverAlpha = 1,
   position = {
-    left = {},
-    width = 48,
+    Left = {},
+    Width = 48,
   },
-  firstButtonPoint = "topLeft",
+  firstButtonPoint = "TopLeft",
 })
 ns.UtilityBar2 = UtilityBar2

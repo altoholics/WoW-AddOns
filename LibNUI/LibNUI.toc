@@ -12,10 +12,8 @@ globals.lua
 
 constants.lua
 
-# mixins
-mixins/PositionableMixin.lua
-
 # core wrappers
+ScriptRegion.lua
 Texture.lua
 Label.lua
 Frame.lua

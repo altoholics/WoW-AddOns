@@ -32,24 +32,24 @@ local HistoryItem = Class(Frame, function(self)
     coords = {0.07, 0.93, 0.07, 0.93},
     path = tex,
     position = {
-      topLeft = {},
-      bottomLeft = {},
-      width = 30,
+      TopLeft = {},
+      BottomLeft = {},
+      Width = 30,
     },
   }
   self.name = Label:new{
     parent = self,
     text = name,
     position = {
-      topLeft = {self.frame, ui.edge.TopLeft, 30, -4},
-      right = {self.frame, ui.edge.Right},
-      height = 26,
+      TopLeft = {self._widget, ui.edge.TopLeft, 30, -4},
+      Right = {self._widget, ui.edge.Right},
+      Height = 26,
     },
     justifyH = "LEFT",
   }
 end, {
   position = {
-    height = 30,
+    Height = 30,
   },
   background = {0, 0, 0, 0.5},
 })
@@ -66,9 +66,9 @@ local History = Class(CleanFrame, function(self)
 end,{
   parent = UIParent,
   position = {
-    width = 150,
-    height = 12,
-    hide = true,
+    Width = 150,
+    Height = 12,
+    Hide = true,
   },
   background = {0, 0, 0, 0.2},
   events = {"CHAT_MSG_LOOT"},
@@ -80,9 +80,9 @@ function History:AddItem(link)
       parent = self,
       link = link,
       position = {
-        bottom = {self.frame, ui.edge.Bottom, 0, 32 * #self.history + 2},
-        left = {self.frame, ui.edge.Left, 2, 0},
-        right = {self.frame, ui.edge.Right, -2, 0},
+        Bottom = {self._widget, ui.edge.Bottom, 0, 32 * #self.history + 2},
+        Left = {self._widget, ui.edge.Left, 2, 0},
+        Right = {self._widget, ui.edge.Right, -2, 0},
       },
     })
   else
@@ -92,10 +92,10 @@ function History:AddItem(link)
     tinsert(self.history, hi)
     -- reposition
     for i=1,#self.history do
-      self.history[i]:bottom(self.frame, ui.edge.Bottom, 0, 32 * (i-1) + 2)
+      self.history[i]:bottom(self._widget, ui.edge.Bottom, 0, 32 * (i-1) + 2)
     end
   end
-  self:height(32 * #self.history + 2)
+  self:Height(32 * #self.history + 2)
 end
 
 function History:CHAT_MSG_LOOT(text, playerName, _, _, playerName2)
@@ -111,13 +111,13 @@ local Bucket = Class(Frame, function(self)
   self:withTextureBackground("topBorder", {
     color = {0, 0, 0},
     position = {
-      topLeft = {0, 1},
-      topRight = {},
+      TopLeft = {0, 1},
+      TopRight = {},
     },
   })
   self.money = Label:new{
     parent = self,
-    position = { topRight = {-2, -2} },
+    position = { TopRight = {-2, -2} },
   }
 
   self.fadeDelay = 10000
@@ -126,17 +126,17 @@ local Bucket = Class(Frame, function(self)
 end, {
   parent = UIParent,
   position = {
-    width = 100,
-    height = 20,
-    bottomRight = {-300, 30},
+    Width = 100,
+    Height = 20,
+    BottomRight = {-300, 30},
   },
   events = {"PLAYER_ENTERING_WORLD", "PLAYER_MONEY"},
   scripts = {"OnEnter", "OnLeave", "OnMouseUp"},
 })
 
 function Bucket:checkSize()
-  local w = max(100, self.money.label:GetUnboundedStringWidth())
-  self.frame:SetWidth(w + 4)
+  local w = max(100, self.money._widget:GetUnboundedStringWidth())
+  self:Width(w + 4)
 end
 
 function Bucket:onUpdate(elapsed)
@@ -152,9 +152,9 @@ function Bucket:onUpdate(elapsed)
     if self.fadeTimer <= 0 then
       self:stopUpdates()
       self.fadeTimer = -1
-      self.frame:SetAlpha(0.15)
+      self._widget:SetAlpha(0.15)
     else
-      self.frame:SetAlpha(0.15 + 0.85 * self.fadeTimer / self.fadeDuration)
+      self._widget:SetAlpha(0.15 + 0.85 * self.fadeTimer / self.fadeDuration)
     end
   end
 end
@@ -166,7 +166,7 @@ function Bucket:updateMoney()
   -- reset timers
   self.fadeTimer = -1
   self.fadeWait = self.fadeDelay
-  self.frame:SetAlpha(1)
+  self._widget:SetAlpha(1)
   self:checkSize()
   self:startUpdates()
 end
@@ -196,7 +196,7 @@ function Bucket:startTracking(itemName)
   if name and not self.db.trackedItems[itemId] then
     -- if we weren't watching loot, start
     if self.db.trackedItems.n == 0 then
-      self.frame:RegisterEvent("CHAT_MSG_LOOT")
+      self._widget:RegisterEvent("CHAT_MSG_LOOT")
     end
     self.db.trackedItems.n = self.db.trackedItems.n + 1
     self.db.trackedItems[itemId] = {id=itemId, name=name, textureID = textureID}
@@ -227,7 +227,7 @@ function Bucket:OnLeave()
 end
 
 function Bucket:OnMouseUp()
-  ns.history:toggle()
+  ns.history:Toggle()
 end
 
 
@@ -235,7 +235,7 @@ function ns:onLoad()
   ns.bucket = Bucket:new{}
   ns.history = History:new{
     position = {
-      bottomRight = {ns.bucket.frame, ui.edge.TopRight, 0, 5},
+      BottomRight = {ns.bucket._widget, ui.edge.TopRight, 0, 5},
     },
   }
 end

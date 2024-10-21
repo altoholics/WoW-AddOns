@@ -18,16 +18,10 @@ chatFont:SetShadowOffset(2, -2)
 
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_ChatFrameBase/Mainline/ChatFrame.lua
 local MessageFrame = Class(Frame, function(self)
-  self.frame:SetFontObject(chatFont)
-  self.frame:SetTimeVisible(60)
-  self.frame:SetSpacing(3)
-  -- self.frame:EnableMouse(true)
-  -- self.frame:SetMouseClickEnabled(true)
-  -- self.frame:EnableMouseWheel(true)
-  self.frame:SetHyperlinksEnabled(true)
-  -- self.frame:SetFading(false)
-
-  -- for i=1,10 do self.frame:AddMessage("sample line of text "..i, 1, 1, 1) end
+  self._widget:SetFontObject(chatFont)
+  self._widget:SetTimeVisible(60)
+  self._widget:SetSpacing(3)
+  self._widget:SetHyperlinksEnabled(true)
 end, {
   type = "ScrollingMessageFrame",
 })
@@ -38,9 +32,9 @@ end, {
   parent = UIParent,
   name = "ShadowUIChat",
   position = {
-    bottomLeft = {20, 20},
-    width = 800,
-    height = 300,
+    BottomLeft = {20, 20},
+    Width = 800,
+    Height = 300,
   },
   events = {
     -- "CHAT_MSG_ADDON",
@@ -87,7 +81,7 @@ function Chat:OnHyperlinkClick(_, link)
     if "player" == cmd then
       if ns.command then
         ns.command:UpdateChannelDisplay("SMART_WHISPER", nil, nil, arg1, Ambiguate(arg1, "short"))
-        ns.command:show()
+        ns.command:Show()
       end
     end
   elseif "item" == linkType then
@@ -119,7 +113,7 @@ local ChannelStrings = {
 
 function Chat:AddChannelMessage(channel, text, player)
   local info = ChatTypeInfo[channel]
-  self.frame:AddMessage(strf(ChannelStrings[channel], player, text), info.r, info.g, info.b, info.id)
+  self._widget:AddMessage(strf(ChannelStrings[channel], player, text), info.r, info.g, info.b, info.id)
 end
 
 function Chat:HandlePlayerMessage(channel, text, player, ...)

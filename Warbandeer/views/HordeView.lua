@@ -20,22 +20,22 @@ local HordeView = Class(TableFrame, function(o)
   local toons = ns.api.GetHordeCharacters()
   for _,data in pairs(toons) do
     local row = data.classId
-    local w = o.cols[1].frame:GetWidth()
+    local w = o.cols[1]:Width()
     local cell = Frame:new{
-      parent = o.frame,
+      parent = o,
       level = 3,
       position = {
-        topLeft = {data.raceIdx * w, (row-1) * -24 - HeaderHeight},
-        width = w - 6,
-        height = 24 - 10,
+        TopLeft = {data.raceIdx * w, (row-1) * -24 - HeaderHeight},
+        Width = w - 6,
+        Height = 24 - 10,
       },
     }
     cell:withLabel({
       font = ui.fonts.GameFontHighlightSmall,
       text = data.name,
       position = {
-        topLeft = {},
-        size = {cellWidth, cellHeight},
+        TopLeft = {},
+        Size = {cellWidth, cellHeight},
       },
       justifyH = "CENTER",
       justifyV = "MIDDLE",
@@ -43,8 +43,8 @@ local HordeView = Class(TableFrame, function(o)
     })
 
     -- https://wowpedia.fandom.com/wiki/UIOBJECT_GameTooltip
-    cell.frame:SetScript("OnEnter", function()
-      GameTooltip:SetOwner(cell.frame, "ANCHOR_RIGHT")
+    cell._widget:SetScript("OnEnter", function()
+      GameTooltip:SetOwner(cell._widget, "ANCHOR_RIGHT")
       GameTooltip:SetText(data.name, 1, 1, 1)
       GameTooltip:AddDoubleLine("Level", data.level, nil, nil, nil, 1, 1, 1)
       GameTooltip:AddDoubleLine("iLvl", data.ilvl, nil, nil, nil, 1, 1, 1)
@@ -74,7 +74,7 @@ local HordeView = Class(TableFrame, function(o)
       end
       GameTooltip:Show()
     end)
-    cell.frame:SetScript("OnLeave", function()
+    cell._widget:SetScript("OnLeave", function()
       GameTooltip:Hide()
     end)
   end
@@ -87,8 +87,8 @@ end, {
   colNames = HORDE_RACES,
   rowInfo = rowInfo,
   position = {
-    topLeft = {},
-    bottomRight = {},
+    TopLeft = {},
+    BottomRight = {},
   },
   headerFont = "GameFontHighlightSmall",
 })

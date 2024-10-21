@@ -7,10 +7,10 @@ local Button = ui.Button
 local SecureButton = Class(Button, function(self)
   if self.actions then
     for _,action in pairs(self.actions) do
-      if action.type then self.frame:SetAttribute("type", action.type) end
-      if action.spell then self.frame:SetAttribute("spell", action.spell) end
-      if action.target then self.frame:SetAttribute("unit", action.target) end
-      if action.toy then self.frame:SetAttribute("toy", action.toy) end
+      if action.type then self._widget:SetAttribute("type", action.type) end
+      if action.spell then self._widget:SetAttribute("spell", action.spell) end
+      if action.target then self._widget:SetAttribute("unit", action.target) end
+      if action.toy then self._widget:SetAttribute("toy", action.toy) end
     end
   end
 end, {

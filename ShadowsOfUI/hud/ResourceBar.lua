@@ -50,7 +50,7 @@ local offsets = {
 
 local ResourceBar = Class(StatusBar, function(self)
   local className = gsub(Player:GetClassName(), " ", "")
-  local t = self.frame:GetStatusBarTexture()
+  local t = self._widget:GetStatusBarTexture()
   t:SetVertexColor(unpack(ns.Colors[className]))
 
   if self.classId == 11 then -- druid
@@ -76,9 +76,9 @@ end, {
     coords = {0.32, 0.05, 0.01, 0.99},
   },
   position = {
-    center = {11, 0},
-    width = 17,
-    height = 150,
+    Center = {11, 0},
+    Width = 17,
+    Height = 150,
   },
   events = {"PLAYER_TALENT_UPDATE"},
   unitEvents = {
@@ -93,8 +93,8 @@ function ResourceBar:PLAYER_TALENT_UPDATE()
   for i=1,countMax - 1 do
     local n = self.notches[i]
     if n then
-      n:show()
-      n:center(offsets[countMax][i].x, offsets[countMax][i].y)
+      n:Show()
+      n:Center(offsets[countMax][i].x, offsets[countMax][i].y)
     else
       tinsert(self.notches, Texture:new{
         parent = self,
@@ -104,15 +104,15 @@ function ResourceBar:PLAYER_TALENT_UPDATE()
         rotation = offsets[countMax][i].r,
         vertexColor = {0, 0, 0, 0.8},
         position = {
-          center = {offsets[countMax][i].x, offsets[countMax][i].y},
-          width = 4.5,
-          height = 9,
+          Center = {offsets[countMax][i].x, offsets[countMax][i].y},
+          Width = 4.5,
+          Height = 9,
         },
       })
     end
   end
-  for i=countMax,#self.notches do self.notches[i]:hide() end
-  self.frame:SetMinMaxValues(0, countMax)
+  for i=countMax,#self.notches do self.notches[i]:Hide() end
+  self._widget:SetMinMaxValues(0, countMax)
   self:RUNE_POWER_UPDATE()
 end
 

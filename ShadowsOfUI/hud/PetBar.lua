@@ -7,14 +7,14 @@ local Player = ns.wow.Player
 
 local PetBar = Class(StatusBar, function(self)
   local className = Player:GetClassName()
-  local t = self.frame:GetStatusBarTexture()
+  local t = self._widget:GetStatusBarTexture()
   t:SetVertexColor(unpack(ns.Colors[className]))
 
   self:withLabel("hp", {
     text = AbbreviateNumbers(Player:GetHealth()),
     font = "GameFontHighlightSmall",
     position = {
-      bottomRight = {self.frame, ui.edge.BottomLeft, 7, 2},
+      BottomRight = {self._widget, ui.edge.BottomLeft, 7, 2},
     },
     alpha = 0.8,
   })
@@ -22,7 +22,7 @@ local PetBar = Class(StatusBar, function(self)
     text = Player:GetHealthPercent(),
     font = "GameFontHighlightSmall",
     position = {
-      bottomRight = {self.hp.label, ui.edge.TopRight, -4, 2},
+      BottomRight = {self.hp.label, ui.edge.TopRight, -4, 2},
     },
     alpha = 0.8,
   })
@@ -40,9 +40,9 @@ end, {
     coords = {0.32, 0.05, 0.01, 0.99},
   },
   position = {
-    center = {-14, 0},
-    width = 14,
-    height = 136,
+    Center = {-14, 0},
+    Width = 14,
+    Height = 136,
   },
   unitEvents = {
     UNIT_HEALTH = {"pet"},
@@ -53,10 +53,10 @@ ns.PetBar = PetBar
 
 function PetBar:UNIT_HEALTH()
   local hp, max = Player.GetPetHealthValues()
-  self.frame:SetMinMaxValues(0, max)
+  self._widget:SetMinMaxValues(0, max)
   self:SetValue(hp)
 end
 
 function PetBar:UNIT_PET()
-  self.frame:SetShown(ns.wow.UnitExists("pet"))
+  self._widget:SetShown(ns.wow.UnitExists("pet"))
 end

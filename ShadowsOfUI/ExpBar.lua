@@ -23,7 +23,7 @@ local ExpBar = Class(StatusBar, function(self)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
     clamp = {
       {TopLeft},
-      {BottomRight, self.frame, TopRight, 0, -3}
+      {BottomRight, self._widget, TopRight, 0, -3}
     },
   })
 
@@ -34,35 +34,35 @@ local ExpBar = Class(StatusBar, function(self)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
     clamp = {
       {TopLeft, 0, 3},
-      {BottomRight, self.frame, TopRight},
+      {BottomRight, self._widget, TopRight},
     },
   })
 
   -- secondary bar to show rested amount
   self:withTextureArtwork("secondary", { color = {0, 0.25, 1, 0.5} })
-  self.secondary.texture:SetHeight(self.frame:GetHeight())
-  -- self.secondary.texture:SetGradient("HORIZONTAL", RestedGradientStart, RestedGradientEnd)
+  self.secondary._widget:SetHeight(self:Height())
+  -- self.secondary._widget:SetGradient("HORIZONTAL", RestedGradientStart, RestedGradientEnd)
 
   -- percent text
-  self.textPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
-  self.textPercent:SetHeight(self.frame:GetHeight() - 2)
+  self.textPercent = self._widget:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
+  self.textPercent:SetHeight(self:Height() - 2)
   self.textPercent:SetTextColor(1, 1, 1, 0)
 
-  self.restPercent = self.frame:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
-  self.restPercent:SetHeight(self.frame:GetHeight() - 2)
+  self.restPercent = self._widget:CreateFontString(nil, "ARTWORK", "SystemFont_Tiny2")
+  self.restPercent:SetHeight(self:Height() - 2)
   self.restPercent:SetTextColor(1, 1, 1, 0)
 
   -- make sure we can get mouse hover events in order to show the text
   self.fadeDelay = 500
-  self.frame:SetMouseMotionEnabled(true)
-  self.frame:SetScript("OnEnter", function() self:onEnter() end)
-  self.frame:SetScript("OnLeave", function() self:onLeave() end)
+  self._widget:SetMouseMotionEnabled(true)
+  self._widget:SetScript("OnEnter", function() self:onEnter() end)
+  self._widget:SetScript("OnLeave", function() self:onLeave() end)
 end, {
   parent = ns.wowui.UIParent,
   position = {
-    height = 7,
-    bottomLeft = {},
-    bottomRight = {}
+    Height = 7,
+    BottomLeft = {},
+    BottomRight = {}
   },
   events = {
     "PLAYER_ENTERING_WORLD", "PLAYER_XP_UPDATE", "PLAYER_LEVEL_UP", "UPDATE_EXHAUSTION", "PLAYER_UPDATE_RESTING"
@@ -104,19 +104,19 @@ function ExpBar:update()
   local xp = Player:GetXPPercent()
   local rest = Player:GetRestPercent()
 
-  self.fill.texture:SetWidth(self:width() * xp)
-  self.textPercent:SetPoint(TopRight, self.frame, TopLeft, self.fill.texture:GetWidth() - 3, -1)
+  self.fill:Width(self:Width() * xp)
+  self.textPercent:SetPoint(TopRight, self._widget, TopLeft, self.fill:Width() - 3, -1)
   self.textPercent:SetText(ns.lua.floor(xp * 100).."%")
 
-  self.secondary.texture:SetWidth(self:width() * rest)
-  self.secondary.texture:SetPoint(TopLeft, self.fill.texture:GetWidth(), 0)
-  self.restPercent:SetPoint(TopLeft, self.frame, TopLeft, self.fill.texture:GetWidth() + 3, -1)
+  self.secondary:Width(self:Width() * rest)
+  self.secondary._widget:SetPoint(TopLeft, self.fill:Width(), 0)
+  self.restPercent:SetPoint(TopLeft, self._widget, TopLeft, self.fill:Width() + 3, -1)
   self.restPercent:SetText(ns.lua.floor(rest * 100).."%")
 end
 
 function ExpBar:initNotches()
   -- add the little notches every 10%
-  local spacing = self.frame:GetWidth() / 10
+  local spacing = self:Width() / 10
   for i=1,9 do
     self:withTextureOverlay("notch"..i, {
       color = {1, 1, 1},
@@ -124,7 +124,7 @@ function ExpBar:initNotches()
       gradient = {"HORIZONTAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)},
       clamp = {
         {TopLeft, spacing * i, 0},
-        {BottomRight, self.frame, BottomLeft, spacing * i + 3, 0},
+        {BottomRight, self._widget, BottomLeft, spacing * i + 3, 0},
       },
     })
   end

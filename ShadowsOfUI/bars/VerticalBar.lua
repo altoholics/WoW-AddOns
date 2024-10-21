@@ -19,11 +19,11 @@ end, {
 })
 ns.VerticalBar = VerticalBar
 
-function VerticalBar:OnEnter() self.frame:SetAlpha(self.mouseOverAlpha) end
-function VerticalBar:OnLeave() if not self.frame:IsMouseOver() then self.frame:SetAlpha(self.alpha) end end
+function VerticalBar:OnEnter() self._widget:SetAlpha(self.mouseOverAlpha) end
+function VerticalBar:OnLeave() if not self._widget:IsMouseOver() then self._widget:SetAlpha(self.alpha) end end
 
 function VerticalBar:UpdateHeight()
-  self:height(#self.buttons * self.iconSize + (#self.buttons-1) * self.spacing)
+  self:Height(#self.buttons * self.iconSize + (#self.buttons-1) * self.spacing)
 end
 
 function VerticalBar:addSecureButton(ops)
@@ -31,15 +31,15 @@ function VerticalBar:addSecureButton(ops)
     parent = self,
     position = {
       [self.firstButtonPoint] = #self.buttons == 0 and {} or nil,
-      top = #self.buttons > 0 and {self.buttons[#self.buttons].frame, Bottom, 0, -self.spacing} or nil,
-      width = self.iconSize,
-      height = self.iconSize,
+      Top = #self.buttons > 0 and {self.buttons[#self.buttons]._widget, Bottom, 0, -self.spacing} or nil,
+      Width = self.iconSize,
+      Height = self.iconSize,
     },
     normal = {
       coords = {0.07, 0.93, 0.07, 0.93},
     },
     tooltip = {
-      owner = {self.frame, "ANCHOR_NONE"},
+      owner = {self._widget, "ANCHOR_NONE"},
       point = self.tooltipPoint,
     },
   }))
@@ -65,12 +65,12 @@ end
 function VerticalBar:addOffsetToyButton(id, target, x, y)
   return HasToy(id) and self:addSecureButton{
     offset = true,
-    level = target.frame:GetFrameLevel() + 1,
+    level = target._widget:GetFrameLevel() + 1,
     position = {
-      top = false,
-      right = {target.frame, ui.edge.Left, x or 2 * self.spacing, y or 0},
-      width = self.smallSize,
-      height = self.smallSize,
+      Top = false,
+      Right = {target._widget, ui.edge.Left, x or 2 * self.spacing, y or 0},
+      Width = self.smallSize,
+      Height = self.smallSize,
     },
     normal = {
       texture = Items.GetIcon(id),
@@ -103,12 +103,12 @@ end
 function VerticalBar:addOffsetSpellButton(id, icon, target, x, y)
   return IsSpellKnown(id) and self:addSecureButton{
     offset = true,
-    level = target.frame:GetFrameLevel() + 1,
+    level = target._widget:GetFrameLevel() + 1,
     position = {
-      top = false,
-      right = {target.frame, ui.edge.Left, x or 2 * self.spacing, y or 0},
-      width = self.smallSize,
-      height = self.smallSize,
+      Top = false,
+      Right = {target._widget, ui.edge.Left, x or 2 * self.spacing, y or 0},
+      Width = self.smallSize,
+      Height = self.smallSize,
     },
     normal = {
       texture = icon or GetSpellTexture(id),

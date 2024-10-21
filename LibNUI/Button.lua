@@ -27,29 +27,29 @@ end
 local Button = Class(Frame, function(self)
   if self.normal then
     if self.normal.texture then
-      self.frame:SetNormalTexture(self.normal.texture)
+      self._widget:SetNormalTexture(self.normal.texture)
     end
     if self.normal.coords then
-      self.frame:GetNormalTexture():SetTexCoord(unpack(self.normal.coords))
+      self._widget:GetNormalTexture():SetTexCoord(unpack(self.normal.coords))
     end
   end
 
   if self.onClick then
-    self.frame:SetScript("OnClick", function() self:onClick() end)
+    self._widget:SetScript("OnClick", function() self:onClick() end)
   end
-  self.frame:RegisterForClicks("AnyDown", "AnyUp")
+  self._widget:RegisterForClicks("AnyDown", "AnyUp")
 
   -- https://wowpedia.fandom.com/wiki/Creating_key_bindings
   if self.bindLeftClick then
-    SetOverrideBindingClick(self.frame, false, self.bindLeftClick, self.frame:GetName(), "LeftButton")
+    SetOverrideBindingClick(self._widget, false, self.bindLeftClick, self._widget:GetName(), "LeftButton")
     if self.kbLabel ~= false then
       self:withLabel("keybind", {
         text = formatKeybind(self.bindLeftClick),
         color = {0.8, 0.8, 0.8, 1},
         fontObj = keybindFont,
         position = {
-          topRight = {0, -2},
-          height = 7,
+          TopRight = {0, -2},
+          Height = 7,
         },
       })
     end
@@ -61,8 +61,8 @@ local Button = Class(Frame, function(self)
       path = "interface/buttons/UI-ActionButton-Border",
       blendMode = "ADD",
       position = {
-        all = true,
-        hide = true,
+        All = true,
+        Hide = true,
       },
       coords = {0.21, 0.77, 0.24, 0.79},
     })
@@ -91,15 +91,15 @@ function Button:OnMouseUp()
 end
 
 function Button:OnEnter()
-  if self.border then self.border.texture:Show() end
+  if self.border then self.border:Show() end
   if self.tooltip then
-    local gt = self.tooltip.frame
+    local gt = self.tooltip._widget
     if not gt then
       gt = GameTooltip
       if self.tooltip.owner then
         gt:SetOwner(unpack(self.tooltip.owner))
       else
-        gt:SetOwner(self.frame, "ANCHOR_TOPRIGHT", -2, 0)
+        gt:SetOwner(self._widget, "ANCHOR_TOPRIGHT", -2, 0)
       end
       if self.tooltip.point then
         gt:SetPoint(unpack(self.tooltip.point))
@@ -120,6 +120,6 @@ function Button:OnEnter()
 end
 
 function Button:OnLeave()
-  if self.border then self.border.texture:Hide() end
-  if self.tooltip then (self.tooltip.frame or GameTooltip):Hide() end
+  if self.border then self.border:Hide() end
+  if self.tooltip then (self.tooltip._widget or GameTooltip):Hide() end
 end

@@ -13,10 +13,10 @@ local StatusBar = Class(Frame, function(self)
   if self.fill then
     local fill = self.fill
     self:withTextureArtwork("fill", {color = fill.color})
-    if fill.gradient then self.fill.texture:SetGradient(ns.lua.unpack(fill.gradient)) end
-    if fill.blend then self.fill.texture:SetBlendMode("ADD") end
+    if fill.gradient then self.fill._widget:SetGradient(ns.lua.unpack(fill.gradient)) end
+    if fill.blend then self.fill._widget:SetBlendMode("ADD") end
   end
-  if self.color then self.frame:SetColorFill(unpack(self.color)) end
+  if self.color then self._widget:SetColorFill(unpack(self.color)) end
 
   if self.texture then
     if type(self.texture) == "table" then
@@ -24,12 +24,12 @@ local StatusBar = Class(Frame, function(self)
       local tex = Texture:new(Mixin({
         parent = self,
       }, tOps))
-      self.frame:SetStatusBarTexture(tex.texture)
-      tex.texture:ClearAllPoints()
-      tex:top(self.frame)
-      tex:left(self.frame)
-      tex:right(self.frame)
-      tex:bottom(self.frame)
+      self._widget:SetStatusBarTexture(tex._widget)
+      tex._widget:ClearAllPoints()
+      tex:Top(self._widget)
+      tex:Left(self._widget)
+      tex:Right(self._widget)
+      tex:Bottom(self._widget)
       local l, r, t, b = unpack(tOps.coords or {0, 1, 0, 1})
       self.X1 = l
       self.X2 = r
@@ -39,13 +39,13 @@ local StatusBar = Class(Frame, function(self)
       self.Yd = b - t
       self.texture = tex
     else
-      self.frame:SetStatusBarTexture(self.texture)
+      self._widget:SetStatusBarTexture(self.texture)
       self.texture = nil
     end
   end
 
-  if self.orientation then self.frame:SetOrientation(self.orientation) end
-  if self.min and self.max then self.frame:SetMinMaxValues(self.min, self.max) end
+  if self.orientation then self._widget:SetOrientation(self.orientation) end
+  if self.min and self.max then self._widget:SetMinMaxValues(self.min, self.max) end
 end, {
   type = "StatusBar"
 })
@@ -53,28 +53,28 @@ ui.StatusBar = StatusBar
 
 function StatusBar:onLoad()
   if self.fill then
-    self.fill.texture:SetPoint(BottomLeft)
-    self.fill.texture:SetHeight(self.frame:GetHeight())
+    self.fill._widget:SetPoint(BottomLeft)
+    self.fill._widget:SetHeight(self._widget:GetHeight())
   end
 end
 
-function StatusBar:Color(c) self.frame:SetColorFill(unpack(c)) end
-function StatusBar:Texture(t) self.frame:SetStatusBarTexture(t) end
+function StatusBar:Color(c) self._widget:SetColorFill(unpack(c)) end
+function StatusBar:Texture(t) self._widget:SetStatusBarTexture(t) end
 
 function StatusBar:SetValue(v)
-  if not self.texture then self.frame:SetValue(v); return end
-  local n, m = self.frame:GetMinMaxValues()
+  if not self.texture then self._widget:SetValue(v); return end
+  local n, m = self._widget:GetMinMaxValues()
   local p = 1 - (v / (m-n))
   local dx, dy = self.Xd * p, self.Yd * p
   local l, r, t, b = self.X1, self.X2, self.Y1, self.Y2
-  if self.frame:GetOrientation() == "HORIZONTAL" then
+  if self._widget:GetOrientation() == "HORIZONTAL" then
     if dx > 0 then -- luacheck: ignore
       --
     end
   else -- vertical
     -- bottom up
     t = t + dy
-    self.texture:top(0, self:height() * -dy)
+    self._widget:Top(0, self:Height() * -dy)
   end
-  self.texture.texture:SetTexCoord(l, r, t, b)
+  self.texture._widget:SetTexCoord(l, r, t, b)
 end

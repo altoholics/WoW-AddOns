@@ -34,7 +34,7 @@ local AllianceView = Class(TableFrame, function(self)
       justifyH = ui.justify.Center,
       color = data.level ~= ns.wow.maxLevel and {0.7, 0.7, 0.7, 1},
       onEnter = function(cell)
-        GameTooltip:SetOwner(cell.frame, "ANCHOR_BOTTOMRIGHT", -10, 10)
+        GameTooltip:SetOwner(cell._widget, "ANCHOR_BOTTOMRIGHT", -10, 10)
         GameTooltip:SetText(data.name, 1, 1, 1)
         GameTooltip:AddDoubleLine("Level", data.level, nil, nil, nil, 1, 1, 1)
         GameTooltip:AddDoubleLine("iLvl", data.ilvl, nil, nil, nil, 1, 1, 1)
@@ -87,9 +87,9 @@ end, {
   colInfo = colInfo,
   rowInfo = rowInfo,
   position = {
-    topLeft = {},
-    width = (#ALLIANCE_RACES + 1) * cellWidth,
-    height = #rowInfo * cellHeight + HeaderHeight,
+    TopLeft = {},
+    Width = (#ALLIANCE_RACES + 1) * cellWidth,
+    Height = #rowInfo * cellHeight + HeaderHeight,
   },
   headerFont = ui.fonts.GameFontHighlightSmall,
 })
