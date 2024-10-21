@@ -2,7 +2,7 @@ local _, ns = ...
 local Class = ns.lua.Class
 local AbbreviateNumbers = ns.lua.AbbreviateNumbers
 local ui = ns.ui
-local StatusBar = ui.StatusBar
+local StatusBar, Label = ui.StatusBar, ui.Label
 local Player = ns.wow.Player
 
 local PowerBar = Class(StatusBar, function(self)
@@ -10,22 +10,24 @@ local PowerBar = Class(StatusBar, function(self)
     self:registerEvent("UPDATE_SHAPESHIFT_FORM")
   end
 
-  self:withLabel("value", {
+  self.value = Label:new{
+    parent = self,
     text = AbbreviateNumbers(Player:GetPower()),
     font = "GameFontHighlight",
     position = {
       BottomLeft = {self._widget, ui.edge.BottomRight, 0, -6},
     },
     alpha = 0.8,
-  })
-  self:withLabel("percent", {
+  }
+  self.percent = Label:new{
+    parent = self,
     text = Player:GetPowerPercent(),
     font = "GameFontHighlight",
     position = {
       BottomLeft = {self._widget, ui.edge.BottomRight, 0, 6},
     },
     alpha = 0.8,
-  })
+  }
 
   self:UPDATE_SHAPESHIFT_FORM()
   local power, x = Player:GetPowerValues()

@@ -1,7 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame, TableFrame = ns.lua.Class, ui.Frame, ui.TableFrame
+local Class, Frame, TableFrame, Label = ns.lua.Class, ui.Frame, ui.TableFrame, ui.Label
 local HORDE_RACES, CLASSES = ns.HORDE_RACES, ns.CLASSES
 
 local rowInfo = {}
@@ -30,7 +30,8 @@ local HordeView = Class(TableFrame, function(o)
         Height = 24 - 10,
       },
     }
-    cell:withLabel({
+    cell.label = Label:new{
+      parent = cell,
       font = ui.fonts.GameFontHighlightSmall,
       text = data.name,
       position = {
@@ -40,7 +41,7 @@ local HordeView = Class(TableFrame, function(o)
       justifyH = "CENTER",
       justifyV = "MIDDLE",
       color = data.level ~= ns.wow.maxLevel and {0.7, 0.7, 0.7, 1}
-    })
+    }
 
     -- https://wowpedia.fandom.com/wiki/UIOBJECT_GameTooltip
     cell._widget:SetScript("OnEnter", function()

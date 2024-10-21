@@ -1,11 +1,11 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame = ns.lua.Class, ui.Frame
+local Class, Frame, Label = ns.lua.Class, ui.Frame, ui.Label
 local AllianceView, HordeView, FactionIcon = ns.views.AllianceView, ns.views.HordeView, ns.views.FactionIcon
 
-local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
-local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
+local TopRight = ui.edge.TopRight
+local BottomLeft = ui.edge.BottomLeft
 
 local rgba = ns.wowui.rgba
 
@@ -37,22 +37,22 @@ local RaceGridView = Class(Frame, function(o)
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
-    clamp = {
-      {TopLeft, 0, 3},
-      {BottomRight, status._widget, TopRight},
+    position = {
+      TopLeft = {0, 3},
+      BottomRight = {status._widget, TopRight},
     },
   })
 
-  status:withLabel{
-    name = "count",
+  status.count = Label:new{
+    parent = status,
     font = ui.fonts.GameFontHighlightSmall,
     text = "Characters: "..ns.api.GetNumCharacters(),
     position = {TopLeft = {4, -2}},
     color = {1, 1, 215/255, 0.8},
   }
 
-  status:withLabel{
-    name = "maxLevel",
+  status.maxLevel = Label:new{
+    parent = status,
     font = "GameFontHighlightSmall",
     text = ns.wow.maxLevel.."'s: "..ns.api.GetNumMaxLevel(),
     position = {TopLeft = {200, -2}},

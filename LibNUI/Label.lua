@@ -3,7 +3,7 @@ local ui = ns.ui
 
 local unpack = ns.lua.unpack
 local Class, Drop = ns.lua.Class, ns.lua.Drop
-local ScriptRegion = ui.ScriptRegion
+local Region = ui.Region
 
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_FontStyles_Shared/SharedFontStyles.xml
 -- https://github.com/Gethe/wow-ui-source/blob/5076663b5454de9e7522320994ea7cc15b2a961c/Interface/AddOns/Blizzard_FontStyles_Frame/Mainline/FontStyles.xml
@@ -12,19 +12,15 @@ ui.fonts = ns.lua.ToMap({
   "SystemFont_Med2",
 })
 
-local Label = Class(ScriptRegion, function(self)
-  if self.fontObj then self._widget:SetFontObject(self.fontObj) end
-  if self.text then self._widget:SetText(self.text) end
-  if self.alpha then self._widget:SetAlpha(self.alpha) end
-  if self.color then
-    self._widget:SetTextColor(unpack(self.color))
-  end
-  if self.justifyH then
-    self._widget:SetJustifyH(self.justifyH)
-  end
-  if self.justiftV then
-    self._widget:SetJustifyV(self.justiftV)
-  end
+local Label = Class(Region, function(self)
+  local fontObj, text, color = Drop(self, "fontObj", "text", "color")
+  if fontObj then self._widget:SetFontObject(fontObj) end
+  if text then self:Text(text) end
+  if color then self:Color(unpack(color)) end
+
+  local h, v = Drop(self, 'justifyH', 'justifyV')
+  if h then self._widget:SetJustifyH(h) end
+  if v then self._widget:SetJustifyV(v) end
 end, {
   CreateWidth = function(self)
     local parent, name, layer, font = Drop(self, "parent", "name", "layer", "font")

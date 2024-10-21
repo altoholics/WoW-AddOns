@@ -1,9 +1,8 @@
 local _, ns = ...
 
 local ui, Class = ns.ui, ns.lua.Class
-local Frame, StatusBar = ui.Frame, ui.StatusBar
-local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
-local BottomRight = ui.edge.BottomRight
+local Frame, StatusBar, Label = ui.Frame, ui.StatusBar, ui.Label
+local TopRight = ui.edge.TopRight
 
 local rgba = ns.wowui.rgba
 
@@ -28,14 +27,15 @@ local SeveredThreadsStart = rgba(169, 71, 59)
 local SeveredThreadsEnd = rgba(244, 124, 102)
 
 local RepBar = Class(StatusBar, function(self)
-  self:withLabel({
+  self.label = Label:new{
+    parent = self,
     font = "SystemFont_Tiny2",
     color = {1, 1, 1, 1},
     position = {
       Center = {},
       Height = self:Height() - 2,
     },
-  })
+  }
   self.label._widget:SetShadowColor(0, 0, 0, 0.8)
   self.label._widget:SetShadowOffset(1, -1)
 end, {
@@ -104,9 +104,9 @@ local RepBarContainer = Class(Frame, function(self)
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
-    clamp = {
-      {TopLeft},
-      {BottomRight, self._widget, TopRight, 0, -3}
+    position = {
+      TopLeft = {},
+      BottomRight = {self._widget, TopRight, 0, -3},
     },
   })
 
@@ -115,9 +115,9 @@ local RepBarContainer = Class(Frame, function(self)
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
-    clamp = {
-      {TopLeft, 0, 3},
-      {BottomRight, self._widget, TopRight},
+    position = {
+      TopLeft = {0, 3},
+      BottomRight = {self._widget, TopRight},
     },
   })
 end, {

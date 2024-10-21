@@ -21,9 +21,9 @@ local ExpBar = Class(StatusBar, function(self)
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
-    clamp = {
-      {TopLeft},
-      {BottomRight, self._widget, TopRight, 0, -3}
+    position = {
+      TopLeft = {},
+      BottomRight = {self._widget, TopRight, 0, -3},
     },
   })
 
@@ -32,9 +32,9 @@ local ExpBar = Class(StatusBar, function(self)
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
-    clamp = {
-      {TopLeft, 0, 3},
-      {BottomRight, self._widget, TopRight},
+    position = {
+      TopLeft = {0, 3},
+      BottomRight = {self._widget, TopRight},
     },
   })
 
@@ -122,9 +122,9 @@ function ExpBar:initNotches()
       color = {1, 1, 1},
       blendMode = "BLEND",
       gradient = {"HORIZONTAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)},
-      clamp = {
-        {TopLeft, spacing * i, 0},
-        {BottomRight, self._widget, BottomLeft, spacing * i + 3, 0},
+      position = {
+        TopLeft = {spacing * i, 0},
+        BottomRight = {self._widget, BottomLeft, spacing * i + 3, 0},
       },
     })
   end

@@ -1,7 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 local tinsert = ns.lua.tinsert
-local Class, Frame, BgFrame = ns.lua.Class, ui.Frame, ui.BgFrame
+local Class, Frame, BgFrame, Label = ns.lua.Class, ui.Frame, ui.BgFrame, ui.Label
 local Center, Middle, Left = ui.justify.Center, ui.justify.Middle, ui.justify.Left
 local TopRight, BottomLeft, Right = ui.edge.TopRight, ui.edge.BottomLeft, ui.edge.Right
 local Top, Bottom = ui.edge.Top, ui.edge.Bottom
@@ -17,19 +17,21 @@ local Top, Bottom = ui.edge.Top, ui.edge.Bottom
 
 local TableRow = Class(BgFrame, function(self)
   if self.label then
-    self:withLabel({
+    self.label = Label:new{
+      parent = self,
       text = self.label,
       position = {Left = {2, 0}},
       template = self.font,
       color = self.color or {1, 1, 1, 1},
-    })
+    }
   end
 end, {
   level = 2,
 })
 
 local TableCol = Class(BgFrame, function(self)
-  self:withLabel({
+  self.label = Label{
+    parent = self,
     text = self.label,
     position = {
       TopLeft = {},
@@ -39,7 +41,7 @@ local TableCol = Class(BgFrame, function(self)
     color = self.color or {1, 215/255, 0, 1},
     justifyH = Center,
     justifyV = Middle,
-  })
+  }
 end, {
   level = 1,
 })
@@ -181,13 +183,14 @@ local Cell = Class(Frame, function(self)
   if data.onClick then self._widget:SetScript("OnMouseUp", function() data.onClick(self) end) end
   if data.onEnter then self._widget:SetScript("OnEnter", function() data.onEnter(self) end) end
   if data.onLeave then self._widget:SetScript("OnLeave", function() data.onLeave(self) end) end
-  self:withLabel({
+  self.label = Label:new{
+    parent = self,
     text = data.text,
     color = data.color,
     template = data.font,
     position = { Fill = true },
     justifyH = data.justifyH or Left,
-  })
+  }
 end, {
   level = 3,
 })

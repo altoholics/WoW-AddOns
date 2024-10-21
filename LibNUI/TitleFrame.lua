@@ -1,7 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame, CleanFrame = ns.lua.Class, ui.Frame, ui.CleanFrame
+local Class, Frame, CleanFrame, Label = ns.lua.Class, ui.Frame, ui.CleanFrame, ui.Label
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local Left, Right, Center = ui.edge.Left, ui.edge.Right, ui.edge.Center
 
@@ -18,7 +18,8 @@ local TitleFrame = Class(CleanFrame, function(o)
     dragTarget = o._widget,
     background = {0, 0, 0, 0.5},
   }
-  o.titlebar:withLabel("title", {
+  o.titlebar.title = Label:new{
+    parent = o.titlebar,
     name = "$parentText",
     layer = "OVERLAY",
     font = ui.fonts.SystemFont_Med2,
@@ -28,7 +29,7 @@ local TitleFrame = Class(CleanFrame, function(o)
     text = o.title,
     justifyH = Left,
     justifyV = "MIDDLE",
-  })
+  }
 
   -- icon
   o.titlebar.icon = Frame:new{
@@ -42,7 +43,7 @@ local TitleFrame = Class(CleanFrame, function(o)
     name = "$parentIcon",
     path = "Interface/Icons/inv_10_tailoring2_banner_green.blp",
     coords = {0.1, 0.9, 0.1, 0.9},
-    positionAll = true,
+    position = { All = true },
   })
 
   -- close button
@@ -68,14 +69,13 @@ local TitleFrame = Class(CleanFrame, function(o)
   end)
   o.closeButton:withTextureArtwork("icon", {
     name = "$parentIcon",
-    clamp = {
-      {Center, o.closeButton._widget, Center},
+    position = {
+      Center = {o.closeButton._widget, Center},
     },
     path = "Interface/AddOns/Warbandeer/icons/close.blp",
   })
   o.closeButton.icon._widget:SetSize(10, 10)
   o.closeButton.icon._widget:SetVertexColor(0.7, 0.7, 0.7, 1)
-
 end, {
   drag = true,
 })

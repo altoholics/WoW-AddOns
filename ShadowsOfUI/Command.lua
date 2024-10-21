@@ -3,7 +3,7 @@ local _, ns = ...
 local ui, Colors = ns.ui, ns.Colors
 local Class = ns.lua.Class
 local unpack, strsub, string, strmatch = ns.lua.unpack, ns.lua.strsub, ns.lua.string, ns.lua.strmatch
-local CleanFrame, Button = ui.CleanFrame, ui.Button
+local CleanFrame, Label, Button = ui.CleanFrame, ui.Label, ui.Button
 local UpdateHashLists = ChatFrame_ImportAllListsToHash
 local COMMANDS, CHANNELS, EMOTES = hash_SlashCmdList, hash_ChatTypeInfoList, hash_EmoteTokenList
 local MAX_WOW_CHAT_CHANNELS = MAX_WOW_CHAT_CHANNELS
@@ -52,15 +52,17 @@ local Command = Class(EditBox, function(self)
     onClick = function() if not f._widget:IsShown() then f:Show() end end,
   }
 
-  self:withLabel("channelTitle", {
+  self.channelTitle = Label:new{
+    parent = self,
     text = "Say",
     fontObj = SoUICmdTitleFont,
     alpha = 0.8,
     position = {
       BottomLeft = {self._widget, ui.edge.TopLeft, 15, -2},
     },
-  })
-  self:withLabel("channelTargetName", {
+  }
+  self.channelTargetName = Label:new{
+    parent = self,
     text = "",
     fontObj = SoUICmdTitleFont,
     alpha = 0.8,
@@ -68,7 +70,7 @@ local Command = Class(EditBox, function(self)
     position = {
       Left = {self.channelTitle.label, ui.edge.Right, 2, 0},
     },
-  })
+  }
 end, {
   parent = ns.wow.UIParent,
   name = "ShadowsOfUI_Command",

@@ -2,7 +2,7 @@ local _, ns = ...
 -- luacheck: globals NumberFontNormalSmallGray CreateFont GetCursorInfo
 local ui = ns.ui
 local Class, unpack = ns.lua.Class, ns.lua.unpack
-local Frame = ui.Frame
+local Frame, Label = ui.Frame, ui.Label
 local GameTooltip, SetOverrideBindingClick = ns.wowui.GameTooltip, ns.wowui.SetOverrideBindingClick
 local GetCursorInfo = GetCursorInfo
 
@@ -43,7 +43,8 @@ local Button = Class(Frame, function(self)
   if self.bindLeftClick then
     SetOverrideBindingClick(self._widget, false, self.bindLeftClick, self._widget:GetName(), "LeftButton")
     if self.kbLabel ~= false then
-      self:withLabel("keybind", {
+      self.keybind = Label:new{
+        parent = self,
         text = formatKeybind(self.bindLeftClick),
         color = {0.8, 0.8, 0.8, 1},
         fontObj = keybindFont,
@@ -51,7 +52,7 @@ local Button = Class(Frame, function(self)
           TopRight = {0, -2},
           Height = 7,
         },
-      })
+      }
     end
   end
 

@@ -57,7 +57,7 @@ end, {
 function HistoryItem:Update(link)
   self.link = link
   local name, _, qual, _, _, _, _, _, _, tex = GetItemInfo(self.link)
-  self.icon:setTexture(tex)
+  self.icon:Texture(tex)
   self.name:Text(name)
 end
 

@@ -2,7 +2,7 @@ local _, ns = ...
 local ui = ns.ui
 
 local tinsert = ns.lua.tinsert
-local Class, CleanFrame, Frame = ns.lua.Class, ui.CleanFrame, ui.Frame
+local Class, CleanFrame, Frame, Label = ns.lua.Class, ui.CleanFrame, ui.Frame, ui.Label
 
 local Tooltip = Class(CleanFrame, function(self)
   self:Hide()
@@ -21,11 +21,12 @@ local Tooltip = Class(CleanFrame, function(self)
       },
       background = line.background,
     }
-    l:withLabel({
+    l.label = Label:new{
+      parent = l,
       text = line.text,
       position = {Fill = {}},
       justifyH = ui.edge.Left,
-    })
+    }
     w = ns.lua.max(w, l.label._widget:GetUnboundedStringWidth())
     if line.onClick then l._widget:SetScript("OnMouseUp", function() line.onClick(l) end) end
     if line.onEnter then l._widget:SetScript("OnEnter", function() line.onEnter(l) end) end

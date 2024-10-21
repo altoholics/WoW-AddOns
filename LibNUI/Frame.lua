@@ -7,13 +7,13 @@ local _G, tinsert = _G, table.insert
 
 local Class, CopyTables, Drop, unpack = ns.lua.Class, ns.lua.CopyTables, ns.lua.Drop, ns.lua.unpack
 local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.layer.Overlay
-local ScriptRegion, Texture, Label = ui.ScriptRegion, ui.Texture, ui.Label
+local Region, Texture = ui.Region, ui.Texture
 
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
 -- frame/UI control templates: https://www.wowinterface.com/forums/showthread.php?t=40444
 
 -- empty frame
-local Frame = Class(ScriptRegion, function(self)
+local Frame = Class(Region, function(self)
   local strata, clamped, scale, level = Drop(self, "strata", "clamped", "scale", "level")
   if strata then self._widget:SetFrameStrata(strata) end
   if clamped then self._widget:SetClampedToScreen(true) end
@@ -40,10 +40,9 @@ local Frame = Class(ScriptRegion, function(self)
   if self.background then
     self:withTextureBackground("background", {
       color = self.background,
-      positionAll = true,
+      position = { All = true },
     })
   end
-  if self.alpha then self._widget:SetAlpha(self.alpha) end
 
   if self.drag then
     self:makeDraggable()
@@ -184,20 +183,10 @@ function Frame:withTextureOverlay(name, o)
 end
 
 local BACKDROP_DEFAULTS = {
-  positionAll = true,
+  position = { All = true },
   color = {0, 0, 0, 0.8}
 }
 function Frame:addBackdrop(o)
   o = o or {}
   return self:withTextureBackground(o.name or "backdrop", CopyTables(BACKDROP_DEFAULTS, o))
-end
-
-function Frame:withLabel(name, o)
-  if not o then
-    o = name
-    name = o.name or "label"
-  end
-  o.parent = self._widget
-  self[name] = Label:new(o)
-  return self
 end

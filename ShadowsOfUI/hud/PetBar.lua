@@ -2,7 +2,7 @@ local _, ns = ...
 local Class, unpack = ns.lua.Class, ns.lua.unpack
 local AbbreviateNumbers = ns.lua.AbbreviateNumbers
 local ui = ns.ui
-local StatusBar = ui.StatusBar
+local StatusBar, Label = ui.StatusBar, ui.Label
 local Player = ns.wow.Player
 
 local PetBar = Class(StatusBar, function(self)
@@ -10,22 +10,24 @@ local PetBar = Class(StatusBar, function(self)
   local t = self._widget:GetStatusBarTexture()
   t:SetVertexColor(unpack(ns.Colors[className]))
 
-  self:withLabel("hp", {
+  self.hp = Label:new{
+    parent = self,
     text = AbbreviateNumbers(Player:GetHealth()),
     font = "GameFontHighlightSmall",
     position = {
       BottomRight = {self._widget, ui.edge.BottomLeft, 7, 2},
     },
     alpha = 0.8,
-  })
-  self:withLabel("hpPcnt", {
+  }
+  self.hpPcnt = Label:new{
+    parent = self,
     text = Player:GetHealthPercent(),
     font = "GameFontHighlightSmall",
     position = {
       BottomRight = {self.hp.label, ui.edge.TopRight, -4, 2},
     },
     alpha = 0.8,
-  })
+  }
 end, {
   name = "$parentPet",
   alpha = 0.8,
