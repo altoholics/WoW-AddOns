@@ -2,12 +2,18 @@ local _, ns = ...
 
 local ui = ns.ui
 local Class = ns.lua.Class
-local Frame = ui.Frame
+local Frame, Texture = ui.Frame, ui.Texture
 
 -- frame with a background
-local BgFrame = Class(Frame, function(o)
-  o:addBackdrop(o.backdrop or {})
+local BgFrame = Class(Frame, function(self)
+  self.backdrop = Texture:new{
+    parent = self,
+    layer = ui.layer.Overlay,
+    position = { All = true },
+    color = {0, 0, 0, 0.8}
+  }
 end)
 ui.BgFrame = BgFrame
+
 function BgFrame:backdropColor(...) self.backdrop._widget:SetColorTexture(...); return self end
 function BgFrame:backdropTexture(...) self.backdrop._widget:SetTexture(...); return self end

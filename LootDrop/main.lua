@@ -108,13 +108,15 @@ end
 local Bucket = Class(Frame, function(self)
   self:makeDraggable()
   self:makeContainerDraggable()
-  self:withTextureBackground("topBorder", {
+  self.topBorder = Texture:new{
+    parent = self,
+    layer = ui.layer.Background,
     color = {0, 0, 0},
     position = {
       TopLeft = {0, 1},
       TopRight = {},
     },
-  })
+  }
   self.money = Label:new{
     parent = self,
     position = { TopRight = {-2, -2} },

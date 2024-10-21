@@ -2,7 +2,7 @@ local _, ns = ...
 
 local Player = ns.wow.Player
 local ui, Class = ns.ui, ns.lua.Class
-local StatusBar = ui.StatusBar
+local StatusBar, Texture = ui.StatusBar, ui.Texture
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
 local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
 local rgba = ns.wowui.rgba
@@ -17,7 +17,9 @@ local RestedGradientEnd = rgba(0, 64, 255, 0.5)
 
 local ExpBar = Class(StatusBar, function(self)
   -- darken top edge of bar
-  self:withTextureOverlay("edge", {
+  self.edge = Texture:new{
+    parent = self,
+    layer = ui.layer.Overlay,
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
@@ -25,10 +27,12 @@ local ExpBar = Class(StatusBar, function(self)
       TopLeft = {},
       BottomRight = {self._widget, TopRight, 0, -3},
     },
-  })
+  }
 
   -- fade into ui above
-  self:withTextureBackground("fade", {
+  self.fade = Texture:new{
+    parent = self,
+    layer = ui.layer.Background,
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
@@ -36,10 +40,14 @@ local ExpBar = Class(StatusBar, function(self)
       TopLeft = {0, 3},
       BottomRight = {self._widget, TopRight},
     },
-  })
+  }
 
   -- secondary bar to show rested amount
-  self:withTextureArtwork("secondary", { color = {0, 0.25, 1, 0.5} })
+  self.secondary = Texture:new{
+    parent = self,
+    layer = ui.layer.Artwork,
+    color = {0, 0.25, 1, 0.5},
+  }
   self.secondary._widget:SetHeight(self:Height())
   -- self.secondary._widget:SetGradient("HORIZONTAL", RestedGradientStart, RestedGradientEnd)
 
@@ -118,7 +126,9 @@ function ExpBar:initNotches()
   -- add the little notches every 10%
   local spacing = self:Width() / 10
   for i=1,9 do
-    self:withTextureOverlay("notch"..i, {
+    self['notch'..i] = Texture:new{
+      parent = self,
+      layer = ui.layer.Overlay,
       color = {1, 1, 1},
       blendMode = "BLEND",
       gradient = {"HORIZONTAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)},
@@ -126,7 +136,7 @@ function ExpBar:initNotches()
         TopLeft = {spacing * i, 0},
         BottomRight = {self._widget, BottomLeft, spacing * i + 3, 0},
       },
-    })
+    }
   end
 end
 

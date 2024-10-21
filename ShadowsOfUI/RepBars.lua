@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local ui, Class = ns.ui, ns.lua.Class
-local Frame, StatusBar, Label = ui.Frame, ui.StatusBar, ui.Label
+local Frame, StatusBar, Label, Texture = ui.Frame, ui.StatusBar, ui.Label, ui.Texture
 local TopRight = ui.edge.TopRight
 
 local rgba = ns.wowui.rgba
@@ -100,7 +100,9 @@ local RepBarContainer = Class(Frame, function(self)
   }
 
   -- darken top edge of bar
-  self:withTextureOverlay("edge", {
+  self.edge = Texture:new{
+    parent = self,
+    layer = ui.edge.Overlay,
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
@@ -108,10 +110,12 @@ local RepBarContainer = Class(Frame, function(self)
       TopLeft = {},
       BottomRight = {self._widget, TopRight, 0, -3},
     },
-  })
+  }
 
   -- fade into ui above
-  self:withTextureBackground("fade", {
+  self.fade = Texture:new{
+    parent = self,
+    layer = ui.layer.Background,
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
@@ -119,7 +123,7 @@ local RepBarContainer = Class(Frame, function(self)
       TopLeft = {0, 3},
       BottomRight = {self._widget, TopRight},
     },
-  })
+  }
 end, {
   parent = ns.wowui.UIParent,
   strata = "BACKGROUND",

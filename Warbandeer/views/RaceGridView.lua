@@ -1,7 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Frame, Label = ns.lua.Class, ui.Frame, ui.Label
+local Class, Frame, Label, Texture = ns.lua.Class, ui.Frame, ui.Label, ui.Texture
 local AllianceView, HordeView, FactionIcon = ns.views.AllianceView, ns.views.HordeView, ns.views.FactionIcon
 
 local TopRight = ui.edge.TopRight
@@ -32,8 +32,9 @@ local RaceGridView = Class(Frame, function(o)
       BottomRight = {},
     },
   }
-  -- status:addBackdrop({color = {0, 0, 0, 0.2}})
-  status:withTextureBackground("fade", {
+  status.fade = Texture:new{
+    parent = status,
+    layer = ui.layer.Background,
     color = {1, 1, 1},
     blendMode = "BLEND",
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
@@ -41,7 +42,7 @@ local RaceGridView = Class(Frame, function(o)
       TopLeft = {0, 3},
       BottomRight = {status._widget, TopRight},
     },
-  })
+  }
 
   status.count = Label:new{
     parent = status,

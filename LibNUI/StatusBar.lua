@@ -8,13 +8,24 @@ local BottomLeft = ui.edge.BottomLeft
 -- https://wowpedia.fandom.com/wiki/Widget_API#StatusBar
 
 local StatusBar = Class(Frame, function(self)
-  if self.backdrop then self:addBackdrop(self.backdrop) end
+  if self.backdrop then
+    self.backdrop = Texture:new(Mixin({
+      parent = self,
+      layer = ui.layer.Overlay,
+      position = { All = true },
+      color = {0, 0, 0, 0.8}
+    }, self.backdrop))
+  end
 
   if self.fill then
     local fill = self.fill
-    self:withTextureArtwork("fill", {color = fill.color})
-    if fill.gradient then self.fill._widget:SetGradient(ns.lua.unpack(fill.gradient)) end
-    if fill.blend then self.fill._widget:SetBlendMode("ADD") end
+    self.fill = Texture:new{
+      parent = self,
+      layer = ui.layer.Artwork,
+      color = fill.color,
+      gradient = fill.gradient,
+      blendMode = fill.blend,
+    }
   end
   if self.color then self._widget:SetColorFill(unpack(self.color)) end
 

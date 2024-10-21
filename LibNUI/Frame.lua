@@ -5,8 +5,7 @@ local CreateFrame = ns.wowui.CreateFrame
 local UISpecialFrames = ns.wowui.UISpecialFrames
 local _G, tinsert = _G, table.insert
 
-local Class, CopyTables, Drop, unpack = ns.lua.Class, ns.lua.CopyTables, ns.lua.Drop, ns.lua.unpack
-local Artwork, Background, Overlay = ui.layer.Artwork, ui.layer.Background, ui.layer.Overlay
+local Class, Drop, unpack = ns.lua.Class, ns.lua.Drop, ns.lua.unpack
 local Region, Texture = ui.Region, ui.Texture
 
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
@@ -38,10 +37,12 @@ local Frame = Class(Region, function(self)
   end
 
   if self.background then
-    self:withTextureBackground("background", {
-      color = self.background,
+    self.background = Texture:new{
+      parent = self,
+      layer = ui.layer.Background,
       position = { All = true },
-    })
+      color = self.background,
+    }
   end
 
   if self.drag then
@@ -146,47 +147,3 @@ function Frame:stopUpdates()
 end
 
 -- todo, resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
-
-function Frame:withTexture(name, o)
-  if not o then
-    o = name
-    name = o.name
-  end
-  o.parent = o.parent or self._widget
-  self[name] = Texture:new(o)
-  return self
-end
-
-function Frame:withTextureBackground(name, o)
-  if not o then
-    o = name
-    name = o.name
-  end
-  o.layer = Background
-  return self:withTexture(name, o)
-end
-function Frame:withTextureArtwork(name, o)
-  if not o then
-    o = name
-    name = o.name
-  end
-  o.layer = Artwork
-  return self:withTexture(name, o)
-end
-function Frame:withTextureOverlay(name, o)
-  if not o then
-    o = name
-    name = o.name
-  end
-  o.layer = Overlay
-  return self:withTexture(name, o)
-end
-
-local BACKDROP_DEFAULTS = {
-  position = { All = true },
-  color = {0, 0, 0, 0.8}
-}
-function Frame:addBackdrop(o)
-  o = o or {}
-  return self:withTextureBackground(o.name or "backdrop", CopyTables(BACKDROP_DEFAULTS, o))
-end

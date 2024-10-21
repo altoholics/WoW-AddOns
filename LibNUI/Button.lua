@@ -2,7 +2,7 @@ local _, ns = ...
 -- luacheck: globals NumberFontNormalSmallGray CreateFont GetCursorInfo
 local ui = ns.ui
 local Class, unpack = ns.lua.Class, ns.lua.unpack
-local Frame, Label = ui.Frame, ui.Label
+local Frame, Label, Texture = ui.Frame, ui.Label, ui.Texture
 local GameTooltip, SetOverrideBindingClick = ns.wowui.GameTooltip, ns.wowui.SetOverrideBindingClick
 local GetCursorInfo = GetCursorInfo
 
@@ -58,7 +58,9 @@ local Button = Class(Frame, function(self)
 
   -- hover texture
   if self.glow ~= false then
-    self:withTextureOverlay("border", {
+    self.border = Texture:new{
+      parent = self,
+      layer = ui.layer.Overlay,
       path = "interface/buttons/UI-ActionButton-Border",
       blendMode = "ADD",
       position = {
@@ -66,7 +68,7 @@ local Button = Class(Frame, function(self)
         Hide = true,
       },
       coords = {0.21, 0.77, 0.24, 0.79},
-    })
+    }
   end
 end, {
   type = "Button",
