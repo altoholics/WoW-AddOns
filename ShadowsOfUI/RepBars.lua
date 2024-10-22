@@ -72,7 +72,7 @@ local RepBarContainer = Class(Frame, function(self)
     factionId = RingingDeepsID,
     parent = self,
     position = {
-      TopLeft = {self.dornogal._widget, TopRight},
+      TopLeft = {self.dornogal, TopRight},
     },
     fill = {
       gradient = {"HORIZONTAL", RingingDeepsStart, RingingDeepsEnd},
@@ -82,7 +82,7 @@ local RepBarContainer = Class(Frame, function(self)
     factionId = HallowfallID,
     parent = self,
     position = {
-      TopLeft = {self.ringingDeeps._widget, TopRight},
+      TopLeft = {self.ringingDeeps, TopRight},
     },
     fill = {
       gradient = {"HORIZONTAL", HallowfallStart, HallowfallEnd},
@@ -92,7 +92,7 @@ local RepBarContainer = Class(Frame, function(self)
     factionId = SeveredThreadsID,
     parent = self,
     position = {
-      TopLeft = {self.hallowFall._widget, TopRight},
+      TopLeft = {self.hallowFall, TopRight},
     },
     fill = {
       gradient = {"HORIZONTAL", SeveredThreadsStart, SeveredThreadsEnd},
@@ -108,7 +108,7 @@ local RepBarContainer = Class(Frame, function(self)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
     position = {
       TopLeft = {},
-      BottomRight = {self._widget, TopRight, 0, -3},
+      BottomRight = {self, TopRight, 0, -3},
     },
   }
 
@@ -121,7 +121,7 @@ local RepBarContainer = Class(Frame, function(self)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
     position = {
       TopLeft = {0, 3},
-      BottomRight = {self._widget, TopRight},
+      BottomRight = {self, TopRight},
     },
   }
 end, {

@@ -25,7 +25,7 @@ local ExpBar = Class(StatusBar, function(self)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)},
     position = {
       TopLeft = {},
-      BottomRight = {self._widget, TopRight, 0, -3},
+      BottomRight = {self, TopRight, 0, -3},
     },
   }
 
@@ -38,7 +38,7 @@ local ExpBar = Class(StatusBar, function(self)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
     position = {
       TopLeft = {0, 3},
-      BottomRight = {self._widget, TopRight},
+      BottomRight = {self, TopRight},
     },
   }
 
@@ -63,8 +63,8 @@ local ExpBar = Class(StatusBar, function(self)
   -- make sure we can get mouse hover events in order to show the text
   self.fadeDelay = 500
   self._widget:SetMouseMotionEnabled(true)
-  self._widget:SetScript("OnEnter", function() self:onEnter() end)
-  self._widget:SetScript("OnLeave", function() self:onLeave() end)
+  self:SetScript("OnEnter", function() self:onEnter() end)
+  self:SetScript("OnLeave", function() self:onLeave() end)
 end, {
   parent = ns.wowui.UIParent,
   position = {
@@ -134,7 +134,7 @@ function ExpBar:initNotches()
       gradient = {"HORIZONTAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)},
       position = {
         TopLeft = {spacing * i, 0},
-        BottomRight = {self._widget, BottomLeft, spacing * i + 3, 0},
+        BottomRight = {self, BottomLeft, spacing * i + 3, 0},
       },
     }
   end

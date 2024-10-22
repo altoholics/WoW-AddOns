@@ -15,7 +15,7 @@ local PowerBar = Class(StatusBar, function(self)
     text = AbbreviateNumbers(Player:GetPower()),
     font = "GameFontHighlight",
     position = {
-      BottomLeft = {self._widget, ui.edge.BottomRight, 0, -6},
+      BottomLeft = {self, ui.edge.BottomRight, 0, -6},
     },
     alpha = 0.8,
   }
@@ -24,7 +24,7 @@ local PowerBar = Class(StatusBar, function(self)
     text = Player:GetPowerPercent(),
     font = "GameFontHighlight",
     position = {
-      BottomLeft = {self._widget, ui.edge.BottomRight, 0, 6},
+      BottomLeft = {self, ui.edge.BottomRight, 0, 6},
     },
     alpha = 0.8,
   }

@@ -36,7 +36,7 @@ local Command = Class(EditBox, function(self)
     kbLabel = false,
     glow = false,
     position = {
-      TopRight = {self._widget, ui.edge.TopLeft},
+      TopRight = {self, ui.edge.TopLeft},
     },
     onClick = function() if not f._widget:IsShown() then f:Show() end end,
   }
@@ -47,7 +47,7 @@ local Command = Class(EditBox, function(self)
     kbLabel = false,
     glow = false,
     position = {
-      TopRight = {self._widget, ui.edge.TopLeft},
+      TopRight = {self, ui.edge.TopLeft},
     },
     onClick = function() if not f._widget:IsShown() then f:Show() end end,
   }
@@ -58,7 +58,7 @@ local Command = Class(EditBox, function(self)
     fontObj = SoUICmdTitleFont,
     alpha = 0.8,
     position = {
-      BottomLeft = {self._widget, ui.edge.TopLeft, 15, -2},
+      BottomLeft = {self, ui.edge.TopLeft, 15, -2},
     },
   }
   self.channelTargetName = Label:new{
@@ -68,7 +68,7 @@ local Command = Class(EditBox, function(self)
     alpha = 0.8,
     color = Colors.Whisper,
     position = {
-      Left = {self.channelTitle.label, ui.edge.Right, 2, 0},
+      Left = {self.channelTitle, ui.edge.Right, 2, 0},
     },
   }
 end, {

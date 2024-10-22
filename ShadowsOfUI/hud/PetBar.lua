@@ -15,7 +15,7 @@ local PetBar = Class(StatusBar, function(self)
     text = AbbreviateNumbers(Player:GetHealth()),
     font = "GameFontHighlightSmall",
     position = {
-      BottomRight = {self._widget, ui.edge.BottomLeft, 7, 2},
+      BottomRight = {self, ui.edge.BottomLeft, 7, 2},
     },
     alpha = 0.8,
   }
@@ -60,5 +60,5 @@ function PetBar:UNIT_HEALTH()
 end
 
 function PetBar:UNIT_PET()
-  self._widget:SetShown(ns.wow.UnitExists("pet"))
+  self:SetShown(ns.wow.UnitExists("pet"))
 end

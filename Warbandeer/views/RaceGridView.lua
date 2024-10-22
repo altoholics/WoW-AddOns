@@ -23,12 +23,12 @@ local RaceGridView = Class(Frame, function(o)
       Height = 32,
     },
   }
-  o.factionIcon._widget:SetScript("OnMouseUp", function() o:swap() end)
+  o.factionIcon:SetScript("OnMouseUp", function() o:swap() end)
 
   local status = Frame:new{
     parent = o,
     position = {
-      TopLeft = {o._widget, BottomLeft, 0, 12},
+      TopLeft = {o, BottomLeft, 0, 12},
       BottomRight = {},
     },
   }
@@ -40,7 +40,7 @@ local RaceGridView = Class(Frame, function(o)
     gradient = {"VERTICAL", rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)},
     position = {
       TopLeft = {0, 3},
-      BottomRight = {status._widget, TopRight},
+      BottomRight = {status, TopRight},
     },
   }
 

@@ -14,7 +14,7 @@ local HealthBar = Class(StatusBar, function(self)
     text = Player:GetLevel(),
     font = "GameFontNormalSmall",
     position = {
-      TopRight = {self._widget, ui.edge.TopLeft, 16, -2}
+      TopRight = {self, ui.edge.TopLeft, 16, -2}
     },
     alpha = 0.8,
   }
@@ -23,7 +23,7 @@ local HealthBar = Class(StatusBar, function(self)
     text = AbbreviateNumbers(Player:GetHealth()),
     font = "GameFontHighlight",
     position = {
-      BottomRight = {self._widget, ui.edge.BottomLeft, 14, 2},
+      BottomRight = {self, ui.edge.BottomLeft, 14, 2},
     },
     alpha = 0.8,
   }

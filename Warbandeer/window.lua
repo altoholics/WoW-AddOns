@@ -41,7 +41,7 @@ local MainWindow = Class(TitleFrame, function(self)
   -- view control toolip
   self.viewSelector = Tooltip:new{
     position = {
-      TopLeft = {self.titlebar._widget, ui.edge.BottomLeft, 6, 3},
+      TopLeft = {self.titlebar, ui.edge.BottomLeft, 6, 3},
       Width = 60,
     },
     lines = {
@@ -75,7 +75,7 @@ local MainWindow = Class(TitleFrame, function(self)
       },
     },
   }
-  self.titlebar.icon._widget:SetScript("OnMouseUp", function()
+  self.titlebar.icon:SetScript("OnMouseUp", function()
     self.viewSelector:Toggle()
   end)
 end, {
