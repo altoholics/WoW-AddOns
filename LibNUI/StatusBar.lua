@@ -37,10 +37,10 @@ local StatusBar = Class(Frame, function(self)
       }, tOps))
       self._widget:SetStatusBarTexture(tex._widget)
       tex._widget:ClearAllPoints()
-      tex:Top(self._widget)
-      tex:Left(self._widget)
-      tex:Right(self._widget)
-      tex:Bottom(self._widget)
+      tex:Top(self)
+      tex:Left(self)
+      tex:Right(self)
+      tex:Bottom(self)
       local l, r, t, b = unpack(tOps.coords or {0, 1, 0, 1})
       self.X1 = l
       self.X2 = r
@@ -64,8 +64,8 @@ ui.StatusBar = StatusBar
 
 function StatusBar:onLoad()
   if self.fill then
-    self.fill._widget:SetPoint(BottomLeft)
-    self.fill._widget:SetHeight(self._widget:GetHeight())
+    self.fill:BottomLeft()
+    self.fill:Height(self:Height())
   end
 end
 
@@ -85,7 +85,7 @@ function StatusBar:SetValue(v)
   else -- vertical
     -- bottom up
     t = t + dy
-    self._widget:Top(0, self:Height() * -dy)
+    self:Top(0, self:Height() * -dy)
   end
-  self.texture._widget:SetTexCoord(l, r, t, b)
+  self.texture:Coords(l, r, t, b)
 end

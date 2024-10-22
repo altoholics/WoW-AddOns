@@ -15,8 +15,8 @@ local Tooltip = Class(CleanFrame, function(self)
     local l = Frame:new{
       parent = self,
       position = {
-        TopLeft = i == 1 and {self.inset, -self.inset} or {self.lines[i-1]._widget, ui.edge.BottomLeft},
-        Right = {self._widget, ui.edge.Right},
+        TopLeft = i == 1 and {self.inset, -self.inset} or {self.lines[i-1], ui.edge.BottomLeft},
+        Right = {self, ui.edge.Right},
         Height = 20,
       },
       background = line.background,
@@ -28,9 +28,9 @@ local Tooltip = Class(CleanFrame, function(self)
       justifyH = ui.edge.Left,
     }
     w = ns.lua.max(w, l.label._widget:GetUnboundedStringWidth())
-    if line.onClick then l._widget:SetScript("OnMouseUp", function() line.onClick(l) end) end
-    if line.onEnter then l._widget:SetScript("OnEnter", function() line.onEnter(l) end) end
-    if line.onLeave then l._widget:SetScript("OnLeave", function() line.onLeave(l) end) end
+    if line.onClick then l:SetScript("OnMouseUp", function() line.onClick(l) end) end
+    if line.onEnter then l:SetScript("OnEnter", function() line.onEnter(l) end) end
+    if line.onLeave then l:SetScript("OnLeave", function() line.onLeave(l) end) end
     tinsert(self.lines, l)
     h = h + l:Height()
   end

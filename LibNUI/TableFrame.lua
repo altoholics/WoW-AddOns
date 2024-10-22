@@ -35,7 +35,7 @@ local TableCol = Class(BgFrame, function(self)
     text = self.label,
     position = {
       TopLeft = {},
-      BottomRight = {self._widget, TopRight, 0, -self.headerHeight},
+      BottomRight = {self, TopRight, 0, -self.headerHeight},
     },
     template = self.font,
     color = self.color or {1, 215/255, 0, 1},
@@ -78,8 +78,8 @@ local TableFrame = Class(Frame, function(self)
         label = self.colNames[i],
         headerHeight = self.headerHeight,
         position = {
-          TopLeft = i == 1 and {self.offsetX, 0} or {self.cols[i-1]._widget, TopRight},
-          Bottom = {self._widget, Bottom},
+          TopLeft = i == 1 and {self.offsetX, 0} or {self.cols[i-1], TopRight},
+          Bottom = {self, Bottom},
           Width = w,
         },
         font = self.colHeaderFont or self.headerFont,
@@ -97,8 +97,8 @@ local TableFrame = Class(Frame, function(self)
         parent = self,
         label = self.rowNames[i],
         position = {
-          TopLeft = i == 1 and {0, -self.offsetY} or {self.rows[i-1]._widget, BottomLeft},
-          Right = {self._widget, Right},
+          TopLeft = i == 1 and {0, -self.offsetY} or {self.rows[i-1], BottomLeft},
+          Right = {self, Right},
           Height = h,
         },
         font = self.rowHeaderFont or self.headerFont,
@@ -146,8 +146,8 @@ function TableFrame:addCol(info)
     label = self.colInfo[n].name,
     headerHeight = self.headerHeight,
     position = {
-      TopLeft = n == 1 and {self.offsetX, 0} or {self.cols[n-1]._widget, TopRight},
-      Bottom = {self._widget, Bottom},
+      TopLeft = n == 1 and {self.offsetX, 0} or {self.cols[n-1], TopRight},
+      Bottom = {self, Bottom},
       Width = w,
     },
     font = self.colHeaderFont or self.headerFont,
@@ -167,8 +167,8 @@ function TableFrame:addRow(info)
     parent = self,
     label = self.rowInfo[n].name,
     position = {
-      TopLeft = n == 1 and {0, -self.offsetY} or {self.rows[n-1]._widget, BottomLeft},
-      Right = {self._widget, Right},
+      TopLeft = n == 1 and {0, -self.offsetY} or {self.rows[n-1], BottomLeft},
+      Right = {self, Right},
       Height = h,
     },
     backdrop = self.rowInfo and self.rowInfo[n].backdrop or
@@ -180,9 +180,9 @@ end
 
 local Cell = Class(Frame, function(self)
   local data = type(self.data) == "table" and self.data or {text = self.data}
-  if data.onClick then self._widget:SetScript("OnMouseUp", function() data.onClick(self) end) end
-  if data.onEnter then self._widget:SetScript("OnEnter", function() data.onEnter(self) end) end
-  if data.onLeave then self._widget:SetScript("OnLeave", function() data.onLeave(self) end) end
+  if data.onClick then self:SetScript("OnMouseUp", function() data.onClick(self) end) end
+  if data.onEnter then self:SetScript("OnEnter", function() data.onEnter(self) end) end
+  if data.onLeave then self:SetScript("OnLeave", function() data.onLeave(self) end) end
   self.label = Label:new{
     parent = self,
     text = data.text,
@@ -204,10 +204,10 @@ function TableFrame:update()
         self.cells[rowN][colN] = Cell:new{
           parent = self,
           position = {
-            Top = {self.rows[rowN]._widget, Top},
-            Bottom = {self.rows[rowN]._widget, Bottom},
-            Left = {self.cols[colN]._widget, Left},
-            Right = {self.cols[colN]._widget, Right},
+            Top = {self.rows[rowN], Top},
+            Bottom = {self.rows[rowN], Bottom},
+            Left = {self.cols[colN], Left},
+            Right = {self.cols[colN], Right},
           },
           data = data,
         }

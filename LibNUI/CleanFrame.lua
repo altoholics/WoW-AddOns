@@ -10,8 +10,8 @@ local CleanFrame = Class(Frame, function(self)
     name = "$parentBorder",
     template = "BackdropTemplate",
     position = {
-      TopLeft = {self._widget, TopLeft, -3, 3},
-      BottomRight = {self._widget, BottomRight, 3, -3},
+      TopLeft = {self, TopLeft, -3, 3},
+      BottomRight = {self, BottomRight, 3, -3},
     },
   }
   -- from BackdropTemplate

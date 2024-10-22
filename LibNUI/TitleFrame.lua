@@ -11,8 +11,8 @@ local TitleFrame = Class(CleanFrame, function(o)
     parent = o,
     name = "$parentTitle",
     position = {
-      TopLeft = {o._widget, TopLeft},
-      TopRight = {o._widget, TopRight},
+      TopLeft = {o, TopLeft},
+      TopRight = {o, TopRight},
       Height = 30,
     },
     dragTarget = o._widget,
@@ -24,7 +24,7 @@ local TitleFrame = Class(CleanFrame, function(o)
     layer = "OVERLAY",
     font = ui.fonts.SystemFont_Med2,
     position = {
-      Left = {o.titlebar._widget, 28, 0},
+      Left = {o.titlebar, 28, 0},
     },
     text = o.title,
     justifyH = Left,
@@ -56,16 +56,16 @@ local TitleFrame = Class(CleanFrame, function(o)
     position = {
       Width = 30,
       Height = 30,
-      Right = {o.titlebar._widget, Right, 0, 0},
+      Right = {o.titlebar, Right, 0, 0},
     },
     background = {1, 1, 1, 0},
   }
-  o.closeButton._widget:SetScript("OnClick", function() o:Hide() end)
-  o.closeButton._widget:SetScript("OnEnter", function()
+  o.closeButton:SetScript("OnClick", function() o:Hide() end)
+  o.closeButton:SetScript("OnEnter", function()
     o.closeButton.icon._widget:SetVertexColor(1, 1, 1, 1)
     o.closeButton.background._widget:SetColorTexture(1, 0, 0, 0.2)
   end)
-  o.closeButton._widget:SetScript("OnLeave", function()
+  o.closeButton:SetScript("OnLeave", function()
     o.closeButton.icon._widget:SetVertexColor(0.7, 0.7, 0.7, 1)
     o.closeButton.background._widget:SetColorTexture(1, 1, 1, 0)
   end)
@@ -74,11 +74,11 @@ local TitleFrame = Class(CleanFrame, function(o)
     layer = ui.layer.Artwork,
     name = "$parentIcon",
     position = {
-      Center = {o.closeButton._widget, Center},
+      Center = {o.closeButton, Center},
     },
     path = "Interface/AddOns/Warbandeer/icons/close.blp",
   }
-  o.closeButton.icon._widget:SetSize(10, 10)
+  o.closeButton.icon:Size(10, 10)
   o.closeButton.icon._widget:SetVertexColor(0.7, 0.7, 0.7, 1)
 end, {
   drag = true,

@@ -25,25 +25,26 @@ function Region:Position(position)
   end
 end
 
+function Region:SetPoint(point, target, edge, x, y)
+  if type(target) == "table" and target._widget then target = target._widget end
+  self._widget:SetPoint(point, target, edge, x, y)
+end
+
 function Region:All() self._widget:SetAllPoints() end
-function Region:Center(...) self._widget:SetPoint(ui.edge.Center, ...) end
-function Region:Top(...) self._widget:SetPoint(ui.edge.Top, ...) end
-function Region:TopLeft(...) self._widget:SetPoint(ui.edge.TopLeft, ...) end
-function Region:TopRight(...) self._widget:SetPoint(ui.edge.TopRight, ...) end
-function Region:Bottom(...) self._widget:SetPoint(ui.edge.Bottom, ...) end
-function Region:BottomLeft(...) self._widget:SetPoint(ui.edge.BottomLeft, ...) end
-function Region:BottomRight(...) self._widget:SetPoint(ui.edge.BottomRight, ...) end
-function Region:Left(...) self._widget:SetPoint(ui.edge.Left, ...) end
-function Region:Right(...) self._widget:SetPoint(ui.edge.Right, ...) end
-function Region:Size(x, y) self._widget:SetSize(x, y) end
-function Region:Width(w)
-  if w ~= nil then self._widget:SetWidth(w) end
-  return self._widget:GetWidth()
-end
-function Region:Height(h)
-  if h ~= nil then self._widget:SetHeight(h) end
-  return self._widget:GetHeight()
-end
+function Region:Center(...) self:SetPoint(ui.edge.Center, ...) end
+function Region:Top(...) self:SetPoint(ui.edge.Top, ...) end
+function Region:TopLeft(...) self:SetPoint(ui.edge.TopLeft, ...) end
+function Region:TopRight(...) self:SetPoint(ui.edge.TopRight, ...) end
+function Region:Bottom(...) self:SetPoint(ui.edge.Bottom, ...) end
+function Region:BottomLeft(...) self:SetPoint(ui.edge.BottomLeft, ...) end
+function Region:BottomRight(...) self:SetPoint(ui.edge.BottomRight, ...) end
+function Region:Left(...) self:SetPoint(ui.edge.Left, ...) end
+function Region:Right(...) self:SetPoint(ui.edge.Right, ...) end
+
+function Region:Size(x, y) return x == nil and self._widget:GetSize() or self._widget:SetSize(x, y) end
+
+function Region:Width(w) return w == nil and self._widget:GetWidth() or self._widget:SetWidth(w) end
+function Region:Height(h) return h == nil and self._widget:GetHeight() or self._widget:SetHeight(h) end
 function Region:Show() self._widget:Show() end
 function Region:Hide() self._widget:Hide() end
 function Region:Toggle() self._widget:SetShown(not self._widget:IsVisible()) end

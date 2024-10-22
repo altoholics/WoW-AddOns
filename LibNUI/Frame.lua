@@ -107,6 +107,7 @@ function Frame:listenForEvents()
 end
 function Frame:registerEvent(event) self._widget:RegisterEvent(event); return self end
 function Frame:unregisterEvent(event) self._widget:UnregisterEvent(event); return self end
+
 -- https://wowpedia.fandom.com/wiki/Making_draggable_frames
 function Frame:makeDraggable()
   self._widget:SetMovable(true)
@@ -147,3 +148,5 @@ function Frame:stopUpdates()
 end
 
 -- todo, resizable: https://wowpedia.fandom.com/wiki/Making_resizable_frames
+
+function Frame:Attribute(name, value) return value == nil and self._widget:GetAttribute(name) or self._widget:SetAttribute(name, value) end
