@@ -38,7 +38,7 @@ local Command = Class(EditBox, function(self)
     position = {
       TopRight = {self, ui.edge.TopLeft},
     },
-    onClick = function() if not f._widget:IsShown() then f:Show() end end,
+    onClick = function() if not f._widget:IsShown() then f._widget:Show() end end,
   }
   self.binderSlash = Button:new{
     parent = self,
@@ -49,7 +49,7 @@ local Command = Class(EditBox, function(self)
     position = {
       TopRight = {self, ui.edge.TopLeft},
     },
-    onClick = function() if not f._widget:IsShown() then f:Show() end end,
+    onClick = function() if not f._widget:IsShown() then f._widget:Show() end end,
   }
 
   self.channelTitle = Label:new{

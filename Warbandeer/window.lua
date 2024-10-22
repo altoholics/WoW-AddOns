@@ -11,26 +11,28 @@ local viewIdx = {"raceGrid", "raceGrid", "summary", "detail"}
 local MainWindow = Class(TitleFrame, function(self)
   -- add the contents
   self.views = {}
-  self.views.raceGrid = RaceGridView:new{
-    parent = self,
-    position = {
-      TopLeft = {3, -27},
-    },
-  }
+  -- self.views.raceGrid = RaceGridView:new{
+  --   parent = self,
+  --   position = {
+  --     TopLeft = {3, -27},
+  --     Hide = true,
+  --   },
+  -- }
 
   self.views.summary = SummaryView:new{
     parent = self,
     position = {
       TopLeft = {3, -30},
+      Hide = true,
     },
   }
 
-  self.views.detail = DetailView:new{
-    parent = self,
-    position = {
-      TopLeft = {3, -32},
-    },
-  }
+  -- self.views.detail = DetailView:new{
+  --   parent = self,
+  --   position = {
+  --     TopLeft = {3, -32},
+  --   },
+  -- }
 
   local defaultView = ns.db.settings.defaultView
   self:view(viewIdx[defaultView])

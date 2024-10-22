@@ -25,9 +25,22 @@ function Region:Position(position)
   end
 end
 
+function Region:GetName() return self._widget:GetName() end
+
 function Region:SetPoint(point, target, edge, x, y)
   if type(target) == "table" and target._widget then target = target._widget end
-  self._widget:SetPoint(point, target, edge, x, y)
+  -- must be called with explicit arguments, passing nil confuses it
+  if x == nil and y == nil then
+    if target == nil and edge == nil then
+      self._widget:SetPoint(point)
+    elseif edge == nil then
+      self._widget:SetPoint(point, target)
+    else
+      self._widget:SetPoint(point, target, edge)
+    end
+  else
+    self._widget:SetPoint(point, target, edge, x, y)
+  end
 end
 
 function Region:All() self._widget:SetAllPoints() end

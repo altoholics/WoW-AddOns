@@ -103,7 +103,7 @@ function Frame:listenForEvents()
   if self._listening then return end
   self._listening = true
   local o = self
-  self._widget:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
+  self:SetScript("OnEvent", function(_, e, ...) o:OnEvent(e, ...) end)
 end
 function Frame:registerEvent(event) self._widget:RegisterEvent(event); return self end
 function Frame:unregisterEvent(event) self._widget:UnregisterEvent(event); return self end

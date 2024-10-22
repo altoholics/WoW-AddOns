@@ -127,6 +127,7 @@ local Bucket = Class(Frame, function(self)
   self.tracking = {n=0}
 end, {
   parent = UIParent,
+  name = "LootDropBucket",
   position = {
     Width = 100,
     Height = 20,
@@ -237,7 +238,7 @@ function ns:onLoad()
   ns.bucket = Bucket:new{}
   ns.history = History:new{
     position = {
-      BottomRight = {ns.bucket._widget, ui.edge.TopRight, 0, 5},
+      BottomRight = {ns.bucket, ui.edge.TopRight, 0, 5},
     },
   }
 end

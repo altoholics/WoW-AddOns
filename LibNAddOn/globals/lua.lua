@@ -1,7 +1,7 @@
 local _, ns = ...
 -- luacheck: globals unpack table CopyTable Mixin floor AbbreviateNumbers gsub strsub strmatch strupper
 
-local table = table
+local table, tinsert = table, table.insert
 local Mixin, setmetatable = Mixin, setmetatable
 
 local function CopyTables(...)
@@ -107,7 +107,7 @@ ns.lua = {
   -- lua
   unpack = unpack,
   table = table,
-  tinsert = table.insert,
+  tinsert = tinsert,
   tremove = table.remove,
   floor = floor,
   string = string,
@@ -145,7 +145,7 @@ function ns.lua.Drop(t, ...)
   local r = {}
   for i=1,select("#", ...) do
     local k = select(i, ...)
-    r[k] = t[k]
+    tinsert(r, i, t[k])
     t[k] = nil
   end
   return unpack(r)

@@ -22,7 +22,7 @@ local Label = Class(Region, function(self)
   if h then self._widget:SetJustifyH(h) end
   if v then self._widget:SetJustifyV(v) end
 end, {
-  CreateWidth = function(self)
+  CreateWidget = function(self)
     local parent, name, layer, font = Drop(self, "parent", "name", "layer", "font")
     return (parent._widget or parent):CreateFontString(name, layer, font)
   end,

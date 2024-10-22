@@ -34,6 +34,7 @@ local TitleFrame = Class(CleanFrame, function(o)
   -- icon
   o.titlebar.icon = Frame:new{
     parent = o.titlebar,
+    name = "$parentIcon",
     position = {
       Left = {6, 0},
       Size = {20, 20},
@@ -41,7 +42,6 @@ local TitleFrame = Class(CleanFrame, function(o)
   }
   o.titlebar.icon.icon = Texture:new{
     parent = o.titlebar.icon,
-    name = "$parentIcon",
     layer = ui.layer.Artwork,
     path = "Interface/Icons/inv_10_tailoring2_banner_green.blp",
     coords = {0.1, 0.9, 0.1, 0.9},

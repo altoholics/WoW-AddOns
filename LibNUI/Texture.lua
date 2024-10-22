@@ -11,7 +11,7 @@ local Texture = Class(Region, function(self)
   if self.rotation then self._widget:SetRotation(self.rotation); self.rotation = nil end
 
   local color, vertexColor, blendMode, gradient = Drop(self, 'color', 'vertexColor', 'blendMode', 'gradient')
-  if color then self:Color(unpack(self.color)) end
+  if color then self:Color(unpack(color)) end
   if vertexColor then self:SetVertexColor(unpack(vertexColor)) end
   if blendMode then self._widget:SetBlendMode(blendMode) end
   if gradient then self._widget:SetGradient(unpack(gradient)) end

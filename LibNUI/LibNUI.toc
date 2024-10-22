@@ -13,7 +13,7 @@ globals.lua
 constants.lua
 
 # core wrappers
-ScriptRegion.lua
+Region.lua
 Texture.lua
 Label.lua
 Frame.lua

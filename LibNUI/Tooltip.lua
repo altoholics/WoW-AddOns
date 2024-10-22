@@ -16,7 +16,7 @@ local Tooltip = Class(CleanFrame, function(self)
       parent = self,
       position = {
         TopLeft = i == 1 and {self.inset, -self.inset} or {self.lines[i-1], ui.edge.BottomLeft},
-        Right = {self, ui.edge.Right},
+        Right = {},
         Height = 20,
       },
       background = line.background,

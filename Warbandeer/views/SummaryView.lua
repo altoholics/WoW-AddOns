@@ -42,7 +42,6 @@ local function formatBestVaultRewardOption(o)
 end
 
 local SummaryView = Class(TableFrame, function(self)
-  self:Hide()
   local toons = ns.api.GetAllCharacters() -- returns a copy
   -- sort by level, then ilvl, then name
   table.sort(toons, function(c1, c2)
@@ -63,6 +62,7 @@ local SummaryView = Class(TableFrame, function(self)
 
   self:update()
 end, {
+  -- name = "$parentSummaryView",
   colInfo = {
     { name = "Character", width = 80, backdrop = {color = {0, 0, 0, 0}} },
     { name = "Level", width = 40, backdrop = {color = {0, 0, 0, 0}} },

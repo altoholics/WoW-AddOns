@@ -30,7 +30,7 @@ end, {
 })
 
 local TableCol = Class(BgFrame, function(self)
-  self.label = Label{
+  self.label = Label:new{
     parent = self,
     text = self.label,
     position = {
@@ -79,7 +79,7 @@ local TableFrame = Class(Frame, function(self)
         headerHeight = self.headerHeight,
         position = {
           TopLeft = i == 1 and {self.offsetX, 0} or {self.cols[i-1], TopRight},
-          Bottom = {self, Bottom},
+          Bottom = {},
           Width = w,
         },
         font = self.colHeaderFont or self.headerFont,
@@ -98,7 +98,7 @@ local TableFrame = Class(Frame, function(self)
         label = self.rowNames[i],
         position = {
           TopLeft = i == 1 and {0, -self.offsetY} or {self.rows[i-1], BottomLeft},
-          Right = {self, Right},
+          Right = {},
           Height = h,
         },
         font = self.rowHeaderFont or self.headerFont,
@@ -147,7 +147,7 @@ function TableFrame:addCol(info)
     headerHeight = self.headerHeight,
     position = {
       TopLeft = n == 1 and {self.offsetX, 0} or {self.cols[n-1], TopRight},
-      Bottom = {self, Bottom},
+      Bottom = {},
       Width = w,
     },
     font = self.colHeaderFont or self.headerFont,
@@ -168,7 +168,7 @@ function TableFrame:addRow(info)
     label = self.rowInfo[n].name,
     position = {
       TopLeft = n == 1 and {0, -self.offsetY} or {self.rows[n-1], BottomLeft},
-      Right = {self, Right},
+      Right = {},
       Height = h,
     },
     backdrop = self.rowInfo and self.rowInfo[n].backdrop or
