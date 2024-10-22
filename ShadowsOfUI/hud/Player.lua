@@ -6,6 +6,7 @@ local Player = ns.wow.Player
 local PlayerHealthBar, PlayerPowerBar, ResourceBar = ns.PlayerHealthBar, ns.PlayerPowerBar, ns.ResourceBar
 local PetBar = ns.PetBar
 
+-- PowerType enum
 local PowerByClass = {
   nil,
   9, -- paladin holy power
@@ -15,10 +16,13 @@ local PowerByClass = {
   5, -- death knight runes
   nil,
   16, -- mage arcane charges
-  7, -- warlock soul shard
+  7, -- warlock soul shard, destro burning embers = 14
   nil,
   4, -- druid combo points
 }
+-- 27 happiness (pet mood?)
+-- 28 shadow orbs - shadow priest
+-- 29 rune chromatic
 
 local ResourceColorByClass = {
   nil,
