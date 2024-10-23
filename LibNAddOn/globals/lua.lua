@@ -37,10 +37,12 @@ local function Merge(destination, ...)
     local t = select(i, ...)
     if t then
       for k, v in pairs(t) do
-        if type(destination[k]) == "table" and type(v) == "table" then
-          Merge(destination[k], v)
-        else
-          destination[k] = v
+        if '__index' ~= k then
+          if type(destination[k]) == "table" and type(v) == "table" then
+            Merge(destination[k], v)
+          else
+            destination[k] = v
+          end
         end
       end
     end
@@ -82,7 +84,7 @@ end
 
 local function Class(parent, fn, defaults, ...)
   local c = {}
-  Mixin(c, ...)
+  Merge(c, ...)
 
   -- define the constructor
   function c:new(o)
@@ -90,7 +92,7 @@ local function Class(parent, fn, defaults, ...)
     o.onLoad = nil
     if defaults then Fill(o, defaults) end
     o = parent and parent:new(o) or o
-    Mixin(o, parent or {}, c)
+    Merge(o, parent or {}, c)
     setmetatable(o, self)
     self.__index = self
     fn(o)
