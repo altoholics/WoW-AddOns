@@ -103,8 +103,11 @@ local ChannelStrings = {
   MONSTER_EMOTE = "%s %s",
   MONSTER_SAY = "%s says: %s",
   MONSTER_YELL = "%s yells: %s",
+  MONSTER_WHISPER = "%s whispers: %s",
   RAID = "[Raid] %s: %s",
   RAID_LEADER = "[Raid] %s: %s",
+  RAID_BOSS_EMOTE = "%s %s",
+  RAID_BOSS_WHISPER = "%s whispers: %s",
   SAY = "%s says: %s",
   WHISPER = "%s whispers: %s",
   WHISPER_INFORM = "To %s: %s",
@@ -141,3 +144,6 @@ function Chat:CHAT_MSG_YELL(...) self:HandlePlayerMessage("YELL", ...) end
 function Chat:CHAT_MSG_MONSTER_SAY(text, player) self:AddChannelMessage("MONSTER_SAY", text, player) end
 function Chat:CHAT_MSG_MONSTER_YELL(text, player) self:AddChannelMessage("MONSTER_YELL", text, player) end
 function Chat:CHAT_MSG_MONSTER_EMOTE(text, player) self:AddChannelMessage("MONSTER_EMOTE", text, player) end
+function Chat:CHAT_MSG_MONSTER_WHISPER(text, player) self:AddChannelMessage("MONSTER_WHISPER", text, player) end
+function Chat:CHAT_MSG_RAID_BOSS_EMOTE(text, player) self:AddChannelMessage("RAID_BOSS_EMOTE", text, player) end
+function Chat:CHAT_MSG_RAID_BOSS_WHISPER(text, player) self:AddChannelMessage("RAID_BOSS_WHISPER", text, player) end
