@@ -10,7 +10,8 @@ local StatusBar = Class(Frame, function(self)
   if self.backdrop then
     self.backdrop = Texture:new(Mixin({
       parent = self,
-      layer = ui.layer.Overlay,
+      name = "$parentBackdrop",
+      layer = ui.layer.Background,
       position = { All = true },
       color = {0, 0, 0, 0.8}
     }, self.backdrop))
@@ -20,6 +21,7 @@ local StatusBar = Class(Frame, function(self)
     local fill = self.fill
     self.fill = Texture:new{
       parent = self,
+      name = "$parentFill",
       layer = ui.layer.Artwork,
       color = fill.color,
       gradient = fill.gradient,

@@ -4,7 +4,7 @@ local Player = ns.wow.Player
 local ui, Class = ns.ui, ns.lua.Class
 local StatusBar, Texture = ui.StatusBar, ui.Texture
 local TopLeft, TopRight = ui.edge.TopLeft, ui.edge.TopRight
-local BottomLeft, BottomRight = ui.edge.BottomLeft, ui.edge.BottomRight
+local BottomLeft = ui.edge.BottomLeft
 local rgba = ns.wowui.rgba
 
 -- https://github.com/teelolws/EditModeExpanded
@@ -45,10 +45,14 @@ local ExpBar = Class(StatusBar, function(self)
   -- secondary bar to show rested amount
   self.secondary = Texture:new{
     parent = self,
+    name = "$parentRest",
     layer = ui.layer.Artwork,
     color = {0, 0.25, 1, 0.5},
+    position = {
+      Left = {self.fill, ui.edge.Right},
+      Height = self:Height(),
+    },
   }
-  self.secondary._widget:SetHeight(self:Height())
   -- self.secondary._widget:SetGradient("HORIZONTAL", RestedGradientStart, RestedGradientEnd)
 
   -- percent text
@@ -67,6 +71,7 @@ local ExpBar = Class(StatusBar, function(self)
   self:SetScript("OnLeave", function() self:onLeave() end)
 end, {
   parent = ns.wowui.UIParent,
+  name = "ShadowsOfUIExpBar",
   position = {
     Height = 7,
     BottomLeft = {},
@@ -117,7 +122,7 @@ function ExpBar:update()
   self.textPercent:SetText(ns.lua.floor(xp * 100).."%")
 
   self.secondary:Width(self:Width() * rest)
-  self.secondary._widget:SetPoint(TopLeft, self.fill:Width(), 0)
+  -- self.secondary:SetPoint(TopLeft, self.fill:Width(), 0)
   self.restPercent:SetPoint(TopLeft, self._widget, TopLeft, self.fill:Width() + 3, -1)
   self.restPercent:SetText(ns.lua.floor(rest * 100).."%")
 end
