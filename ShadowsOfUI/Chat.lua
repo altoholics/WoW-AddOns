@@ -125,7 +125,7 @@ function Chat:HandlePlayerMessage(channel, text, player, ...)
   local _, className = C_PlayerInfo.GetClass(pl)
   local color = C_ClassColor.GetClassColor(className):GenerateHexColor()
   local p = Ambiguate(player, "short")
-  self:AddChannelMessage(channel, text, "[|c"..color.."|HShadowUI:player:"..player.."|h"..p.."|h|r]")
+  self:AddChannelMessage(channel, text, "|c"..color.."|HShadowUI:player:["..player.."]|h"..p.."|h|r")
 end
 
 function Chat:CHAT_MSG_EMOTE(...) self:HandlePlayerMessage("EMOTE", ...) end

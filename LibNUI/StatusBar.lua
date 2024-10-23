@@ -3,7 +3,6 @@ local _, ns = ...
 local ui = ns.ui
 local Class, unpack, Mixin = ns.lua.Class, ns.lua.unpack, ns.lua.Mixin
 local Frame, Texture = ui.Frame, ui.Texture
-local BottomLeft = ui.edge.BottomLeft
 
 -- https://wowpedia.fandom.com/wiki/Widget_API#StatusBar
 
@@ -85,7 +84,7 @@ function StatusBar:SetValue(v)
   else -- vertical
     -- bottom up
     t = t + dy
-    self:Top(0, self:Height() * -dy)
+    self.texture:Top(0, self:Height() * -dy)
   end
   self.texture:Coords(l, r, t, b)
 end

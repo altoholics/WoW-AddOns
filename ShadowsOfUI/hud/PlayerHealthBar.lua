@@ -32,7 +32,7 @@ local HealthBar = Class(StatusBar, function(self)
     text = Player:GetHealthPercent(),
     font = "GameFontHighlight",
     position = {
-      BottomRight = {self.hp.label, ui.edge.TopRight, -4, 2},
+      BottomRight = {self.hp, ui.edge.TopRight, -4, 2},
     },
     alpha = 0.8,
   }

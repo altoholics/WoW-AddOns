@@ -11,6 +11,7 @@ end)
 ui.Region = Region
 
 function Region:Position(position)
+  if position.Center then print(self:GetName(), self._widget:GetParent():GetName(), position.Center[1], position.Center[2]) end
   for k,v in pairs(position) do
     if self[k] then
       if type(v) == "table" then

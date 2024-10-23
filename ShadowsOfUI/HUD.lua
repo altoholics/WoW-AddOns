@@ -9,12 +9,10 @@ local IsResting = IsResting -- luacheck: globals IsResting
 local HUD = Class(Frame, function(self)
   self.player = PlayerHUD:new{
     parent = self,
-    position = {
-      Center = {-120, -20},
-    },
   }
   self.resting = Label:new{
     parent = self,
+    name = "$parentResting",
     text = "RESTING",
     color = {0.7, 0.7, 0.7, 0.4},
     position = {
@@ -24,6 +22,7 @@ local HUD = Class(Frame, function(self)
   self.resting:SetShown(IsResting())
   self.away = Label:new{
     parent = self,
+    name = "$parentAway",
     text = "< AWAY >",
     color = {1, 1, 0.6, 0.5},
     position = {

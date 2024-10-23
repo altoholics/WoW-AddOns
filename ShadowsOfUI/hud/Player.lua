@@ -63,6 +63,7 @@ end, {
   name = "$parentPlayer",
   alpha = 0.9,
   position = {
+    Center = {-120, -20},
     Width = 1,
     Height = 1,
   },
