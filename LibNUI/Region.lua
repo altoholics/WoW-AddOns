@@ -15,7 +15,7 @@ function Region:Position(position)
     if self[k] then
       if type(v) == "table" then
         self[k](self, unpack(v))
-      else
+      elseif v ~= false then
         self[k](self, v)
       end
     end

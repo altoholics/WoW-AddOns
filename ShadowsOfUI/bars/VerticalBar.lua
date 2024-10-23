@@ -1,6 +1,6 @@
 local _, ns = ...
 local ui, Player, Items = ns.ui, ns.wow.Player, ns.wow.Items
-local Class, tinsert, Fill = ns.lua.Class, ns.lua.tinsert, ns.lua.Fill
+local Class, tinsert, Merge = ns.lua.Class, ns.lua.tinsert, ns.lua.Merge
 local Frame, SecureButton = ui.Frame, ui.SecureButton
 local GetSpellName, GetSpellTexture = ns.wow.GetSpellName, ns.wow.GetSpellTexture
 local HasToy, IsSpellKnown = Player.HasToy, Player.IsSpellKnown
@@ -27,11 +27,11 @@ function VerticalBar:UpdateHeight()
 end
 
 function VerticalBar:addSecureButton(ops)
-  local btn = SecureButton:new(Fill(ops, {
+  local btn = SecureButton:new(Merge({
     parent = self,
     position = {
       [self.firstButtonPoint] = #self.buttons == 0 and {} or nil,
-      Top = #self.buttons > 0 and {self.buttons[#self.buttons]._widget, Bottom, 0, -self.spacing} or nil,
+      Top = #self.buttons > 0 and {self.buttons[#self.buttons], Bottom, 0, -self.spacing} or nil,
       Width = self.iconSize,
       Height = self.iconSize,
     },
@@ -42,7 +42,7 @@ function VerticalBar:addSecureButton(ops)
       owner = {self._widget, "ANCHOR_NONE"},
       point = self.tooltipPoint,
     },
-  }))
+  }, ops))
   if not ops.offset then tinsert(self.buttons, btn) end
   return btn
 end
@@ -68,7 +68,7 @@ function VerticalBar:addOffsetToyButton(id, target, x, y)
     level = target._widget:GetFrameLevel() + 1,
     position = {
       Top = false,
-      Right = {target._widget, ui.edge.Left, x or 2 * self.spacing, y or 0},
+      Right = {target, ui.edge.Left, x or 2 * self.spacing, y or 0},
       Width = self.smallSize,
       Height = self.smallSize,
     },
@@ -106,7 +106,7 @@ function VerticalBar:addOffsetSpellButton(id, icon, target, x, y)
     level = target._widget:GetFrameLevel() + 1,
     position = {
       Top = false,
-      Right = {target._widget, ui.edge.Left, x or 2 * self.spacing, y or 0},
+      Right = {target, ui.edge.Left, x or 2 * self.spacing, y or 0},
       Width = self.smallSize,
       Height = self.smallSize,
     },
