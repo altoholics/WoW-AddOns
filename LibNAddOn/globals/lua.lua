@@ -84,7 +84,7 @@ end
 
 local function Class(parent, fn, defaults, ...)
   local c = {}
-  Merge(c, ...)
+  Mixin(c, ...)
 
   -- define the constructor
   function c:new(o)
@@ -92,7 +92,7 @@ local function Class(parent, fn, defaults, ...)
     o.onLoad = nil
     if defaults then Fill(o, defaults) end
     o = parent and parent:new(o) or o
-    Merge(o, parent or {}, c)
+    Mixin(o, parent or {}, c)
     setmetatable(o, self)
     self.__index = self
     fn(o)
@@ -142,13 +142,3 @@ ns.lua = {
 
   Class = Class,
 }
-
-function ns.lua.Drop(t, ...)
-  local r = {}
-  for i=1,select("#", ...) do
-    local k = select(i, ...)
-    tinsert(r, i, t[k])
-    t[k] = nil
-  end
-  return unpack(r)
-end

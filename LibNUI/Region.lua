@@ -1,25 +1,22 @@
 local _, ns = ...
 local ui = ns.ui
 
-local Class, Drop, unpack = ns.lua.Class, ns.lua.Drop, ns.lua.unpack
+local Class, unpack = ns.lua.Class, ns.lua.unpack
 
 local Region = Class(nil, function(self)
   self._widget = self:CreateWidget()
-  local position, alpha = Drop(self, "position", "alpha")
-  self:Position(position)
-  if alpha then self:Alpha(alpha) end
+  if self.position then self:Position(self.position) end
+  if self.alpha then self:Alpha(self.alpha) end
 end)
 ui.Region = Region
 
 function Region:Position(position)
-  if position then
-    for k,v in pairs(position) do
-      if self[k] then
-        if type(v) == "table" then
-          self[k](self, unpack(v))
-        else
-          self[k](self, v)
-        end
+  for k,v in pairs(position) do
+    if self[k] then
+      if type(v) == "table" then
+        self[k](self, unpack(v))
+      else
+        self[k](self, v)
       end
     end
   end
@@ -33,8 +30,6 @@ function Region:SetPoint(point, target, edge, x, y)
   if x == nil and y == nil then
     if target == nil and edge == nil then
       self._widget:SetPoint(point)
-    elseif edge == nil then
-      self._widget:SetPoint(point, target)
     else
       self._widget:SetPoint(point, target, edge)
     end

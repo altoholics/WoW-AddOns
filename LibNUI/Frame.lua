@@ -5,7 +5,7 @@ local CreateFrame = ns.wowui.CreateFrame
 local UISpecialFrames = ns.wowui.UISpecialFrames
 local _G, tinsert = _G, table.insert
 
-local Class, Drop, unpack = ns.lua.Class, ns.lua.Drop, ns.lua.unpack
+local Class, unpack = ns.lua.Class, ns.lua.unpack
 local Region, Texture = ui.Region, ui.Texture
 
 -- https://www.reddit.com/r/wowaddondev/comments/1cc2qgj/creating_a_wow_addon_part_2_creating_a_frame/
@@ -13,24 +13,11 @@ local Region, Texture = ui.Region, ui.Texture
 
 -- empty frame
 local Frame = Class(Region, function(self)
-  local strata, clamped, scale, level = Drop(self, "strata", "clamped", "scale", "level")
-  if strata then self._widget:SetFrameStrata(strata) end
-  if clamped then self._widget:SetClampedToScreen(true) end
-  if scale then self._widget:SetScale(scale) end
-  if level then self._widget:SetFrameLevel(level) end
-  local position, special = Drop(self, "position", "self")
-  if position then
-    for p,args in pairs(position) do
-      if self[p] then
-        if type(args) == "table" then
-          self[p](self, unpack(args))
-        elseif args then
-          self[p](self, args)
-        end
-      end
-    end
-  end
-  if special then
+  if self.strata then self._widget:SetFrameStrata(self.strata) end
+  if self.clamped then self._widget:SetClampedToScreen(true) end
+  if self.scale then self._widget:SetScale(self.scale) end
+  if self.level then self._widget:SetFrameLevel(self.level) end
+  if self.special then
     -- make it closable with Escape key
     _G[self._widget:GetName()] = self._widget -- put it in the global namespace
     tinsert(UISpecialFrames, self._widget:GetName()) -- make it a special frame
@@ -51,26 +38,24 @@ local Frame = Class(Region, function(self)
   end
   if self.dragTarget then self:setDragTarget(self.dragTarget._widget or self.dragTarget) end
 
-  local scripts, events, unitEvents = Drop(self, "scripts", "events", "unitEvents")
-  if scripts then
-    self:RegisterScript(unpack(scripts))
+  if self.scripts then
+    self:RegisterScript(unpack(self.scripts))
   end
-  if events then
+  if self.events then
     self:listenForEvents()
-    for _,e in pairs(events) do
+    for _,e in pairs(self.events) do
       self._widget:RegisterEvent(e)
     end
   end
-  if unitEvents then
+  if self.unitEvents then
     self:listenForEvents()
-    for e,u in pairs(unitEvents) do
+    for e,u in pairs(self.unitEvents) do
       self._widget:RegisterUnitEvent(e, unpack(u))
     end
   end
 end, {
   CreateWidget = function(self)
-    local type, name, parent, template = Drop(self, "type", "name", "parent", "template")
-    return CreateFrame(type or "Frame", name, parent and parent._widget or parent, template)
+    return CreateFrame(self.type or "Frame", self.name, self.parent and self.parent._widget or self.parent, self.template)
   end,
 })
 ui.Frame = Frame

@@ -62,7 +62,7 @@ local SummaryView = Class(TableFrame, function(self)
 
   self:update()
 end, {
-  -- name = "$parentSummaryView",
+  name = "SummaryView",
   colInfo = {
     { name = "Character", width = 80, backdrop = {color = {0, 0, 0, 0}} },
     { name = "Level", width = 40, backdrop = {color = {0, 0, 0, 0}} },

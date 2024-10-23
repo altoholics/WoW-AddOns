@@ -24,7 +24,7 @@ local Tooltip = Class(CleanFrame, function(self)
     l.label = Label:new{
       parent = l,
       text = line.text,
-      position = {Fill = {}},
+      position = { All = true },
       justifyH = ui.edge.Left,
     }
     w = ns.lua.max(w, l.label._widget:GetUnboundedStringWidth())

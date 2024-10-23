@@ -11,13 +11,13 @@ local viewIdx = {"raceGrid", "raceGrid", "summary", "detail"}
 local MainWindow = Class(TitleFrame, function(self)
   -- add the contents
   self.views = {}
-  -- self.views.raceGrid = RaceGridView:new{
-  --   parent = self,
-  --   position = {
-  --     TopLeft = {3, -27},
-  --     Hide = true,
-  --   },
-  -- }
+  self.views.raceGrid = RaceGridView:new{
+    parent = self,
+    position = {
+      TopLeft = {3, -27},
+      Hide = true,
+    },
+  }
 
   self.views.summary = SummaryView:new{
     parent = self,
@@ -27,12 +27,12 @@ local MainWindow = Class(TitleFrame, function(self)
     },
   }
 
-  -- self.views.detail = DetailView:new{
-  --   parent = self,
-  --   position = {
-  --     TopLeft = {3, -32},
-  --   },
-  -- }
+  self.views.detail = DetailView:new{
+    parent = self,
+    position = {
+      TopLeft = {3, -32},
+    },
+  }
 
   local defaultView = ns.db.settings.defaultView
   self:view(viewIdx[defaultView])
@@ -83,6 +83,7 @@ local MainWindow = Class(TitleFrame, function(self)
 end, {
   name = ADDON_NAME,
   title = ADDON_NAME,
+  parent = ns.wowui.UIParent,
   position = {
     Center = {},
   },

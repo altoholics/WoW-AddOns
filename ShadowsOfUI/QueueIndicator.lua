@@ -8,7 +8,7 @@ local QueueIndicator = Class(Frame, function(self)
   self.timer = Label:new{
     parent = self,
     justifyH = "LEFT",
-    position = { Fill = true },
+    position = { All = true },
   }
 end, {
   parent = UIParent,

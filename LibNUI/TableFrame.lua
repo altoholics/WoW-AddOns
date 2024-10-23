@@ -21,7 +21,7 @@ local TableRow = Class(BgFrame, function(self)
       parent = self,
       text = self.label,
       position = {Left = {2, 0}},
-      template = self.font,
+      font = self.font,
       color = self.color or {1, 1, 1, 1},
     }
   end
@@ -37,7 +37,7 @@ local TableCol = Class(BgFrame, function(self)
       TopLeft = {},
       BottomRight = {self, TopRight, 0, -self.headerHeight},
     },
-    template = self.font,
+    font = self.font,
     color = self.color or {1, 215/255, 0, 1},
     justifyH = Center,
     justifyV = Middle,
@@ -75,6 +75,7 @@ local TableFrame = Class(Frame, function(self)
       width = width + w
       tinsert(self.cols, TableCol:new{
         parent = self,
+        name = "$parentCol"..i,
         label = self.colNames[i],
         headerHeight = self.headerHeight,
         position = {
@@ -95,6 +96,7 @@ local TableFrame = Class(Frame, function(self)
       height = height + h
       tinsert(self.rows, TableRow:new{
         parent = self,
+        name = "$parentRow"..i,
         label = self.rowNames[i],
         position = {
           TopLeft = i == 1 and {0, -self.offsetY} or {self.rows[i-1], BottomLeft},
@@ -143,6 +145,7 @@ function TableFrame:addCol(info)
   local w = self.colInfo and self.colInfo[n].width or self.cellWidth
   tinsert(self.cols, TableCol:new{
     parent = self,
+    name = "$parentCol"..n,
     label = self.colInfo[n].name,
     headerHeight = self.headerHeight,
     position = {
@@ -165,6 +168,7 @@ function TableFrame:addRow(info)
   local h = self.rowInfo and self.rowInfo[n].height or self.cellHeight
   tinsert(self.rows, n, TableRow:new{
     parent = self,
+    name = "$parentRow"..n,
     label = self.rowInfo[n].name,
     position = {
       TopLeft = n == 1 and {0, -self.offsetY} or {self.rows[n-1], BottomLeft},
@@ -187,8 +191,8 @@ local Cell = Class(Frame, function(self)
     parent = self,
     text = data.text,
     color = data.color,
-    template = data.font,
-    position = { Fill = true },
+    font = data.font,
+    position = { All = true },
     justifyH = data.justifyH or Left,
   }
 end, {
@@ -203,6 +207,7 @@ function TableFrame:update()
       if data and not self.cells[rowN][colN] then
         self.cells[rowN][colN] = Cell:new{
           parent = self,
+          name = "$parentCell"..rowN.."-"..colN,
           position = {
             Top = {self.rows[rowN], Top},
             Bottom = {self.rows[rowN], Bottom},

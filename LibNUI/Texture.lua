@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local ui = ns.ui
-local Class, Drop, unpack = ns.lua.Class, ns.lua.Drop, ns.lua.unpack
+local Class, unpack = ns.lua.Class, ns.lua.unpack
 local Region = ui.Region
 
 local Texture = Class(Region, function(self)
@@ -10,19 +10,16 @@ local Texture = Class(Region, function(self)
   end
   if self.rotation then self._widget:SetRotation(self.rotation); self.rotation = nil end
 
-  local color, vertexColor, blendMode, gradient = Drop(self, 'color', 'vertexColor', 'blendMode', 'gradient')
-  if color then self:Color(unpack(color)) end
-  if vertexColor then self:SetVertexColor(unpack(vertexColor)) end
-  if blendMode then self._widget:SetBlendMode(blendMode) end
-  if gradient then self._widget:SetGradient(unpack(gradient)) end
+  if self.color then self:Color(unpack(self.color)) end
+  if self.vertexColor then self:SetVertexColor(unpack(self.vertexColor)) end
+  if self.blendMode then self._widget:SetBlendMode(self.blendMode) end
+  if self.gradient then self._widget:SetGradient(unpack(self.gradient)) end
 
-  local path, coords = Drop(self, 'path', 'coords')
-  if path then self:Texture(path) end
-  if coords then self:Coords(unpack(coords)) end
+  if self.path then self:Texture(self.path) end
+  if self.coords then self:Coords(unpack(self.coords)) end
 end, {
   CreateWidget = function(self)
-    local parent, name, layer, template = Drop(self, "parent", "name", "layer", "template")
-    return (parent._widget or parent):CreateTexture(name or nil, layer or nil, template or nil)
+    return (self.parent._widget or self.parent):CreateTexture(self.name, self.layer, self.template)
   end,
 })
 ui.Texture = Texture
