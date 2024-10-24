@@ -4,6 +4,7 @@ local ui = ns.ui
 local Class, unpack = ns.lua.Class, ns.lua.unpack
 local Frame, Label, Texture = ui.Frame, ui.Label, ui.Texture
 local GameTooltip, SetOverrideBindingClick = ns.wowui.GameTooltip, ns.wowui.SetOverrideBindingClick
+local GetItemCooldown, GetTime = ns.wow.GetItemCooldown, ns.wow.GetTime
 local GetCursorInfo = GetCursorInfo
 
 local file, _, flags = NumberFontNormalSmallGray:GetFont()
@@ -21,6 +22,16 @@ local function formatKeybind(bind)
     bind = bind:gsub(p, s)
   end
   return bind
+end
+
+local function formatCooldown(t)
+  if t > 3600 then -- > 1h
+    return math.floor(t / 3600)..'h'
+  end
+  if t > 60 then -- > 1m
+    local m = math.floor(t / 60)
+    return m..':'..(t - m * 60)
+  end
 end
 
 -- https://wowpedia.fandom.com/wiki/UIOBJECT_Button
@@ -70,6 +81,17 @@ local Button = Class(Frame, function(self)
       coords = {0.21, 0.77, 0.24, 0.79},
     }
   end
+
+  -- cooldown
+  if self.itemID then
+    self.cooldown = Label:new{
+      parent = self,
+      position = {
+        All = true,
+        Hide = true,
+      },
+    }
+  end
 end, {
   type = "Button",
   scripts = {
@@ -91,6 +113,17 @@ end
 
 function Button:OnMouseUp()
   if self.border then self.border:SetVertexColor(1, 1, 1) end
+
+  if self.itemID then
+    local start, duration, enable = GetItemCooldown(self.itemID)
+    if enable == 1 and start > 0 then
+      self.cooldownEnd = start + duration
+      self._widget:GetNormalTexture():SetDesaturated(true)
+      self.cooldown:Text(formatCooldown(duration))
+      self.cooldown:Show()
+      self:startUpdates()
+    end
+  end
 end
 
 function Button:OnEnter()
@@ -125,4 +158,15 @@ end
 function Button:OnLeave()
   if self.border then self.border:Hide() end
   if self.tooltip then (self.tooltip._widget or GameTooltip):Hide() end
+end
+
+function Button:onUpdate(elapsed)
+  local remaining = self.cooldownEnd - GetTime()
+  if remaining < 0 then
+    self:stopUpdates()
+    self.cooldown:Hide()
+    self._widget:GetNormalTexture():SetDesaturated(false)
+    return
+  end
+  self.cooldown:Text(formatCooldown(remaining))
 end

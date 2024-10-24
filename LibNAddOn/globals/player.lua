@@ -64,7 +64,7 @@ ns.wow.Player = Player
 function Player:GetRestPercent()
   if not self:isRested() then return 0 end
   local maxXP = self:GetMaxXP()
-  return max(0, (min(self:GetXPExhaustion(), maxXP) - self:GetXP()) / maxXP)
+  return max(0, (min(self:GetXP() + self:GetXPExhaustion() / 2, maxXP)) / maxXP)
 end
 
 local Profession = {}

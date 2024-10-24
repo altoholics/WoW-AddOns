@@ -9,6 +9,7 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
   self.fortitude = self:addSpellButton(21562)
   self.aranceInt = self:addSpellButton(1459)
   self.motw = self:addSpellButton(1126)
+  self.shout = self:addSpellButton(6673)
 
   self.refreshments = self:addSpellButton(190336)
 
@@ -26,6 +27,10 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
 
   self.runeforging = self:addSpellButton(53428)
   self.pathOfFrost = self:addSpellButton(3714)
+
+  -- stance
+  self.defensive = self:addSpellButton(386208)
+  self.berserker = self:addSpellButton(386196)
 
   self:UpdateHeight()
 end, {

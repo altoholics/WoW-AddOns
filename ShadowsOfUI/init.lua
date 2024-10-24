@@ -289,6 +289,32 @@ end
 
 ns.ui = LibNUI
 
+local strmatch = ns.lua.strmatch
+ns:registerEvent("CHAT_MSG_SYSTEM")
+function ns:CHAT_MSG_SYSTEM(text, player)
+  if strmatch(text, ".* completed.$")
+  or strmatch(text, "^Experience gained: %d+.$")
+  or strmatch(text, "^Received .*")
+  or strmatch(text, '^Quest accepted: .*')
+  or strmatch(text, 'You are now Away: .*')
+  or strmatch(text, 'You are no longer Away.')
+  or strmatch(text, 'A role check has been initiated. Your group will be queued when all members have selected a role.')
+  or strmatch(text, 'You are now queued in the Dungeon Finder.')
+  then return end
+  if strmatch(text, '.* has been added to your appearance collection.$') -- [item link] has been added to your appearance collection.
+  or strmatch(text, '.* has gone offline$') -- Name-Realm has gone offline.
+  or strmatch(text, '.* has come online.$')
+  or strmatch(text, "You have earned the title '.*'.")
+  or strmatch(text, 'Daily quests are now reset!')
+  or strmatch(text, '[.*] has invited you to join a group.')
+  or strmatch(text, 'Dungeon Difficulty set to .*.')
+  then
+    print(text)
+    return
+  end
+  print("system msg", player, text)
+end
+
 -- Disable the reagent bag tutorial
 -- /run HelpTip:HideAllSystem("TutorialReagentBag")
 -- C_CVar.SetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)

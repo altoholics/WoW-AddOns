@@ -137,7 +137,10 @@ function Chat:CHAT_MSG_GUILD(...) self:HandlePlayerMessage("GUILD", ...) end
 function Chat:CHAT_MSG_RAID(...) self:HandlePlayerMessage("RAID", ...) end
 function Chat:CHAT_MSG_RAID_LEADER(...) self:HandlePlayerMessage("RAID_LEADER", ...) end
 function Chat:CHAT_MSG_SAY(...) self:HandlePlayerMessage("SAY", ...) end
-function Chat:CHAT_MSG_WHISPER(...) self:HandlePlayerMessage("WHISPER", ...) end
+function Chat:CHAT_MSG_WHISPER(...)
+  if select(5, ...) == "" then print("whisper no target", select(1, ...)) end
+  self:HandlePlayerMessage("WHISPER", ...)
+end
 function Chat:CHAT_MSG_WHISPER_INFORM(...) self:HandlePlayerMessage("WHISPER_INFORM", ...) end
 function Chat:CHAT_MSG_YELL(...) self:HandlePlayerMessage("YELL", ...) end
 

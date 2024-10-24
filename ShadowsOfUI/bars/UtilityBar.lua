@@ -33,6 +33,7 @@ local UtilityBar = Class(ns.VerticalBar, function(self)
   -- https://wowpedia.fandom.com/wiki/MountID
   self.mount = self:addMountButton(1799, 419345, "$parentMount", "CTRL-R") -- Eve's Ghastly Rider
   self.shopMount = self:addMountButton(2237, 457485, "$parentShopMount", "CTRL-SHIFT-R") -- Grizzly Hills Packmaster
+  self.aucMount = self:addMountButton(2265, 465235, "$parentAucMount", "CTRL-ALT-R") -- Trader's Gilded Brutosaur
   self.waterMount = self:addMountButton(855, 228919) -- darkwater skate
   self.bank = self:addSpellButton(83958) -- guild perk: mobile banking
   self.warband = self:addSpellButton(460905) -- warband bank distance inhibitor (460925, 465226)

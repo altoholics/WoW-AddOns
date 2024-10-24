@@ -92,7 +92,7 @@ function History:AddItem(link)
     tinsert(self.history, hi)
     -- reposition
     for i=1,#self.history do
-      self.history[i]:bottom(self._widget, ui.edge.Bottom, 0, 32 * (i-1) + 2)
+      self.history[i]:Bottom(self, ui.edge.Bottom, 0, 32 * (i-1) + 2)
     end
   end
   self:Height(32 * #self.history + 2)
@@ -101,6 +101,7 @@ end
 function History:CHAT_MSG_LOOT(text, playerName, _, _, playerName2)
   if playerName == playerName2 or playerName2 == "" then -- our loot
     local _, _, link = ExtractHyperlinkString(text)
+    if playerName2 == "" then print(playerName, link) end
     if link then self:AddItem(link) end
   end
 end
@@ -222,11 +223,9 @@ function Bucket:OnLogin(login, reload)
 end
 
 function Bucket:OnEnter()
-  print("bucket enter")
 end
 
 function Bucket:OnLeave()
-  print("bucket leave")
 end
 
 function Bucket:OnMouseUp()

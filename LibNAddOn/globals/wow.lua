@@ -1,8 +1,8 @@
 local _, ns = ...
 -- luacheck: globals InterfaceOptionsFrame_OpenToCategory GetAverageItemLevel C_ClassColor GetClassInfo
--- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetRealmName
+-- luacheck: globals GetNumClasses GetMaxLevelForPlayerExpansion GetRealmName GetItemCooldown
 -- luacheck: globals GetServerTime C_DateAndTime UnitLevel UnitName UnitRace C_AddOns
--- luacheck: globals UnitExists UnitAffectingCombat GetSpellInfo GetChannelName
+-- luacheck: globals UnitExists UnitAffectingCombat GetSpellInfo GetChannelName GetTime
 -- luacheck: globals C_WeeklyRewards C_Item LoadAddOn C_Spell DoEmote SendChatMessage
 
 local wow = {
@@ -23,6 +23,7 @@ local wow = {
   maxLevel = GetMaxLevelForPlayerExpansion(),
 
   -- Items
+  GetItemCooldown = GetItemCooldown,
   GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo,
 
   -- Realms
@@ -41,6 +42,7 @@ local wow = {
   GetSecondsUntilWeeklyReset = C_DateAndTime.GetSecondsUntilWeeklyReset,
   -- GetServerTime() + C_DateAndTime.GetSecondsUntilWeeklyReset() - 604800
   -- if last recorded time <= GetServerTime(), do weekly reset
+  GetTime = GetTime,
 
   -- Weekly Rewards
   GetActivities = C_WeeklyRewards.GetActivities,
