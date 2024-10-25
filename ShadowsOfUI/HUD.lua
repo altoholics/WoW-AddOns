@@ -2,7 +2,7 @@ local _, ns = ...
 local ui = ns.ui
 local Class = ns.lua.Class
 local Frame, Label = ui.Frame, ui.Label
-local PlayerHUD = ns.PlayerHUD
+local PlayerHUD, Target = ns.PlayerHUD, ns.Target
 local Player = ns.wow.Player
 local IsResting = IsResting -- luacheck: globals IsResting
 
@@ -17,9 +17,9 @@ local HUD = Class(Frame, function(self)
     color = {0.7, 0.7, 0.7, 0.4},
     position = {
       Center = {0, 40},
+      SetShown = IsResting(),
     },
   }
-  self.resting:SetShown(IsResting())
   self.away = Label:new{
     parent = self,
     name = "$parentAway",
@@ -27,9 +27,13 @@ local HUD = Class(Frame, function(self)
     color = {1, 1, 0.6, 0.5},
     position = {
       Center = {0, 52},
+      SetShown = Player:IsAFK(),
     },
   }
-  self.away:SetShown(Player:IsAFK())
+
+  self.target = Target:new{
+    parent = self,
+  }
 end, {
   parent = ns.wowui.UIParent,
   name = "ShadowHUD",

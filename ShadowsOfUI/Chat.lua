@@ -115,7 +115,7 @@ local ChannelStrings = {
 }
 
 function Chat:AddChannelMessage(channel, text, player)
-  local info = ChatTypeInfo[channel]
+  local info = ChatTypeInfo[channel] or {r = 1, g = 1, b = 1}
   self._widget:AddMessage(strf(ChannelStrings[channel], player, text), info.r, info.g, info.b, info.id)
 end
 

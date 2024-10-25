@@ -21,6 +21,7 @@ hud/PlayerPowerBar.lua
 hud/ResourceBar.lua
 hud/PetBar.lua
 hud/Player.lua
+hud/Target.lua
 HUD.lua
 
 Command.lua
