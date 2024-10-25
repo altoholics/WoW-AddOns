@@ -22,9 +22,11 @@ LibNAddOn{
           hidePlayerFrame = false,
           hideTargetFrame = false,
           hideSimpleStanceBar = false,
+          hideStanceBar = false,
         },
         actionBars = {
           enabled = false,
+          mount = 1799,
         },
         hud = {
           enabled = false,
@@ -150,6 +152,15 @@ LibNAddOn{
           label = "Hide 1-action stance bar",
           tooltip = "Hide stance bar for classes like Rogue, Priest",
         },
+        {
+          name = "HideStanceBar",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.blizz end,
+          key = "hideStanceBar",
+          label = "Hide stance bar",
+          tooltip = "Hide stance bar for all classes",
+        },
       },
     },
   },
@@ -213,6 +224,7 @@ function ns:settingChanged(var, value, name) --, setting
       updateVisAndParent(StanceBar, value)
     end
   end
+  if "HideStanceBar" == name then updateVisAndParent(StanceBar, value) end
 
   if "XpBarEnabled" == name then
     if self.xpBar then
@@ -239,7 +251,7 @@ function ns:settingChanged(var, value, name) --, setting
   end
   if "CommandEnabled" == name then
     if self.command then
-      -- todo: disable
+      print("should disable command")
     elseif value then
       self.command = ns.Command:new{}
     end
@@ -258,6 +270,7 @@ function ns:onLoad()
       updateVisAndParent(StanceBar, true)
     end
   end
+  if self.db.settings.blizz.hideStanceBar then updateVisAndParent(StanceBar, true) end
 
   local maxLvl = self.wow.Player:isMaxLevel()
   if self.db.settings.xpBar.enabled and not maxLvl and not self.xpBar then
@@ -289,28 +302,44 @@ end
 
 ns.ui = LibNUI
 
+local SYS_MSG_IGNORED = {
+  'Party converted to Raid.',
+  'You are now the group leader.',
+  'Your group has been disbanded.',
+  '.* has joined the instance group.',
+  '.* completed.$',
+  '^Experience gained: %d+.$',
+  '^Received .*', -- %d Gold, %d Silver.
+  '^Quest accepted: .*',
+  'You are now Away: .*',
+  'You are no longer Away.',
+  'A role check has been initiated. Your group will be queued when all members have selected a role.',
+  'You are now queued in the Dungeon Finder.',
+  '[.*] has invited you to join a group.',
+  '.* has died.',
+}
+
+local SYS_MSG_UNHANDLED = {
+  '.* has been added to your appearance collection.$', -- [item link]
+  '.* has gone offline.$', -- Name-Realm
+  '.* has come online.$', -- Name-Realm
+  "You have earned the title '.*'.",
+  'Daily quests are now reset!',
+  'Dungeon Difficulty set to .*.',
+  '.*[You died.].*', -- link open death recap popup
+}
+
 local strmatch = ns.lua.strmatch
 ns:registerEvent("CHAT_MSG_SYSTEM")
 function ns:CHAT_MSG_SYSTEM(text, player)
-  if strmatch(text, ".* completed.$")
-  or strmatch(text, "^Experience gained: %d+.$")
-  or strmatch(text, "^Received .*")
-  or strmatch(text, '^Quest accepted: .*')
-  or strmatch(text, 'You are now Away: .*')
-  or strmatch(text, 'You are no longer Away.')
-  or strmatch(text, 'A role check has been initiated. Your group will be queued when all members have selected a role.')
-  or strmatch(text, 'You are now queued in the Dungeon Finder.')
-  then return end
-  if strmatch(text, '.* has been added to your appearance collection.$') -- [item link] has been added to your appearance collection.
-  or strmatch(text, '.* has gone offline$') -- Name-Realm has gone offline.
-  or strmatch(text, '.* has come online.$')
-  or strmatch(text, "You have earned the title '.*'.")
-  or strmatch(text, 'Daily quests are now reset!')
-  or strmatch(text, '[.*] has invited you to join a group.')
-  or strmatch(text, 'Dungeon Difficulty set to .*.')
-  then
-    print(text)
-    return
+  for _,p in ipairs(SYS_MSG_IGNORED) do
+    if strmatch(text, p) then return end
+  end
+  for _,p in ipairs(SYS_MSG_UNHANDLED) do
+    if strmatch(text, p) then
+      print(text)
+      return
+    end
   end
   print("system msg", player, text)
 end

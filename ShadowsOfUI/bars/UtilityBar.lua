@@ -1,6 +1,7 @@
 local _, ns = ...
 local ui = ns.ui
 local Class = ns.lua.Class
+local GetMountInfoByID, GetSpellName = C_MountJournal.GetMountInfoByID, ns.wow.GetSpellName -- luacheck: globals C_MountJournal
 
 local UtilityBar = Class(ns.VerticalBar, function(self)
   self.tooltipPoint = {ui.edge.Right, self._widget, ui.edge.Left, -2, 0}
@@ -31,10 +32,19 @@ local UtilityBar = Class(ns.VerticalBar, function(self)
   -- mounts
   self.flightStyle = self:addSpellButton(436854) -- switch flight style
   -- https://wowpedia.fandom.com/wiki/MountID
-  self.mount = self:addMountButton(1799, 419345, "$parentMount", "CTRL-R") -- Eve's Ghastly Rider
-  self.shopMount = self:addMountButton(2237, 457485, "$parentShopMount", "CTRL-SHIFT-R") -- Grizzly Hills Packmaster
-  self.aucMount = self:addMountButton(2265, 465235, "$parentAucMount", "CTRL-ALT-R") -- Trader's Gilded Brutosaur
-  self.waterMount = self:addMountButton(855, 228919) -- darkwater skate
+  self.mount = self:addMountButton(ns.db.settings.actionBars.mount or 1799, "$parentMount", "CTRL-R", {
+    OnChange = function(s, mountId)
+      local _, spellId, icon = GetMountInfoByID(mountId)
+      self.mount._widget:SetNormalTexture(icon)
+      self.mount:Attribute("spell", GetSpellName(spellId))
+      self.mount.itemId = mountId
+      self.mount.tooltip.mountSpellId = spellId
+      ns.db.settings.actionBars.mount = mountId
+    end,
+  }) -- Eve's Ghastly Rider
+  self.shopMount = self:addMountButton(2237, "$parentShopMount", "CTRL-SHIFT-R") -- Grizzly Hills Packmaster
+  self.aucMount = self:addMountButton(2265, "$parentAucMount", "CTRL-ALT-R") -- Trader's Gilded Brutosaur
+  self.waterMount = self:addMountButton(855) -- darkwater skate
   self.bank = self:addSpellButton(83958) -- guild perk: mobile banking
   self.warband = self:addSpellButton(460905) -- warband bank distance inhibitor (460925, 465226)
 

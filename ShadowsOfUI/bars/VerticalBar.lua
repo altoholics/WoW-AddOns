@@ -4,7 +4,6 @@ local Class, tinsert, Merge = ns.lua.Class, ns.lua.tinsert, ns.lua.Merge
 local Frame, SecureButton = ui.Frame, ui.SecureButton
 local GetSpellName, GetSpellTexture = ns.wow.GetSpellName, ns.wow.GetSpellTexture
 local HasToy, IsSpellKnown = Player.HasToy, Player.IsSpellKnown
-local IsMountCollected, GetMountIcon = Player.IsMountCollected, Player.GetMountIcon
 local Bottom = ui.edge.Bottom
 
 local VerticalBar = Class(Frame, function(self)
@@ -123,19 +122,21 @@ function VerticalBar:addOffsetSpellButton(id, icon, target, x, y)
   }
 end
 
-function VerticalBar:addMountButton(id, spell, name, bind)
-  return IsMountCollected(id) and self:addSecureButton{
+local GetMountInfoByID = C_MountJournal.GetMountInfoByID -- luacheck: globals C_MountJournal
+function VerticalBar:addMountButton(id, name, bind, ops)
+  local _, spellId, icon, _, _, _, _, _, _, _, collected = GetMountInfoByID(id)
+  return collected and self:addSecureButton(Merge({
     name = name,
     normal = {
-      texture = GetMountIcon(id),
+      texture = icon,
     },
     actions = {
       {
         type = "spell",
-        spell = GetSpellName(spell),
+        spell = GetSpellName(spellId),
       },
     },
     bindLeftClick = bind,
-    tooltip = { mountSpellId = spell },
-  }
+    tooltip = { mountSpellId = spellId },
+  }, ops or {}))
 end

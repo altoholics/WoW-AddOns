@@ -99,16 +99,25 @@ end, {
     "OnLeave",
     "OnMouseDown",
     "OnMouseUp",
+    "OnReceiveDrag",
   },
 })
 ui.Button = Button
 
+function Button:OnReceiveDrag()
+  if not self.OnChange then return end
+  local infoType, a, _, c, _ = GetCursorInfo()
+  if "mount" == infoType and self.tooltip and self.tooltip.mountSpellId then
+    self:OnChange(a) -- mountId
+  elseif "spell" == infoType and self.tooltip and self.tooltip.spellId then
+    self:OnChange(c) -- spellId
+  elseif "item" == infoType and self.tooltip and self.tooltip.itemId then
+    self:OnChange(a) -- itemId
+  end
+end
+
 function Button:OnMouseDown()
   if self.border then self.border:SetVertexColor(0, 1, 0) end
-  if self.allowAnyTarget then
-    -- local info = SafePack(GetCursorInfo())
-    print(GetCursorInfo())
-  end
 end
 
 function Button:OnMouseUp()

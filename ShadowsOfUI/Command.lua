@@ -96,10 +96,6 @@ end, {
 })
 ns.Command = Command
 
-function Command:Show()
-  self:Show()
-end
-
 function Command:OnEscapePressed()
   self._widget:SetText("")
   self:Hide()
