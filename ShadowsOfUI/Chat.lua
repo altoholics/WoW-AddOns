@@ -100,7 +100,7 @@ local ChannelStrings = {
   PARTY = "[Party] %s: %s",
   PARTY_LEADER = "[Party] %s: %s",
   GUILD = "[Guild] %s: %s",
-  MONSTER_EMOTE = "%s %s",
+  MONSTER_EMOTE = "%s",
   MONSTER_SAY = "%s says: %s",
   MONSTER_YELL = "%s yells: %s",
   MONSTER_WHISPER = "%s whispers: %s",
@@ -116,7 +116,7 @@ local ChannelStrings = {
 
 function Chat:AddChannelMessage(channel, text, player)
   local info = ChatTypeInfo[channel] or {r = 1, g = 1, b = 1}
-  self._widget:AddMessage(strf(ChannelStrings[channel], player, text), info.r, info.g, info.b, info.id)
+  self._widget:AddMessage(strf(ChannelStrings[channel], player or text, text), info.r, info.g, info.b, info.id)
 end
 
 function Chat:HandlePlayerMessage(channel, text, player, ...)
@@ -147,6 +147,6 @@ function Chat:CHAT_MSG_YELL(...) self:HandlePlayerMessage("YELL", ...) end
 function Chat:CHAT_MSG_MONSTER_SAY(text, player) self:AddChannelMessage("MONSTER_SAY", text, player) end
 function Chat:CHAT_MSG_MONSTER_YELL(text, player) self:AddChannelMessage("MONSTER_YELL", text, player) end
 function Chat:CHAT_MSG_MONSTER_EMOTE(text, player) self:AddChannelMessage("MONSTER_EMOTE", text, player) end
-function Chat:CHAT_MSG_MONSTER_WHISPER(text, player) self:AddChannelMessage("MONSTER_WHISPER", text, player) end
+function Chat:CHAT_MSG_MONSTER_WHISPER(text, player) self:AddChannelMessage("MONSTER_WHISPER", text, nil) end
 function Chat:CHAT_MSG_RAID_BOSS_EMOTE(text, player) self:AddChannelMessage("RAID_BOSS_EMOTE", text, player) end
 function Chat:CHAT_MSG_RAID_BOSS_WHISPER(text, player) self:AddChannelMessage("RAID_BOSS_WHISPER", text, player) end

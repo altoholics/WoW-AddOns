@@ -69,6 +69,6 @@ function HealthBar:UNIT_HEALTH()
   self.hpPcnt:Text(pcnt)
 end
 
-function HealthBar:PLAYER_LEVEL_UP()
-  self.level:Text(Player:GetLevel())
+function HealthBar:PLAYER_LEVEL_UP(level)
+  self.level:Text(level)
 end

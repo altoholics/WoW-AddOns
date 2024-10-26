@@ -17,9 +17,9 @@ local HUD = Class(Frame, function(self)
     color = {0.7, 0.7, 0.7, 0.4},
     position = {
       Center = {0, 40},
-      SetShown = IsResting(),
     },
   }
+  self.resting:SetShown(IsResting())
   self.away = Label:new{
     parent = self,
     name = "$parentAway",
@@ -27,9 +27,9 @@ local HUD = Class(Frame, function(self)
     color = {1, 1, 0.6, 0.5},
     position = {
       Center = {0, 52},
-      SetShown = Player:IsAFK(),
     },
   }
+  self.away:SetShown(Player:IsAFK())
 
   self.target = Target:new{
     parent = self,

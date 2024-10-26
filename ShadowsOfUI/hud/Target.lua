@@ -3,7 +3,8 @@ local ui = ns.ui
 local Class = ns.lua.Class
 local Frame, Label = ui.Frame, ui.Label
 local Player = ns.wow.Player
-local AbbreviateNumbers = ns.lua.AbbreviateNumbers
+local unpack, AbbreviateNumbers = ns.lua.unpack, ns.lua.AbbreviateNumbers
+local UnitHealth, UnitHealthMax = UnitHealth, UnitHealthMax -- luacheck: globals UnitHealth UnitHealthMax
 
 local Target = Class(Frame, function(self)
   self.hp = Label:new{
@@ -49,8 +50,17 @@ end
 
 function Target:UNIT_HEALTH()
   local hp = UnitHealth("target")
-  local max = UnitHealthMax("player")
-  local pcnt = math.floor(100 * (hp / max)).."%"
+  local max = UnitHealthMax("target")
+  local pcnt = math.floor(100 * (hp / max))
   self.hp:Text(AbbreviateNumbers(hp))
-  self.hpPcnt:Text(pcnt)
+  self.hpPcnt:Text(pcnt..'%')
+  if pcnt <= 50 then
+    self.hpPcnt:Color(unpack(ns.Colors.LightYellow))
+  elseif pcnt <= 25 then
+    self.hpPcnt:Color(unpack(ns.Color.Gold))
+  elseif pcnt <= 10 then
+    self.hpPcnt:Color(unpack(ns.Color.DullRed))
+  else
+    self.hpPcnt:Color(1, 1, 1)
+  end
 end

@@ -114,14 +114,15 @@ function ExpBar:onLeave()
 end
 
 function ExpBar:update()
+  local w = self:Width()
   local xp = Player:GetXPPercent()
   local rest = Player:GetRestPercent()
 
-  self.fill:Width(self:Width() * xp)
+  self.fill:Width(w * xp)
   self.textPercent:SetPoint(TopRight, self._widget, TopLeft, self.fill:Width() - 3, -1)
   self.textPercent:SetText(ns.lua.floor(xp * 100).."%")
 
-  self.secondary:Width(self:Width() * rest)
+  self.secondary:Width(w * rest)
   -- self.secondary:SetPoint(TopLeft, self.fill:Width(), 0)
   self.restPercent:SetPoint(TopLeft, self._widget, TopLeft, self.fill:Width() + 3, -1)
   self.restPercent:SetText(ns.lua.floor(rest * 100).."%")

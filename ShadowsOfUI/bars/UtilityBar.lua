@@ -1,7 +1,40 @@
 local _, ns = ...
 local ui = ns.ui
 local Class = ns.lua.Class
-local GetMountInfoByID, GetSpellName = C_MountJournal.GetMountInfoByID, ns.wow.GetSpellName -- luacheck: globals C_MountJournal
+local Label, Frame = ui.Label, ui.Frame
+local GetMountInfoByID, GetSpellName, strmatch = C_MountJournal.GetMountInfoByID, ns.wow.GetSpellName, strmatch -- luacheck: globals C_MountJournal strmatch
+
+local FlashMsg = Class(Frame, function(self)
+  self.label = Label:new{
+    parent = self,
+    fontInfo = {'fonts/FRIZQT__.TTF', 20, ''},
+    color = ns.Colors.Gold,
+    position = {
+      Right = {},
+    },
+  }
+  self.anim = self._widget:CreateAnimationGroup()
+  self.anim:SetToFinalAlpha(true)
+  self.fade = self.anim:CreateAnimation('Alpha')
+  self.fade:SetStartDelay(5)
+  self.fade:SetDuration(10)
+  self.fade:SetFromAlpha(1)
+  self.fade:SetToAlpha(0)
+end, {
+  parent = ns.wowui.UIParent,
+  position = {
+    Width = 1,
+    Height = 1,
+  },
+})
+
+function FlashMsg:Text(text)
+  self.label:Text(text)
+end
+
+function FlashMsg:Play()
+  self.anim:Play()
+end
 
 local UtilityBar = Class(ns.VerticalBar, function(self)
   self.tooltipPoint = {ui.edge.Right, self._widget, ui.edge.Left, -2, 0}
@@ -96,5 +129,31 @@ end, {
     Width = 48,
   },
   firstButtonPoint = "TopRight",
+  events = {"CHAT_MSG_SKILL"},
 })
 ns.UtilityBar = UtilityBar
+
+function UtilityBar:CHAT_MSG_SKILL(text, p1, _, _, p2)
+  if p2 ~= "" or p2 ~= p1 then return end
+  local skill, level = strmatch(text, 'Your skill in ([%a ]+) has increased to (%d+).')
+  if not skill then return end
+  if not self.flash then self.flash = FlashMsg:new{} end
+  local btn
+  if skill == "Khaz Alhar Herbalism" then btn = self.herbalism
+  elseif skill == "Khaz Algar Mining" then btn = self.mining
+  elseif skill == "Khaz Algar Skinning" then btn = self.skinning
+  elseif skill == "Khaz Algar Alchemy" then btn = self.alchemy
+  elseif skill == "Khaz Algar Blacksmithing" then btn = self.blacksmithing
+  elseif skill == "Khaz Algar Enchanting" then btn = self.enchanting
+  elseif skill == 'Khaz Algar Engineering' then btn = self.engineering
+  elseif skill == 'Khaz Algar Incsription' then btn = self.inscription
+  elseif skill == 'Khaz Algar Jewlcrafting' then btn = self.jewelcrafting
+  elseif skill == 'Khaz Algar Leatherworking' then btn = self.leatherworking
+  elseif skill == 'Khaz Algar Tailoring' then btn = self.tailoring
+  end
+  if btn then
+    self.flash:Text('Skill Up! '..level)
+    self.flash:Right(btn, ui.edge.Left, -25, 0)
+    self.flash:Play()
+  end
+end

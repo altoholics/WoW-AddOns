@@ -14,6 +14,7 @@ ui.fonts = ns.lua.ToMap({
 
 local Label = Class(Region, function(self)
   if self.fontObj then self._widget:SetFontObject(self.fontObj) end
+  if self.fontInfo then self._widget:SetFont(unpack(self.fontInfo)) end
   if self.text then self:Text(self.text) end
   if self.color then self:Color(unpack(self.color)) end
 
