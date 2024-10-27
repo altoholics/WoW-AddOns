@@ -303,30 +303,33 @@ end
 ns.ui = LibNUI
 
 local SYS_MSG_IGNORED = {
-  'Party converted to Raid.',
-  'You are now the group leader.',
-  'Your group has been disbanded.',
-  '.* has joined the instance group.',
-  '.* completed.$',
+  '^Party converted to Raid.$',
+  '^You are now the group leader.$',
+  '^Your group has been disbanded.$',
+  '^.* has joined the instance group.$',
+  '^.* completed.$',
   '^Experience gained: %d+.$',
-  '^Received .*', -- %d Gold, %d Silver.
-  '^Quest accepted: .*',
-  'You are now Away: .*',
-  'You are no longer Away.',
-  'A role check has been initiated. Your group will be queued when all members have selected a role.',
-  'You are now queued in the Dungeon Finder.',
-  '[.*] has invited you to join a group.',
-  '.* has died.',
+  '^Received .*$', -- %d Gold, %d Silver.
+  '^Quest accepted: .*$',
+  '^You are now Away: .*$',
+  '^You are no longer Away.$',
+  '^A role check has been initiated. Your group will be queued when all members have selected a role.$',
+  '^You are now queued in the Dungeon Finder.$',
+  '^[.*] has invited you to join a group.$',
+  '^.* has died.$',
+  '^You have made a new discovery: .*$',
+  '^You have learned a new ability: .*$',
 }
+-- '.* has been added to your pet journal!',
 
 local SYS_MSG_UNHANDLED = {
-  '.* has been added to your appearance collection.$', -- [item link]
-  '.* has gone offline.$', -- Name-Realm
-  '.* has come online.$', -- Name-Realm
-  "You have earned the title '.*'.",
-  'Daily quests are now reset!',
-  'Dungeon Difficulty set to .*.',
-  '.*[You died.].*', -- link open death recap popup
+  '^.* has been added to your appearance collection.$', -- [item link]
+  '^.* has gone offline.$', -- Name-Realm
+  '^.* has come online.$', -- Name-Realm name is linked
+  "^You have earned the title '.*'.$",
+  '^Daily quests are now reset!$',
+  '^Dungeon Difficulty set to .*.$',
+  '^.*[You died.].*$', -- link open death recap popup
 }
 
 local strmatch = ns.lua.strmatch
@@ -337,7 +340,7 @@ function ns:CHAT_MSG_SYSTEM(text, player)
   end
   for _,p in ipairs(SYS_MSG_UNHANDLED) do
     if strmatch(text, p) then
-      print(text)
+      print("unhandled", text)
       return
     end
   end
