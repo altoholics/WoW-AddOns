@@ -57,8 +57,6 @@ function Target:UNIT_HEALTH()
   if pcnt <= 50 then
     self.hpPcnt:Color(unpack(ns.Colors.LightYellow))
   elseif pcnt <= 25 then
-    self.hpPcnt:Color(unpack(ns.Color.Gold))
-  elseif pcnt <= 10 then
     self.hpPcnt:Color(unpack(ns.Color.DullRed))
   else
     self.hpPcnt:Color(1, 1, 1)

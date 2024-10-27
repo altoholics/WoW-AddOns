@@ -306,8 +306,12 @@ local SYS_MSG_IGNORED = {
   '^Party converted to Raid.$',
   '^You are now the group leader.$',
   '^Your group has been disbanded.$',
-  '^.* has joined the instance group.$',
+  '^[%w- ]+ has joined the instance group.$',
+  '^[%w- ]+ has left the instance group.$',
+  '^[%w-]+ has joined the raid group.$',
+  '^[%w-]+ has left the raid group.$',
   '^.* completed.$',
+  '^You have been removed from the group.$',
   '^Experience gained: %d+.$',
   '^Received .*$', -- %d Gold, %d Silver.
   '^Quest accepted: .*$',
@@ -315,21 +319,26 @@ local SYS_MSG_IGNORED = {
   '^You are no longer Away.$',
   '^A role check has been initiated. Your group will be queued when all members have selected a role.$',
   '^You are now queued in the Dungeon Finder.$',
-  '^[.*] has invited you to join a group.$',
+  '^.* has invited you to join a group.$',
   '^.* has died.$',
   '^You have made a new discovery: .*$',
   '^You have learned a new ability: .*$',
+  "^You have earned the title '.*'.$",
+  '^Daily quests are now reset!$',
+  '^Dungeon Difficulty set to %a+.$',
+  '^[%w-] has invited you to join a group.$',
+  '^You are in both a party and an instance group. You may communicate with your party with "/p" and with your instance group with "/i".$',
+  '^You are no longer queued.$',
+  '^[%w-]\'s attempt to share quest "[%w+]" failed. You are already on that quest.$',
 }
 -- '.* has been added to your pet journal!',
 
 local SYS_MSG_UNHANDLED = {
-  '^.* has been added to your appearance collection.$', -- [item link]
-  '^.* has gone offline.$', -- Name-Realm
-  '^.* has come online.$', -- Name-Realm name is linked
-  "^You have earned the title '.*'.$",
-  '^Daily quests are now reset!$',
-  '^Dungeon Difficulty set to .*.$',
+  '^.+ has been added to your appearance collection.$', -- [item link]
+  '^[%w-]+ has gone offline.$', -- Name-Realm
+  '^[%w-]+ has come online.$', -- Name-Realm name is linked
   '^.*[You died.].*$', -- link open death recap popup
+  'Brann Bronzebeard has reached Level %d.',
 }
 
 local strmatch = ns.lua.strmatch

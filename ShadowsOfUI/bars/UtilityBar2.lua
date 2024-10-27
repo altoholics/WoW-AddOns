@@ -37,6 +37,9 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
   self.defensive = self:addSpellButton(386208)
   self.berserker = self:addSpellButton(386196)
 
+  self.twoForms = self:addSpellButton(68996)
+  self.darkFlight = self:addSpellButton(68992)
+
   self.bear = self:addSpellButton(5487)
   self.cat = self:addSpellButton(768)
   self.traval = self:addSpellButton(783)
