@@ -91,7 +91,7 @@ local UtilityBar = Class(ns.VerticalBar, function(self)
 
   self.alchemy = self:addSpellButton(195095)
 
-  self.blacksmithing = self:addSpellButton(264434)
+  self.blacksmithing = self:addSpellButton(195097)
 
   self.enchanting = self:addSpellButton(264455)
   self.disenchant = self:addOffsetSpellButton(13262, nil, self.enchanting)
