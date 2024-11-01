@@ -28,3 +28,4 @@ Command.lua
 Chat.lua
 
 QueueIndicator.lua
+ActivityMonitor.lua

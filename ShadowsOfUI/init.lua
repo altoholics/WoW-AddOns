@@ -7,7 +7,7 @@ LibNAddOn{
   db = {
     name = "ShadowsOfUIDB",
     defaults = {
-      version = 4,
+      version = 5,
       settings = {
         xpBar = {
           enabled = true,
@@ -35,6 +35,9 @@ LibNAddOn{
           enabled = false,
         },
         command = {
+          enabled = false,
+        },
+        activityMonitor = {
           enabled = false,
         },
       },
@@ -97,6 +100,15 @@ LibNAddOn{
           key = "enabled",
           label = "Use Fancy Chat",
           tooltip = "Enable fancy chat features",
+        },
+        {
+          name = "ActivityMonitorEnabled",
+          typ = "checkbox",
+          default = false,
+          table = function(db) return db.settings.activityMonitor end,
+          key = "enabled",
+          label = "Show friend activity monitor",
+          tooltip = "Shows online friend/guild member count, names when coming online/going offline",
         },
         {
           name = "HideDefaultXPBar",
@@ -191,6 +203,10 @@ function ns:MigrateDB()
     db.settings.command = { enabled = false }
     db.version = 4
   end
+  if 4 == db.version then
+    db.settings.activityMonitor = { enabled = false }
+    db.version = 5
+  end
 end
 
 -- luacheck: globals UIParent CreateFrame
@@ -256,6 +272,13 @@ function ns:settingChanged(var, value, name) --, setting
       self.command = ns.Command:new{}
     end
   end
+  if "ActivityMonitorEnabled" == name then
+    if self.activityMonitor then
+      self.activityMonitor:Hide()
+    else
+      self.activityMonitor = ns.ActivityMonitor:new{}
+    end
+  end
 end
 
 function ns:onLoad()
@@ -298,6 +321,9 @@ function ns:onLogin()
   if self.db.settings.chat.enabled and not self.chat then
     self.chat = ns.Chat:new{}
   end
+  if self.db.settings.activityMonitor and not self.activityMonitor then
+    self.activityMonitor = ns.ActivityMonitor:new{}
+  end
 end
 
 ns.ui = LibNUI
@@ -330,13 +356,13 @@ local SYS_MSG_IGNORED = {
   '^You are in both a party and an instance group. You may communicate with your party with "/p" and with your instance group with "/i".$',
   '^You are no longer queued.$',
   '^[%w-]\'s attempt to share quest "[%w+]" failed. You are already on that quest.$',
+  '^[%w-]+ has gone offline.$', -- Name-Realm
+  '^[%w-]+ has come online.$', -- Name-Realm name is linked
 }
 -- '.* has been added to your pet journal!',
 
 local SYS_MSG_UNHANDLED = {
   '^.+ has been added to your appearance collection.$', -- [item link]
-  '^[%w-]+ has gone offline.$', -- Name-Realm
-  '^[%w-]+ has come online.$', -- Name-Realm name is linked
   '^.*[You died.].*$', -- link open death recap popup
   'Brann Bronzebeard has reached Level %d.',
 }
