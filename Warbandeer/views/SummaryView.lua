@@ -71,3 +71,23 @@ end, {
   },
 })
 ns.views.SummaryView = SummaryView
+
+function SummaryView:OnBeforeShow()
+  local toons = ns.api.GetAllCharacters()
+  -- sort by level, then ilvl, then name
+  table.sort(toons, function(c1, c2)
+    if c1.level ~= c2.level then return c1.level > c2.level end
+    if c1.ilvl ~= c2.ilvl then return c1.ilvl > c2.ilvl end
+    return c1.name > c2.name
+  end)
+
+  local d
+  for i,t in pairs(toons) do
+    d = self.data[i]
+    d[2] = t.level
+    d[3] = t.ilvl
+    d[4] = formatBestVaultRewardOption(t.greatVault)
+  end
+
+  self:update()
+end

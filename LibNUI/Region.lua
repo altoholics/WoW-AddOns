@@ -53,9 +53,13 @@ function Region:Size(x, y) return x == nil and self._widget:GetSize() or self._w
 
 function Region:Width(w) return w == nil and self._widget:GetWidth() or self._widget:SetWidth(w) end
 function Region:Height(h) return h == nil and self._widget:GetHeight() or self._widget:SetHeight(h) end
-function Region:Show() self._widget:Show() end
+
+function Region:Show()
+  if self.OnBeforeShow then self:OnBeforeShow() end
+  self._widget:Show()
+end
 function Region:Hide() self._widget:Hide() end
-function Region:Toggle() self._widget:SetShown(not self._widget:IsVisible()) end
-function Region:SetShown(b) self._widget:SetShown(b) end
+function Region:SetShown(b) if b then self:Show() else self:Hide() end end
+function Region:Toggle() self:SetShown(not self._widget:IsVisible()) end
 
 function Region:Alpha(a) return a == nil and self._widget:GetAlpha() or self._widget:SetAlpha(a) end
