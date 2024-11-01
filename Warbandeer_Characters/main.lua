@@ -16,8 +16,9 @@ function ns:onLogin()
     self.db.numCharacters = self.db.numCharacters + 1
   end
   local c = data[name]
-
   self.currentPlayer = name
+  self.currentData = c
+
   c.name = name
   c.classId = Player:GetClassId()
   c.className = Player:GetClassName()
@@ -39,24 +40,22 @@ function ns:onLogin()
 end
 
 function ns:PLAYER_LEVEL_UP()
-  local data = self.db.characters[self.currentPlayer]
-  data.level = UnitLevel("player")
+  self.currentData.level = UnitLevel("player")
 end
 ns:registerEvent("PLAYER_LEVEL_UP")
 
 function ns:PLAYER_EQUIPMENT_CHANGED()
-  local data = self.db.characters[self.currentPlayer]
-  data.ilvl = Player:GetAverageItemLevel()
+  self.currentData.ilvl = Player:GetAverageItemLevel()
 end
 ns:registerEvent("PLAYER_EQUIPMENT_CHANGED")
 
 function ns:WEEKLY_REWARDS_UPDATE(...)
-  ns.Print("WEEKLY_REWARDS_UPDATE", ...)
+  self.currentData.greatVault = Player:GetRewardOptions()
 end
 ns:registerEvent("WEEKLY_REWARDS_UPDATE")
 
 function ns:WEEKLY_REWARDS_ITEM_CHANGED(...)
-  ns.Print("WEEKLY_REWARDS_ITEM_CHANGED", ...)
+  self.currentData.greatVault = Player:GetRewardOptions()
 end
 ns:registerEvent("WEEKLY_REWARDS_ITEM_CHANGED")
 
