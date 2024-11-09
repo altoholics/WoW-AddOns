@@ -330,6 +330,7 @@ local SYS_MSG_IGNORED = {
   '^You are in both a party and an instance group. You may communicate with your party with "/p" and with your instance group with "/i".$',
   '^You are no longer queued.$',
   '^[%w-]\'s attempt to share quest "[%w+]" failed. You are already on that quest.$',
+  '^You leave the group.$',
 }
 -- '.* has been added to your pet journal!',
 
