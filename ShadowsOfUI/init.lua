@@ -358,6 +358,7 @@ local SYS_MSG_IGNORED = {
   '^[%w-]\'s attempt to share quest "[%w+]" failed. You are already on that quest.$',
   '^[%w-]+ has gone offline.$', -- Name-Realm
   '^[%w-]+ has come online.$', -- Name-Realm name is linked
+  '^You leave the group.$',
 }
 -- '.* has been added to your pet journal!',
 
