@@ -127,7 +127,11 @@ function Command:OnEnterPressed()
             end
           end
         elseif CHANNELS[cmd] then
-          self:UpdateChannelDisplay(CHANNELS[cmd])
+          if IsSecureCmd(CHANNELS[cmd]) then
+            -- ignore, cannot do
+          else
+            self:UpdateChannelDisplay(CHANNELS[cmd])
+          end
         else
           print("Unknown command:", cmd)
         end
@@ -194,6 +198,7 @@ function Command:OnSpacePressed()
   if CHANNELS[cmd] then
     if "/DUMP" == cmd then return end -- why is dump a channel?
     if "/RUN" == cmd then return end -- and run? (type script)
+    if '/TAR' == cmd then return end
     if "SMART_WHISPER" == CHANNELS[cmd] then
       if args ~= "" then
         self:UpdateChannelDisplay(CHANNELS[cmd], nil, nil, args)

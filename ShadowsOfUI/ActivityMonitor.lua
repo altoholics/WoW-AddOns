@@ -5,6 +5,16 @@ local Frame, Button, Label = ui.Frame, ui.Button, ui.Label
 local strmatch, tinsert, tremove, unpack = ns.lua.strmatch, ns.lua.tinsert, ns.lua.tremove, ns.lua.unpack
 
 local ActivityButton = Class(Button, function(self)
+  self.anim = self._widget:CreateAnimationGroup()
+  self.anim:SetToFinalAlpha(true)
+  self.fade = self.anim:CreateAnimation('Alpha')
+  self.fade:SetStartDelay(5)
+  self.fade:SetDuration(10)
+  self.fade:SetFromAlpha(1)
+  self.fade:SetToAlpha(0)
+  local m = self
+  self.fade:SetScript("OnFinished", function(...) m:OnFinished(...) end)
+
   self.label = Label:new{
     parent = self,
     position = {
@@ -29,39 +39,33 @@ end
 
 function ActivityButton:Online(name)
   self.label:Text(name)
-  self.label:Color(unpack(ns.Color.Green))
+  self.label:Color(unpack(ns.Colors.Green))
   self:Alpha(1)
   self:Play()
 end
 
 function ActivityButton:Offline(name)
   self.label:Text(name)
-  self.label:Color(unpack(ns.Color.DullRed))
+  self.label:Color(unpack(ns.Colors.DullRed))
   self:Alpha(1)
   self:Play()
 end
 
+function ActivityButton:OnFinished()
+  self.onFinished(self)
+end
+
 local ActivityMonitor = Class(Frame, function(self)
   local m = self
-  self.anim = self._widget:CreateAnimationGroup()
-  self.anim:SetToFinalAlpha(true)
-
   self.names = {}
   for i=1,4 do
-    local fade = self.anim:CreateAnimation('Alpha')
-    fade:SetStartDelay(5)
-    fade:SetDuration(10)
-    fade:SetFromAlpha(1)
-    fade:SetToAlpha(0)
     tinsert(self.names, ActivityButton:new{
       parent = self,
       position = {
         Left = i == 1 and {self, ui.edge.Left} or {self.names[i-1], ui.edge.Right, 4, 0},
       },
-      anim = fade,
+      onFinished = function(...) m:OnFinished(...) end,
     })
-    fade:SetScript("OnFinished", m.OnFinished)
-    fade:SetParent(self.names[i]._widget)
   end
 end, {
   parent = UIParent,
@@ -75,11 +79,10 @@ end, {
 })
 ns.ActivityMonitor = ActivityMonitor
 
-function ActivityMonitor:OnFinished(anim)
-  local w = anim:GetParent()
+function ActivityMonitor:OnFinished(btn)
   local idx
   for i,b in ipairs(self.names) do
-    if b._widget == w then
+    if btn == b then
       idx = i
     end
   end
