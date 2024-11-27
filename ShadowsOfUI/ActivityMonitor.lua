@@ -23,7 +23,7 @@ local ActivityButton = Class(Button, function(self)
   }
 end, {
   position = {
-    Width = 21,
+    Width = 125,
     Height = 16,
     Alpha = 0,
   },
@@ -71,7 +71,7 @@ end, {
   parent = UIParent,
   name = "ShadowUIActivityMonitor",
   position = {
-    Width = 100,
+    Width = 500,
     Height = 16,
     BottomLeft = {20, 325},
   },
@@ -104,17 +104,17 @@ end
 function ActivityMonitor:CHAT_MSG_SYSTEM(text)
   local link = strmatch(text, '^(.+) has come online.$')
   if link then -- Name-Realm name is linked
-    print(text)
-    print(link)
     local next = self:GetNext()
     if next then
       next:Online(link)
     end
-  elseif strmatch(text, '^([%w-\']+) has gone offline.$') then
-    print(text)
+    return
+  end
+  local name = strmatch(text, '^([%w-\']+) has gone offline.$')
+  if name then
     local next = self:GetNext()
     if next then
-      next:Offline(link)
+      next:Offline(name)
     end
   end
 end

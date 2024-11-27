@@ -357,30 +357,35 @@ local SYS_MSG_IGNORED = {
   '^You are no longer queued.$',
   '^[%w-]\'s attempt to share quest "[%w+]" failed. You are already on that quest.$',
   '^[%w-]+ has gone offline.$', -- Name-Realm
-  '^[%w-]+ has come online.$', -- Name-Realm name is linked
+  '^.+ has come online.$', -- Name-Realm name is linked
   '^You leave the group.$',
 }
 -- '.* has been added to your pet journal!',
 
 local SYS_MSG_UNHANDLED = {
-  '^.+ has been added to your appearance collection.$', -- [item link]
-  '^.*[You died.].*$', -- link open death recap popup
-  'Brann Bronzebeard has reached Level %d.',
+  '^(.+) has been added to your appearance collection.$', -- [item link]
+  '^(.*[You died.].*)$', -- link open death recap popup
+  'Brann Bronzebeard has reached Level (%d).',
 }
 
-local strmatch = ns.lua.strmatch
+-- local strmatch = ns.lua.strmatch
+local strfind = ns.lua.strfind
 ns:registerEvent("CHAT_MSG_SYSTEM")
 function ns:CHAT_MSG_SYSTEM(text, player)
-  for _,p in ipairs(SYS_MSG_IGNORED) do
-    if strmatch(text, p) then return end
+  if strfind(text, 'has been added to your appearance collection.')
+  or strfind(text, '[You died.]') then
+    print(text)
   end
-  for _,p in ipairs(SYS_MSG_UNHANDLED) do
-    if strmatch(text, p) then
-      print("unhandled", text)
-      return
-    end
-  end
-  print("system msg", player, text)
+  -- for _,p in ipairs(SYS_MSG_IGNORED) do
+  --   if strmatch(text, p) ~= nil then return end
+  -- end
+  -- for _,p in ipairs(SYS_MSG_UNHANDLED) do
+  --   if strmatch(text, p) ~= nil then
+  --     print("unhandled", text)
+  --     return
+  --   end
+  -- end
+  -- print("system msg", player, text)
 end
 
 -- Disable the reagent bag tutorial
