@@ -62,7 +62,11 @@ local function parseTimer(data)
 end
 
 function QueueIndicator:LFG_QUEUE_STATUS_UPDATE()
-  local lfdInfo, lfrInfo, rfInfo = queueStats(1), queueStats(2), queueStats(3)
+  local lfdInfo, lfrInfo, rfInfo, scenario, custom = queueStats(1), queueStats(2), queueStats(3), queueStats(5), queueStats(6)
+  -- 4 arenas
+  -- 7 arena skirmishes
+  -- 8 battlegrounds
+  -- 121 delves
   if lfdInfo then
     self.timer:Text(parseTimer(lfdInfo))
   elseif lfrInfo then
@@ -71,5 +75,11 @@ function QueueIndicator:LFG_QUEUE_STATUS_UPDATE()
   elseif rfInfo then
     print("raid finder queue update")
     self.timer:Text(parseTimer(rfInfo))
+  elseif scenario then
+    print("scenario group finder queue update")
+    self.timer:Text(parseTimer(scenario))
+  elseif custom then
+    print("custom group finder update")
+    self.timer:Text(parseTimer(custom))
   end
 end
