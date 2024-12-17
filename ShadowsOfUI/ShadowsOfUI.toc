@@ -1,4 +1,4 @@
-## Interface: 110002, 110005
+## Interface: 110002, 110005, 110007
 ## Title: ShadowsOfUI
 ## Author: Nazuraki
 ## Version: 11.0.000-1
