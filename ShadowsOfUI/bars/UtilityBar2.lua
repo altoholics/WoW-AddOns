@@ -15,12 +15,18 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
 
   self.sanctification = self:addSpellButton(433568)
 
+  self.healthstone = self:addSpellButton(6201)
+  self.soulwell = self:addSpellButton(29893)
+
   -- resurrect
   self.resurrect = self:addSpellButton(212036) or self:addSpellButton(2006)
   self.revive = self:addSpellButton(50769)
   self.rebirth = self:addSpellButton(20484)
   self.raiseAlly = self:addSpellButton(61999)
   self.rebirth = self:addSpellButton(7328)
+  self.soulstone = self:addSpellButton(20707)
+
+  self.unendingbreath = self:addSpellButton(5697)
 
   -- soothe
   self.mindSoothe = self:addSpellButton(453)
@@ -40,8 +46,8 @@ local UtilityBar2 = Class(ns.VerticalBar, function(self)
   self.twoForms = self:addSpellButton(68996)
   self.darkFlight = self:addSpellButton(68992)
 
-  self.bear = self:addSpellButton(5487)
-  self.cat = self:addSpellButton(768)
+  self.bear = self:addSpellButton(5487, nil, "$parentBear", "SHIFT-B")
+  self.cat = self:addSpellButton(768, nil, "$parentCat", "SHIFT-C")
   self.traval = self:addSpellButton(783)
 
   self.crusader = self:addSpellButton(32223)

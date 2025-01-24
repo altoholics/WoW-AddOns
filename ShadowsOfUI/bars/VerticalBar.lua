@@ -84,8 +84,9 @@ function VerticalBar:addOffsetToyButton(id, target, x, y)
   }
 end
 
-function VerticalBar:addSpellButton(id, icon)
+function VerticalBar:addSpellButton(id, icon, name, bind)
   return IsSpellKnown(id) and self:addSecureButton{
+    name = name,
     normal = {
       texture = icon or GetSpellTexture(id),
     },
@@ -95,6 +96,24 @@ function VerticalBar:addSpellButton(id, icon)
         spell = id,--GetSpellName(id),
       },
     },
+    bindLeftClick = bind,
+    tooltip = { spellId = id },
+  }
+end
+
+function VerticalBar:addSpellNamedButton(id, icon, name, bind)
+  return IsSpellKnown(id) and self:addSecureButton{
+    name = name,
+    normal = {
+      texture = icon or GetSpellTexture(id),
+    },
+    actions = {
+      {
+        type = "spell",
+        spell = GetSpellName(id),
+      },
+    },
+    bindLeftClick = bind,
     tooltip = { spellId = id },
   }
 end

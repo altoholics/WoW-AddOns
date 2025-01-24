@@ -73,7 +73,7 @@ function QueueIndicator:LFG_QUEUE_STATUS_UPDATE()
     print("lfr queue update")
     self.timer:Text(parseTimer(lfrInfo))
   elseif rfInfo then
-    print("raid finder queue update")
+    -- print("raid finder queue update")
     self.timer:Text(parseTimer(rfInfo))
   elseif scenario then
     print("scenario group finder queue update")

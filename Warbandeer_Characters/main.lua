@@ -3,7 +3,7 @@ local API = ns.api
 
 local tinsert = ns.lua.tinsert
 local Player = ns.wow.Player
-local UnitLevel, UnitRace = ns.wow.UnitLevel, ns.wow.UnitRace
+local UnitRace = ns.wow.UnitRace
 
 function ns:onLogin()
   local name = Player:GetName()
@@ -40,7 +40,7 @@ function ns:onLogin()
 end
 
 function ns:PLAYER_LEVEL_UP()
-  self.currentData.level = UnitLevel("player")
+  self.currentData.level = Player:GetLevel()
 end
 ns:registerEvent("PLAYER_LEVEL_UP")
 
